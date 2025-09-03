@@ -1,0 +1,11 @@
+{
+  "ask_before_branch_switch": true,
+  "default_branch": "main",
+  "prefer_git_worktrees": true,
+  "require_pr_for_dependency_changes": true,
+  "lane_ownership": {
+    "theme": ["site/tailwind.config.js", "site/src/assets/styles/**", "site/src/components/**"],
+    "media": ["site/src/pages/media.astro", "site/src/components/media/**", "site/src/data/media/**"],
+    "navigation": ["site/src/navigation.ts", "site/src/pages/index.astro"]
+  }
+}

@@ -4,7 +4,7 @@ This document explains how Claude Code and Codex will collaborate using GitHub-b
 
 ## 🚀 Overview
 
-The `.claude.json` configuration enables both AI assistants to work simultaneously on different parts of the website without conflicts, using separate Git branches and file ownership rules.
+The `.claude.json` configuration enables both AI assistants to work simultaneously on different parts of the website without conflicts, using separate Git branches and file ownership rules. Assistants must confirm the active branch with the user before making changes and should prefer Git worktrees for parallel tasks (see `docs/WORKTREES.md`).
 
 ## 🛤️ Development Lanes
 
@@ -48,9 +48,8 @@ The `.claude.json` configuration enables both AI assistants to work simultaneous
 ## 🔒 File Protection Rules
 
 ### Shared Protected Files
-- `site/package.json` - Dependencies (no new packages allowed)
-- `site/package-lock.json` - Lock file
-- `.codex/config.json` - Contains GitHub token (ignored by git)
+- `site/package.json` / `site/package-lock.json` — Changing dependencies requires explicit approval and a PR
+- `.codex/README.md` — Agent instructions (do not overwrite)
 
 ### Lane Boundaries
 - Each AI assistant must only modify files in their assigned lane
@@ -71,7 +70,7 @@ The `.claude.json` configuration enables both AI assistants to work simultaneous
 - Content integration scripts
 - Rapid prototyping
 
-### GitHub Polling Strategy
+### GitHub Coordination Strategy
 - Both assistants can poll GitHub for PR updates
 - Use PR comments to coordinate cross-lane changes
 - Merge PRs only after review checklist completion
@@ -82,7 +81,7 @@ For every PR, verify:
 - [ ] **Only lane-owned files changed**
 - [ ] **`npm run build` passes** (in site/ directory)
 - [ ] **`npm run check` clean** (or issues fixed)
-- [ ] **No new dependencies added**
+- [ ] **Dependencies approved** (if any were added/updated)
 - [ ] **Routes load properly**: `/`, `/shows`, `/media` as applicable
 - [ ] **Follows conventional commit style**
 
@@ -124,6 +123,8 @@ npm run check
 # Commit with conventional style
 git commit -m "feat(nav): add songs navigation link"
 ```
+
+Worktrees recommended for multi-branch work. Create them with `git worktree` (see `docs/WORKTREES.md`) and open each worktree folder as a separate repository in GitHub Desktop.
 
 ### 3. PR Creation
 1. Push branch to GitHub

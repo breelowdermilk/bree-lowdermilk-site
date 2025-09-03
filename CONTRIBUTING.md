@@ -5,8 +5,9 @@ This project is designed for development with both **Claude Code** and **Codex**
 ## 🎯 Project Approach
 
 ### Parallel Development Workflow
-- **Read `.claude.json`** for lane assignments and file ownership rules
-- **See `PARALLEL_DEVELOPMENT.md`** for complete workflow documentation
+- **Read `.claude.json`** for lane ownership and branch confirmation rules
+- **See `PARALLEL_DEVELOPMENT.md`** for complete workflow (now includes worktrees)
+- **Use worktrees for parallel branches** (see `docs/WORKTREES.md`)
 - **Work in assigned development lanes** to avoid conflicts
 - **Use GitHub PRs** for cross-lane coordination
 
@@ -29,6 +30,8 @@ This project is designed for development with both **Claude Code** and **Codex**
 - Handle git operations and version control
 - Manage dependencies and build processes
 - Perform accessibility and performance audits
+ - Confirm the target branch with the user before switching or committing
+ - Prefer worktrees for simultaneous tasks; avoid juggling uncommitted changes
 
 ### For Codex
 **Strengths**: Component implementation, rapid prototyping
@@ -36,6 +39,7 @@ This project is designed for development with both **Claude Code** and **Codex**
 - Implement UI features and interactions
 - Handle content ingestion scripts
 - Build specific page templates
+ - Confirm the current branch with the user; default to `main` unless stated
 
 ### Shared Responsibilities
 Both assistants should:
@@ -59,6 +63,10 @@ cd site && npm run dev
 # - 07_Search_Spec.md for search features
 ```
 
+Confirm branch status (Desktop or CLI)
+- Desktop: ensure the branch selector shows `main` or the requested feature branch
+- CLI: `git branch --show-current`
+
 ### 2. During Development
 - **Follow existing patterns**: Check similar files for conventions
 - **Use TypeScript**: Maintain type safety in `.astro` and `.ts` files
@@ -78,6 +86,15 @@ npx pagefind --source dist
 npm run build && npm run preview
 # Open dev tools, check Lighthouse scores
 ```
+
+### 4. GitHub Desktop Quick Flow
+- Open GitHub Desktop → Confirm repository and branch
+- Make changes → Commit with a clear message
+- Push to origin
+- For feature branches → Create Pull Request from Desktop → Merge when ready
+
+See `docs/GIT_WORKFLOW_DESKTOP.md` for detailed, step-by-step instructions and definitions.
+Also see `docs/DESKTOP_PROMPTING_POLICY.md` for when assistants should prompt the user with Desktop steps (short, explicit instructions).
 
 ## 🏗 Code Standards
 

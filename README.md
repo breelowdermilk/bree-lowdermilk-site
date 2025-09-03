@@ -164,6 +164,8 @@ This project is designed for dual development with both **Claude Code** and **Co
 - Ready-to-use prompts in `30_Codex_Prompts.md`
 - Agent roles defined in `18_Agent_Orchestration.md`
 - See `CONTRIBUTING.md` for AI workflow guidelines
+ - See `docs/GIT_WORKFLOW_DESKTOP.md` for GitHub Desktop steps and safety rules
+ - See `docs/WORKTREES.md` for parallel-branch work using Git worktrees
 
 ## 🚀 Deployment
 

@@ -46,6 +46,13 @@ git commit -m "your commit message"
 git push origin main
 ```
 
+Or use GitHub Desktop (recommended):
+- Confirm current branch (usually `main`)
+- Commit your changes in Desktop
+- Click "Push origin"
+ 
+See `docs/GIT_WORKFLOW_DESKTOP.md` for a detailed guide.
+
 ## Optional: Set Up GitHub Pages or Cloudflare Pages
 
 ### For GitHub Pages (if you want free hosting):
@@ -67,7 +74,7 @@ Your GitHub repository will contain:
 - Complete project blueprint (01-30 markdown files)
 - Astro website code (`/site/` directory)
 - Migration data from legacy site
-- Codex configuration (`.codex/instructions.md`)
+- Codex configuration (`.codex/README.md`)
 - Documentation (`README.md`, `CONTRIBUTING.md`)
 
 This setup enables both Claude Code and Codex to collaborate effectively on your website development.
