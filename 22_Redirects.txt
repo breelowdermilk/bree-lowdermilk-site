@@ -1,0 +1,3 @@
+# Example redirects (Netlify style)
+# /old-path  /new-path  301
+# /songs/old-slug   /songs/new-slug   301

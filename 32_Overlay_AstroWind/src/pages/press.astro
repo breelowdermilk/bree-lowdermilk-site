@@ -1,0 +1,95 @@
+---
+import press from "../data/press";
+import { getCollection } from "astro:content";
+const quotes = await getCollection('press');
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: press.name,
+  image: [press.heroImage, ...press.headshots.map(h => h.url)].filter(Boolean),
+  sameAs: press.sameAs && press.sameAs.length ? press.sameAs : undefined,
+};
+---
+<head>
+  <title>Press Kit — {press.name}</title>
+  <meta name="description" content={`Electronic Press Kit for ${press.name}`} />
+  <meta property="og:title" content={`Press Kit — ${press.name}`} />
+  <meta property="og:image" content={press.heroImage} />
+  <script type="application/ld+json">{JSON.stringify(personJsonLd)}</script>
+</head>
+
+<main class="wrap">
+  <section class="hero">
+    <img src={press.heroImage} alt={`${press.name} — hero`} loading="eager" />
+    <div class="hero-text">
+      <h1>{press.name}</h1>
+      {press.downloadPressKit && (
+        <p><a class="btn" href={press.downloadPressKit}>Download Press Kit (ZIP)</a></p>
+      )}
+    </div>
+  </section>
+
+  <section class="bios">
+    <h2>Bio</h2>
+    <h3>50 words</h3>
+    <p>{press.bios.short}</p>
+    <h3>150 words</h3>
+    <p>{press.bios.medium}</p>
+    <h3>600 words</h3>
+    <p>{press.bios.long}</p>
+  </section>
+
+  <section class="assets">
+    <h2>Photos</h2>
+    <ul class="grid">
+      {press.headshots.map((h) => (
+        <li>
+          <a href={h.url} target="_blank" rel="noopener">
+            <img src={h.url} alt={h.caption || 'Headshot'} loading="lazy" />
+            {h.caption && <figcaption>{h.caption}</figcaption>}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {quotes.length ? (
+    <section class="quotes">
+      <h2>Selected Press</h2>
+      <ul>
+        {quotes.map(q => (
+          <li>
+            <blockquote>
+              <p>{q.data.quote}</p>
+              <cite>— {q.data.author ? `${q.data.author}, ` : ''}{q.data.outlet}</cite>
+            </blockquote>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ) : null}
+
+  {press.contacts?.length ? (
+    <section class="contact">
+      <h2>Contact</h2>
+      <ul>
+        {press.contacts.map(c => <li><a href={c.url}>{c.label}</a></li>)}
+      </ul>
+    </section>
+  ) : null}
+</main>
+
+<style>
+  .wrap{max-width:1100px;margin:0 auto;padding:2rem}
+  .hero{position:relative;border-radius:16px;overflow:hidden;background:#111;color:#fff}
+  .hero img{width:100%;height:auto;display:block;opacity:.85}
+  .hero-text{position:absolute;inset:auto 1rem 1rem 1rem}
+  h1{margin:0 0 .5rem;font-size:clamp(1.5rem,4vw,2.5rem)}
+  .btn{display:inline-block;padding:.5rem .75rem;border-radius:8px;border:1px solid currentColor;text-decoration:none;background:rgba(255,255,255,.1);backdrop-filter:blur(4px);color:#fff}
+  .bios h3{margin-top:1rem}
+  .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));list-style:none;padding:0}
+  .grid img{width:100%;height:auto;border-radius:12px;border:1px solid #eee;background:#fff}
+  blockquote{margin:0;padding:.5rem 1rem;border-left:4px solid #ddd}
+</style>
+

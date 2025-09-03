@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "postbuild": "pagefind --source dist"
+  }
+}
+

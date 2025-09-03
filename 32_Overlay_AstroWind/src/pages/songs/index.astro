@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import SongCard from '../../components/SongCard.astro';
+import SongFilters from '../../components/SongFilters.astro';
+
+const songs = (await getCollection('songs'))
+  .filter(s => s.data.published !== false)
+  .sort((a,b) => (a.data.title || '').localeCompare(b.data.title || ''));
+
+const voiceTypes = Array.from(new Set(songs.flatMap(s => s.data.voiceTypes || [])));
+const moods = Array.from(new Set(songs.flatMap(s => s.data.moods || [])));
+const shows = Array.from(new Set(songs.map(s => s.data.show).filter(Boolean)));
+---
+<head>
+  <title>Songs</title>
+  <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+  <script src="/pagefind/pagefind-ui.js" defer></script>
+</head>
+<main class="wrap">
+  <h1>Songs</h1>
+  <SongFilters {voiceTypes} {moods} {shows} />
+  <section id="songs-list" class="grid">
+    {songs.map(s => (
+      <div 
+        data-title={s.data.title}
+        data-show={s.data.show || ''}
+        data-voices={(s.data.voiceTypes||[]).join(',')}
+        data-moods={(s.data.moods||[]).join(',')}
+      >
+        <SongCard song={s} />
+      </div>
+    ))}
+  </section>
+</main>
+
+<style>
+  .wrap{max-width:1100px;margin:0 auto;padding:2rem}
+  .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+</style>
+

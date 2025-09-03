@@ -1,0 +1,12 @@
+{
+  "name": "32_overlay_astrowind",
+  "version": "1.0.0",
+  "description": "Overlay for AstroWind: Content, Pages, and Search",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

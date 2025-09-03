@@ -1,0 +1,21 @@
+---
+export interface Props { id?: string; title?: string }
+const { id, title = "YouTube video" } = Astro.props;
+if (!id) {
+  throw new Error("YouTube.astro requires an `id` prop");
+}
+---
+<div class="yt">
+  <iframe
+    src={`https://www.youtube.com/embed/${id}`}
+    title={title}
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+    loading="lazy"
+  />
+  <style>
+    .yt{position:relative;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}
+    iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  </style>
+</div>
+

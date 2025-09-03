@@ -1,0 +1,83 @@
+---
+export interface Props {
+  voiceTypes: string[];
+  moods: string[];
+  shows: string[];
+}
+const { voiceTypes, moods, shows } = Astro.props;
+---
+<div class="filters">
+  <div id="pagefind"></div>
+
+  <label>
+    Search
+    <input id="search" type="search" placeholder="Search songs by title or lyric…" />
+  </label>
+
+  <fieldset>
+    <legend>Voice Type</legend>
+    {voiceTypes.map(v => <label><input type="checkbox" name="voice" value={v} /> {v}</label>)}
+  </fieldset>
+
+  <fieldset>
+    <legend>Mood</legend>
+    {moods.map(m => <label><input type="checkbox" name="mood" value={m} /> {m}</label>)}
+  </fieldset>
+
+  <label>
+    Show
+    <select name="show">
+      <option value="">All</option>
+      {shows.map(s => <option value={s}>{s}</option>)}
+    </select>
+  </label>
+
+  <style>
+    .filters{display:grid;gap:1rem;margin:1rem 0}
+    fieldset{border:0;padding:0;display:flex;gap:.75rem;flex-wrap:wrap}
+    label{display:flex;gap:.5rem;align-items:center}
+  </style>
+
+  <script is:inline>
+    // Light client-side filtering for the list rendered on the page.
+    const searchInput = document.getElementById('search');
+    const voiceChecks = Array.from(document.querySelectorAll('input[name="voice"]'));
+    const moodChecks = Array.from(document.querySelectorAll('input[name="mood"]'));
+    const showSelect = document.querySelector('select[name="show"]');
+
+    const list = document.querySelector('#songs-list');
+    const items = list ? Array.from(list.querySelectorAll('[data-title]')) : [];
+
+    function activeValues(nodes) { return nodes.filter(n => n instanceof HTMLInputElement && n.checked).map(n => n.value); }
+
+    function filter() {
+      const q = (searchInput?.value || '').toLowerCase();
+      const voices = activeValues(voiceChecks);
+      const moods = activeValues(moodChecks);
+      const show = (showSelect?.value || '').toLowerCase();
+      for (const el of items) {
+        const title = (el.getAttribute('data-title')||'').toLowerCase();
+        const showVal = (el.getAttribute('data-show')||'').toLowerCase();
+        const voiceVals = (el.getAttribute('data-voices')||'').toLowerCase();
+        const moodVals = (el.getAttribute('data-moods')||'').toLowerCase();
+        let ok = true;
+        if (q) ok = ok && title.includes(q);
+        if (show) ok = ok && showVal === show;
+        if (voices.length) ok = ok && voices.every(v => voiceVals.includes(v.toLowerCase()));
+        if (moods.length) ok = ok && moods.every(m => moodVals.includes(m.toLowerCase()));
+        el.style.display = ok ? '' : 'none';
+      }
+    }
+    [searchInput, showSelect, ...voiceChecks, ...moodChecks].forEach(el => el && el.addEventListener('input', filter));
+    filter();
+
+    // Pagefind UI (only active after build when /pagefind assets exist)
+    window.addEventListener('DOMContentLoaded', () => {
+      if (document.querySelector('#pagefind') && window.PagefindUI) {
+        // @ts-ignore - PagefindUI is injected by /pagefind/pagefind-ui.js
+        new PagefindUI({ element: "#pagefind", showSubResults: true });
+      }
+    });
+  </script>
+</div>
+
