@@ -58,6 +58,17 @@ body {
   letter-spacing: 0.05em;
 }
 
+/* Smaller H1 for interior pages */
+.bree-h1-small {
+  font-family: var(--font-title);
+  font-size: 3rem; 
+  font-weight: 300;
+  color: var(--red-primary);
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 /* H2-H4 Headings (Professional style) */
 .bree-h2, .bree-h3, .bree-h4 {
   font-family: var(--font-headers);
@@ -105,9 +116,9 @@ body {
   color: var(--text-dark) !important;
 }
 
-/* Logo stays red in both states */
+/* Logo stays white in both states */
 .bree-header .logo-text {
-  color: var(--red-primary) !important;
+  color: #f9fafb !important;
   font-family: var(--font-title) !important;
   font-weight: 300 !important;
 }
