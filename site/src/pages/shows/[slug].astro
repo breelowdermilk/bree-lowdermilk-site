@@ -1,71 +1,5 @@
 ---
-<<<<<<< Updated upstream
-import Layout from '~/layouts/PageLayout.astro';
 import { getCollection } from 'astro:content';
-import defaultImg from '~/assets/images/default.png';
-
-export async function getStaticPaths() {
-  const all = await getCollection('shows');
-  return all.map((s) => ({ params: { slug: s.slug } }));
-}
-
-const { slug } = Astro.params;
-const shows = await getCollection('shows');
-const show = shows.find((s) => s.slug === slug);
-if (!show) throw new Error('Show not found');
-
-const data = show.data;
-
-const metadata = {
-  title: data.title,
-  description: data.synopsis ?? undefined,
-};
----
-<Layout metadata={metadata}>
-  <article class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <header class="mb-6">
-      <h1 class="text-3xl font-bold">{data.title}</h1>
-    </header>
-
-    <div class="space-y-6">
-      <div class="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-        <img src={data.heroImage || defaultImg} alt="" class="w-full aspect-[16/9] object-cover" loading="lazy" />
-        {data.synopsis && (
-          <div class="p-4">
-            <p class="text-gray-700 dark:text-gray-200">{data.synopsis}</p>
-          </div>
-        )}
-      </div>
-
-      {data.credits?.length ? (
-        <section>
-          <h2 class="text-xl font-semibold mb-2">Credits</h2>
-          <ul class="list-disc ml-6 space-y-1">
-            {data.credits.map((c) => <li>{c}</li>)}
-          </ul>
-        </section>
-      ) : null}
-
-      {data.pressQuotes?.length ? (
-        <section>
-          <h2 class="text-xl font-semibold mb-2">Press</h2>
-          <ul class="space-y-3">
-            {data.pressQuotes.map((q) => (
-              <li class="rounded border border-gray-200 dark:border-gray-700 p-3">
-                <blockquote class="text-gray-800 dark:text-gray-100">“{q.quote}”</blockquote>
-                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{q.author ? `${q.author}, ` : ''}{q.outlet}</div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-    </div>
-  </article>
-</Layout>
-
-=======
-import { getCollection } from 'astro:content';
-import { getEntryBySlug } from 'astro:content';
 import PageLayout from '~/layouts/PageLayout.astro';
 import defaultImg from '~/assets/images/default.png';
 
@@ -104,7 +38,8 @@ const imageUrl = show.data.heroImage || defaultImg;
           src={imageUrl} 
           alt={show.data.title || 'Show image'}
           class="w-full max-w-2xl mx-auto rounded-lg shadow-lg object-cover"
-          onError={`this.src='${defaultImg}'`}
+          width="800"
+          height="600"
         />
       </div>
 
@@ -159,17 +94,34 @@ const imageUrl = show.data.heroImage || defaultImg;
 
       <!-- Credits -->
       {show.data.credits && show.data.credits.length > 0 && (
-        <div class="max-w-3xl mx-auto">
+        <div class="max-w-3xl mx-auto mb-8">
           <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Credits</h2>
           <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
-            {show.data.credits.map((credit) => (
-              <li class="text-lg">{credit}</li>
+            {show.data.credits.map((credit, index) => (
+              <li key={index} class="text-lg">{credit}</li>
             ))}
           </ul>
+        </div>
+      )}
+
+      <!-- Press Quotes -->
+      {show.data.pressQuotes && show.data.pressQuotes.length > 0 && (
+        <div class="max-w-3xl mx-auto">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Press</h2>
+          <div class="space-y-4">
+            {show.data.pressQuotes.map((quote, index) => (
+              <blockquote key={index} class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border-l-4 border-primary-600">
+                <p class="text-lg italic text-gray-700 dark:text-gray-300 mb-2">"{quote.quote}"</p>
+                <footer class="text-sm text-gray-600 dark:text-gray-400">
+                  — <cite>{quote.outlet}</cite>
+                  {quote.date && <span class="ml-2">({quote.date})</span>}
+                </footer>
+              </blockquote>
+            ))}
+          </div>
         </div>
       )}
 
     </div>
   </section>
 </PageLayout>
->>>>>>> Stashed changes

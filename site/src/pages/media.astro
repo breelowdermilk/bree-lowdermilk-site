@@ -1,26 +1,274 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import AudioPlayer from '~/components/media/AudioPlayer.astro';
-import VideoPlayer from '~/components/media/VideoPlayer.astro';
-import audioTracks from '~/data/media/audio';
+import HeroCarousel from '~/components/media/HeroCarousel.astro';
+import FeaturedReleases from '~/components/media/FeaturedReleases.astro';
+import VideoGallery from '~/components/media/VideoGallery.astro';
+import StreamingLinksHub from '~/components/media/StreamingLinksHub.astro';
+
+// Import data
+import featuredItems from '~/data/media/featured';
+import albums from '~/data/media/albums';
 import videoItems from '~/data/media/video';
 
-const metadata = { title: 'Media' };
+const metadata = {
+  title: 'Media | Bree Lowdermilk',
+  description: 'Explore Bree Lowdermilk\'s music, videos, and streaming platforms. Listen to acclaimed albums like The Mad Ones and Our First Mistake, watch live performances and collaborations.',
+  openGraph: {
+    title: 'Media | Bree Lowdermilk - Composer & Lyricist',
+    description: 'Listen to award-winning compositions and watch performances by Bree Lowdermilk',
+    type: 'website'
+  }
+};
 ---
+
 <Layout metadata={metadata}>
-  <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-3xl font-bold tracking-tight">Media</h1>
-    <p class="mt-2 text-gray-600 dark:text-gray-300 max-w-2xl">Listen to selected tracks and watch recent videos.</p>
+  <!-- Hero Carousel Section -->
+  <section class="relative">
+    <HeroCarousel items={featuredItems} autoRotate={true} rotationInterval={8000} />
+  </section>
 
-    <div class="mt-8">
-      <h2 class="text-xl font-semibold mb-3">Audio</h2>
-      <AudioPlayer tracks={audioTracks} />
+  <!-- Page Introduction -->
+  <section class="bg-gray-50 dark:bg-gray-900 py-16">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          Musical Works & Performances
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
+          Discover the acclaimed songs and performances that have captivated audiences worldwide. From chart-topping albums to intimate live performances, explore the complete collection of musical works.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+          <span class="bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-sm">
+            <span class="font-semibold text-purple-600 dark:text-purple-400">30M+</span> streams
+          </span>
+          <span class="bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-sm">
+            <span class="font-semibold text-blue-600 dark:text-blue-400">#1</span> Singer/Songwriter chart
+          </span>
+          <span class="bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-sm">
+            <span class="font-semibold text-green-600 dark:text-green-400">Award-winning</span> compositions
+          </span>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <div class="mt-12">
-      <h2 class="text-xl font-semibold mb-3">Video</h2>
-      <VideoPlayer items={videoItems} />
+  <!-- Featured Albums Section -->
+  <section class="py-20 bg-white dark:bg-gray-800">
+    <FeaturedReleases 
+      albums={albums}
+      title="Featured Releases"
+      description="Stream acclaimed albums on your favorite platforms. From the beloved off-Broadway musical to chart-topping originals."
+    />
+  </section>
+
+  <!-- Section Divider -->
+  <div class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-1"></div>
+
+  <!-- Video Gallery Section -->
+  <section class="py-20 bg-gray-50 dark:bg-gray-900">
+    <VideoGallery 
+      videos={videoItems}
+      title="Performance Gallery"
+      description="Watch live performances, official music videos, and special collaborations with celebrated artists"
+    />
+  </section>
+
+  <!-- Section Divider -->
+  <div class="bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 h-1"></div>
+
+  <!-- Streaming Links Hub Section -->
+  <section class="py-20 bg-white dark:bg-gray-800">
+    <StreamingLinksHub 
+      items={featuredItems}
+      title="Listen Everywhere"
+      description="Access our complete catalog on all major streaming platforms. Choose your preferred way to listen."
+    />
+  </section>
+
+  <!-- Call to Action Section -->
+  <section class="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 py-16">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center text-white">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">
+          Stay Connected
+        </h2>
+        <p class="text-xl opacity-90 mb-8">
+          Follow along for new releases, behind-the-scenes content, and upcoming performances.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="https://twitter.com/breelowdermilk" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-8 py-3 bg-white text-purple-600 font-semibold rounded-full hover:bg-gray-100 transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+          >
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+            Follow @breelowdermilk
+          </a>
+          <a 
+            href="https://newmusicaltheatre.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-8 py-3 bg-white/20 text-white font-semibold rounded-full hover:bg-white/30 transition-colors duration-200 border border-white/30 hover:border-white/50"
+          >
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+            Visit NewMusicalTheatre.com
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 </Layout>
 
+<style>
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Section transitions */
+  section {
+    scroll-margin-top: 2rem;
+  }
+  
+  /* Gradient dividers animation */
+  .bg-gradient-to-r {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+  }
+  
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Enhanced focus states for accessibility */
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
+  }
+  
+  /* Performance optimizations */
+  img {
+    content-visibility: auto;
+  }
+  
+  /* Stats badges hover effect */
+  .bg-white.dark\:bg-gray-800:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark .bg-white.dark\:bg-gray-800:hover {
+    box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Call to action button enhancements */
+  .transform.hover\:-translate-y-1:hover {
+    transform: translateY(-4px) scale(1.02);
+  }
+  
+  /* Responsive typography improvements */
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 2.5rem;
+      line-height: 1.2;
+    }
+    
+    .text-xl {
+      font-size: 1.125rem;
+    }
+    
+    .py-20 {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    
+    .py-16 {
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
+    }
+  }
+  
+  /* Dark mode enhancements */
+  .dark {
+    color-scheme: dark;
+  }
+  
+  .dark .bg-gray-50 {
+    background-color: rgb(17 24 39);
+  }
+  
+  .dark .bg-white {
+    background-color: rgb(31 41 55);
+  }
+</style>
+
+<script>
+  // Intersection Observer for scroll animations
+  const observeElements = () => {
+    const elements = document.querySelectorAll('section');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '50px'
+    });
+    
+    elements.forEach((el) => {
+      el.style.opacity = '0.95';
+      el.style.transform = 'translateY(10px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  };
+  
+  // Enhanced page performance tracking
+  const trackPagePerformance = () => {
+    // Track largest contentful paint
+    new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      entries.forEach((entry) => {
+        console.log('LCP:', entry.startTime);
+      });
+    }).observe({ type: 'largest-contentful-paint', buffered: true });
+  };
+  
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    observeElements();
+    trackPagePerformance();
+  });
+  
+  // Preload critical resources
+  const preloadResources = () => {
+    // Preload hero carousel images
+    const heroImages = [
+      'https://img.youtube.com/vi/jVwtGU3KOro/maxresdefault.jpg',
+      'https://img.youtube.com/vi/rMJSiNN0DxU/maxresdefault.jpg',
+      'https://img.youtube.com/vi/PFlaiSCZAcU/maxresdefault.jpg'
+    ];
+    
+    heroImages.forEach((src) => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      document.head.appendChild(link);
+    });
+  };
+  
+  // Preload resources on page load
+  window.addEventListener('load', preloadResources);
+</script>

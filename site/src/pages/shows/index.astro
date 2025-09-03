@@ -42,8 +42,9 @@ const metadata = {
                   src={imageUrl} 
                   alt={show.data.title || 'Show image'}
                   class="w-full h-64 object-cover"
+                  width="400"
+                  height="256"
                   loading="lazy"
-                  onError={`this.src='${defaultImg}'`}
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -76,7 +77,7 @@ const metadata = {
                     <p class="text-xs text-gray-500 dark:text-gray-500 font-medium mb-1">Credits</p>
                     <div class="text-xs text-gray-600 dark:text-gray-400">
                       {show.data.credits.slice(0, 2).map((credit, index) => (
-                        <p key={index} class="mb-0.5">{credit}</p>
+                        <p class="mb-0.5">{credit}</p>
                       ))}
                       {show.data.credits.length > 2 && (
                         <p class="text-gray-500">+{show.data.credits.length - 2} more</p>
