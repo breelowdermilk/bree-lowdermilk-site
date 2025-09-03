@@ -1,10 +1,6 @@
 ---
-import Features2 from '~/components/widgets/Features2.astro';
-import Features3 from '~/components/widgets/Features3.astro';
-import Hero from '~/components/widgets/Hero.astro';
-import Stats from '~/components/widgets/Stats.astro';
-import Steps2 from '~/components/widgets/Steps2.astro';
 import Layout from '~/layouts/PageLayout.astro';
+import Image from '~/components/common/Image.astro';
 
 const metadata = {
   title: 'About',
@@ -13,191 +9,53 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <!-- Hero Widget ******************* -->
+  <section class="px-4 py-16 mx-auto max-w-6xl lg:px-8 lg:py-20">
+    <div class="grid md:grid-cols-2 gap-12 items-start">
+      <!-- Photo Column -->
+      <div class="md:sticky md:top-20">
+        <Image
+          src="~/assets/images/bree-headshot-hero.png"
+          alt="Bree Lowdermilk"
+          width={500}
+          height={600}
+          class="w-full max-w-md mx-auto rounded-lg shadow-lg"
+        />
+      </div>
 
-  <Hero
-    tagline="About"
-    image={{
-      src: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Bree Lowdermilk',
-    }}
-  >
-    <Fragment slot="title">
-      <span class="text-accent dark:text-white">Bree Lowdermilk</span><br />
-      Composer • Lyricist • Orchestrator
-    </Fragment>
+      <!-- Bio Text Column -->
+      <div class="prose prose-lg max-w-none">
+        <h1 class="text-4xl md:text-5xl font-bold mb-8">Bree Lowdermilk</h1>
+        
+        <p class="text-xl mb-6 font-medium">
+          Composer • Lyricist • Orchestrator
+        </p>
 
-    <Fragment slot="subtitle">
-      BREE LOWDERMILK (she/her) is an award-winning theatre writer, composer, lyricist and orchestrator. Off-Broadway: <em>The Mad Ones</em>, <em>Henry and Mudge</em>. 
-      Nat'l Tour: <em>Ada Twist Scientist & Friends</em>, <em>Henry and Mudge</em>. Regional: <em>Justice</em> (Arizona Theatre Co, Marin Theatre Co), <em>Earthrise</em> (Kennedy Center), 
-      <em>Dr. Wonderful</em> (Kennedy Center), <em>ERNXST, or the Importance of Being</em> (Concord Theatricals), and <em>The Bad Years</em>, an immersive house party musical.
-    </Fragment>
-  </Hero>
+        <div class="space-y-6">
+          <p>
+            <strong>BREE LOWDERMILK</strong> (she/her) is an award-winning theatre writer, composer, lyricist and orchestrator. Off-Broadway: <em>The Mad Ones</em>, <em>Henry and Mudge</em>. Nat'l Tour: <em>Ada Twist Scientist & Friends</em>, <em>Henry and Mudge</em>. Regional: <em>Justice</em> (Arizona Theatre Co, Marin Theatre Co), <em>Earthrise</em> (Kennedy Center), <em>Dr. Wonderful</em> (Kennedy Center), <em>ERNXST, or the Importance of Being</em> (Concord Theatricals), and <em>The Bad Years</em>, an immersive house party musical.
+          </p>
 
-  <!-- Stats Widget ****************** -->
+          <p>
+            Awards: Jonathan Larson, Alan Menken, Richard Rodgers. Concerts: Kennedy Center, Kimmel Center, Lincoln Center. Residencies: McDowell, Mercer.
+          </p>
 
-  <Stats
-    title="Career Highlights"
-    stats={[
-      { title: 'Albums', amount: '3+' },
-      { title: 'Million Streams', amount: '30+' },
-      { title: 'Fan Videos', amount: '1000s' },
-      { title: 'Major Awards', amount: '3' },
-    ]}
-  />
+          <p>
+            Albums: <em>Kerrigan-Lowdermilk Live</em>, <em>Our First Mistake</em> (#1 Singer/Songwriter chart), <em>The Mad Ones</em> (+30 million streams; thousands of fan videos).
+          </p>
 
-  <!-- Features3 Widget ************** -->
+          <p>
+            Founder of <a href="https://newmusicaltheatre.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">NewMusicalTheatre.com</a>, board member of Applied Mechanics.
+          </p>
 
-  <Features3
-    title="Recognition & Awards"
-    subtitle="Awards: Jonathan Larson, Alan Menken, Richard Rodgers. Concerts: Kennedy Center, Kimmel Center, Lincoln Center. Residencies: McDowell, Mercer."
-    columns={3}
-    isBeforeContent={true}
-    items={[
-      {
-        title: 'Jonathan Larson Award',
-        description:
-          'Prestigious award recognizing excellence in musical theatre writing by emerging artists.',
-        icon: 'tabler:award',
-      },
-      {
-        title: 'Alan Menken Award',
-        description:
-          'Honoring outstanding achievement in musical composition for the theatre.',
-        icon: 'tabler:award',
-      },
-      {
-        title: 'Richard Rodgers Award',
-        description:
-          'Supporting the development and production of new musicals for the American theatre.',
-        icon: 'tabler:award',
-      },
-    ]}
-  />
+          <p>
+            Bree is a queer, non-binary trans woman.
+          </p>
 
-  <!-- Features3 Widget ************** -->
-
-  <Features3
-    columns={3}
-    isAfterContent={true}
-    items={[
-      {
-        title: 'Albums & Recordings',
-        description:
-          '<em>Kerrigan-Lowdermilk Live</em>, <em>Our First Mistake</em> (#1 Singer/Songwriter chart), <em>The Mad Ones</em> with over 30 million streams and thousands of fan videos.',
-        icon: 'tabler:disc',
-      },
-      {
-        title: 'Concert Venues',
-        description:
-          'Performances at Kennedy Center, Kimmel Center, and Lincoln Center showcasing original musical theatre works.',
-        icon: 'tabler:building-arch',
-      },
-      {
-        title: 'NewMusicalTheatre.com',
-        description:
-          'Founder of NewMusicalTheatre.com, a platform dedicated to contemporary musical theatre sheet music and resources.',
-        icon: 'tabler:world',
-      },
-      {
-        title: 'Board Member',
-        description:
-          'Board member of Applied Mechanics, contributing to the advancement of experimental theatre and performance.',
-        icon: 'tabler:users',
-      },
-      {
-        title: 'Identity',
-        description:
-          'Bree is a queer, non-binary trans woman bringing diverse perspectives to musical theatre storytelling.',
-        icon: 'tabler:rainbow',
-      },
-      {
-        title: 'Connect',
-        description:
-          'Follow @breelowdermilk on social media for updates on new works, performances, and creative projects.',
-        icon: 'tabler:at',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80',
-      alt: 'Creative workspace',
-    }}
-  />
-
-  <!-- Steps2 Widget ****************** -->
-
-  <Steps2
-    title="Creative Approach"
-    subtitle="Bringing contemporary stories to life through innovative musical theatre that speaks to modern audiences."
-    items={[
-      {
-        title: 'Contemporary Storytelling',
-        description:
-          'Creating musicals that reflect modern experiences, from immersive house party productions to adaptations of beloved children\'s literature.',
-      },
-      {
-        title: 'Collaborative Creation',
-        description:
-          'Working with diverse creative teams to develop new works that push the boundaries of traditional musical theatre.',
-      },
-      {
-        title: 'Accessible Music',
-        description:
-          'Making sheet music and recordings widely available through digital platforms, empowering performers worldwide to share these stories.',
-      },
-    ]}
-  />
-
-  <!-- Steps2 Widget ****************** -->
-
-  <Steps2
-    title="Career Milestones"
-    subtitle="From Off-Broadway productions to national tours, creating contemporary musical theatre that resonates with audiences worldwide."
-    isReversed={true}
-    callToAction={{
-      text: 'View Shows',
-      href: '/shows',
-    }}
-    items={[
-      {
-        title: 'Global Digital Reach',
-        description: 'Over 30 million streams on <em>The Mad Ones</em> album with thousands of fan performance videos shared worldwide.',
-        icon: 'tabler:globe',
-      },
-      {
-        title: '#1 Chart Success',
-        description:
-          '<em>Our First Mistake</em> reached #1 on the Singer/Songwriter chart, demonstrating broad appeal beyond traditional theatre audiences.',
-        icon: 'tabler:chart-line',
-      },
-      {
-        title: 'Industry Recognition',
-        description:
-          'Recipient of the Jonathan Larson, Alan Menken, and Richard Rodgers Awards for excellence in musical theatre composition and writing.',
-        icon: 'tabler:award',
-      },
-    ]}
-  />
-
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="Connect"
-    tagline="Get in touch"
-    columns={2}
-    items={[
-      {
-        title: 'Social Media',
-        description:
-          'Follow @breelowdermilk for updates on new works, performances, and creative projects.',
-        icon: 'tabler:brand-twitter',
-      },
-      {
-        title: 'Sheet Music',
-        description:
-          'Find sheet music for songs at NewMusicalTheatre.com',
-        icon: 'tabler:music',
-      },
-    ]}
-  />
+          <p class="text-lg font-medium">
+            <a href="https://twitter.com/breelowdermilk" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">@breelowdermilk</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 </Layout>
