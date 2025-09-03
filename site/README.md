@@ -247,6 +247,48 @@ To customize Font families, Colors or more Elements refer to the following files
 - `src/components/CustomStyles.astro`
 - `src/assets/styles/tailwind.css`
 
+#### Bree Theme
+
+This site uses the **Bree Theme**, a custom design specification that provides:
+
+**Typography:**
+- **Title Font:** Source Serif 4 (elegant, light weight, bright red)
+- **Header Font:** Inter (bold, all-caps, charcoal)
+- **Body Font:** Inter (regular weight)
+
+**Colors:**
+- **Primary Red:** `#dc2626` (bright red for titles and accents)
+- **Warm Charcoal:** `#374151` to `#1f2937` gradient backgrounds
+- **Header Gradient:** Warm charcoal with smooth transitions
+
+**Design Features:**
+- **Glassmorphism Cards:** Subtle transparency with backdrop blur
+- **Dynamic Header:** Changes from dark to light on scroll with automatic text color adjustment
+- **Responsive Typography:** Fluid scaling from mobile to desktop
+- **Shadow System:** Layered shadows for depth and hierarchy
+
+**Key Files:**
+- `src/assets/styles/bree-theme.css` - Complete theme implementation
+- `src/layouts/Layout.astro` - Theme import and application
+- `src/components/widgets/Header.astro` - Dynamic header styling
+- `src/components/Logo.astro` - Red title font implementation
+
+**Usage:**
+```css
+/* Primary heading style */
+.bree-h1 {
+  font-family: 'Source Serif 4';
+  color: #dc2626;
+  font-size: 3.5rem;
+}
+
+/* Card components */
+.media-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+```
+
 ### Deploy
 
 #### Deploy to production (manual)
