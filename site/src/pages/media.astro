@@ -27,37 +27,11 @@ const metadata = {
     <HeroCarousel items={featuredItems} autoRotate={true} rotationInterval={8000} />
   </section>
 
-  <!-- Page Introduction -->
-  <section class="bg-gray-50 dark:bg-gray-900 py-16">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-          Musical Works & Performances
-        </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
-          Discover the acclaimed songs and performances that have captivated audiences worldwide. From chart-topping albums to intimate live performances, explore the complete collection of musical works.
-        </p>
-        <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-          <span class="bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-sm">
-            <span class="font-semibold text-purple-600 dark:text-purple-400">30M+</span> streams
-          </span>
-          <span class="bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-sm">
-            <span class="font-semibold text-blue-600 dark:text-blue-400">#1</span> Singer/Songwriter chart
-          </span>
-          <span class="bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-sm">
-            <span class="font-semibold text-green-600 dark:text-green-400">Award-winning</span> compositions
-          </span>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Featured Albums Section -->
-  <section class="py-20 bg-white dark:bg-gray-800">
+  <section class="py-2 bg-white dark:bg-gray-800">
     <FeaturedReleases 
       albums={albums}
-      title="Featured Releases"
-      description="Stream acclaimed albums on your favorite platforms. From the beloved off-Broadway musical to chart-topping originals."
     />
   </section>
 
@@ -65,11 +39,9 @@ const metadata = {
   <div class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-1"></div>
 
   <!-- Video Gallery Section -->
-  <section class="py-20 bg-gray-50 dark:bg-gray-900">
+  <section class="py-2 bg-gray-50 dark:bg-gray-900">
     <VideoGallery 
       videos={videoItems}
-      title="Performance Gallery"
-      description="Watch live performances, official music videos, and special collaborations with celebrated artists"
     />
   </section>
 
@@ -77,51 +49,12 @@ const metadata = {
   <div class="bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 h-1"></div>
 
   <!-- Streaming Links Hub Section -->
-  <section class="py-20 bg-white dark:bg-gray-800">
+  <section class="py-2 bg-white dark:bg-gray-800">
     <StreamingLinksHub 
       items={featuredItems}
-      title="Listen Everywhere"
-      description="Access our complete catalog on all major streaming platforms. Choose your preferred way to listen."
     />
   </section>
 
-  <!-- Call to Action Section -->
-  <section class="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 py-16">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-3xl mx-auto text-center text-white">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">
-          Stay Connected
-        </h2>
-        <p class="text-xl opacity-90 mb-8">
-          Follow along for new releases, behind-the-scenes content, and upcoming performances.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a 
-            href="https://twitter.com/breelowdermilk" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center px-8 py-3 bg-white text-purple-600 font-semibold rounded-full hover:bg-gray-100 transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-          >
-            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-            </svg>
-            Follow @breelowdermilk
-          </a>
-          <a 
-            href="https://newmusicaltheatre.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center px-8 py-3 bg-white/20 text-white font-semibold rounded-full hover:bg-white/30 transition-colors duration-200 border border-white/30 hover:border-white/50"
-          >
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-            </svg>
-            Visit NewMusicalTheatre.com
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
 </Layout>
 
 <style>
@@ -176,22 +109,27 @@ const metadata = {
   /* Responsive typography improvements */
   @media (max-width: 640px) {
     h1 {
-      font-size: 2.5rem;
+      font-size: 2rem;
       line-height: 1.2;
     }
     
-    .text-xl {
-      font-size: 1.125rem;
+    .text-lg {
+      font-size: 1rem;
     }
     
-    .py-20 {
-      padding-top: 3rem;
-      padding-bottom: 3rem;
+    .py-6 {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
     }
     
-    .py-16 {
-      padding-top: 2.5rem;
-      padding-bottom: 2.5rem;
+    .py-8 {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+    
+    .py-4 {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
     }
   }
   
@@ -255,9 +193,10 @@ const metadata = {
   const preloadResources = () => {
     // Preload hero carousel images
     const heroImages = [
-      'https://img.youtube.com/vi/jVwtGU3KOro/maxresdefault.jpg',
-      'https://img.youtube.com/vi/rMJSiNN0DxU/maxresdefault.jpg',
-      'https://img.youtube.com/vi/PFlaiSCZAcU/maxresdefault.jpg'
+      'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+      'https://img.youtube.com/vi/M7lc1UVf-VE/maxresdefault.jpg',
+      'https://img.youtube.com/vi/PFlaiSCZAcU/maxresdefault.jpg',
+      'https://img.youtube.com/vi/kJQP7kiw5Fk/maxresdefault.jpg'
     ];
     
     heroImages.forEach((src) => {

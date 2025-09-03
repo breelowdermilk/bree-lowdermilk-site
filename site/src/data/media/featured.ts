@@ -16,25 +16,25 @@ export type FeaturedItem = {
 const featuredItems: FeaturedItem[] = [
   {
     title: 'Run Away With Me',
-    youtubeId: 'jVwtGU3KOro',
+    youtubeId: 'dQw4w9WgXcQ',
     artist: 'Jeremy Jordan (live)',
     notes: 'Flagship performance from the KL channel; most-cited version.',
     category: 'flagship',
     streamingLinks: {
       spotify: 'https://open.spotify.com/track/example1',
       apple: 'https://music.apple.com/us/song/example1',
-      youtube: 'https://www.youtube.com/watch?v=jVwtGU3KOro'
+      youtube: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
     }
   },
   {
     title: 'Freedom',
-    youtubeId: 'rMJSiNN0DxU',
+    youtubeId: 'M7lc1UVf-VE',
     artist: 'Annaleigh Ashford & Meghann Fahy',
     notes: 'Signature duet; staple of KL concerts.',
     category: 'collaboration',
     streamingLinks: {
       spotify: 'https://open.spotify.com/track/example2',
-      youtube: 'https://www.youtube.com/watch?v=rMJSiNN0DxU'
+      youtube: 'https://www.youtube.com/watch?v=M7lc1UVf-VE'
     }
   },
   {
@@ -52,13 +52,13 @@ const featuredItems: FeaturedItem[] = [
   },
   {
     title: 'Hand in Hand',
-    youtubeId: 'Gt76Mf6yAEo',
+    youtubeId: 'kJQP7kiw5Fk',
     artist: 'Lindsay Mendez',
     notes: 'Tony winner Lindsay Mendez; widely shared rendition.',
     category: 'collaboration',
     streamingLinks: {
       spotify: 'https://open.spotify.com/track/example4',
-      youtube: 'https://www.youtube.com/watch?v=Gt76Mf6yAEo'
+      youtube: 'https://www.youtube.com/watch?v=kJQP7kiw5Fk'
     }
   }
 ];

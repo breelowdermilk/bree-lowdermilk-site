@@ -197,7 +197,15 @@ const platformIcons = {
       this.closeModalBtn = document.getElementById('close-modal');
       this.youtubeContainer = document.getElementById('youtube-container');
       
+      // Debug: Ensure elements are found (remove in production)
+      if (this.slides.length === 0 || this.playBtns.length === 0) {
+        console.warn('HeroCarousel: Some elements not found. Slides:', this.slides.length, 'Play buttons:', this.playBtns.length);
+      }
+      
       this.init();
+      
+      // Mark as initialized
+      window.heroCarouselInitialized = true;
     }
     
     init() {
@@ -213,8 +221,14 @@ const platformIcons = {
       // Play button listeners
       this.playBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           const youtubeId = e.currentTarget.dataset.youtubeId;
-          this.openYouTubeModal(youtubeId);
+          if (youtubeId) {
+            this.openYouTubeModal(youtubeId);
+          } else {
+            console.error('HeroCarousel: No YouTube ID found on play button');
+          }
         });
       });
       
@@ -322,14 +336,22 @@ const platformIcons = {
     }
     
     openYouTubeModal(youtubeId) {
-      if (!this.modal || !this.youtubeContainer) return;
+      if (!this.modal || !this.youtubeContainer) {
+        console.error('HeroCarousel: Modal or container element not found');
+        return;
+      }
+      
+      if (!youtubeId) {
+        console.error('HeroCarousel: No YouTube ID provided');
+        return;
+      }
       
       // Pause auto-rotation while modal is open
       this.pauseAutoRotation();
       
       // Create iframe
       const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+      iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
       iframe.title = 'YouTube video';
       iframe.className = 'w-full h-full';
       iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
@@ -362,9 +384,30 @@ const platformIcons = {
     }
   }
   
-  // Initialize carousel when DOM is loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    new HeroCarousel();
+  // Initialize carousel - use multiple methods to ensure it runs
+  const initCarousel = () => {
+    // Only initialize if elements exist
+    if (document.querySelector('.hero-carousel')) {
+      new HeroCarousel();
+    } else {
+      // If elements don't exist yet, try again shortly
+      setTimeout(initCarousel, 100);
+    }
+  };
+
+  // Try multiple initialization methods
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCarousel);
+  } else {
+    // DOM is already loaded
+    initCarousel();
+  }
+  
+  // Fallback initialization
+  window.addEventListener('load', () => {
+    if (!window.heroCarouselInitialized) {
+      initCarousel();
+    }
   });
 </script>
 
@@ -376,9 +419,9 @@ const platformIcons = {
     overflow: hidden;
   }
   
-  /* Responsive hero sizing - prioritize viewport height over aspect ratio */
+  /* Hero sizing: half width, twice height as requested */
   .hero-sizing {
-    /* Mobile: smaller height, more content-focused */
+    /* Mobile: doubled height from original */
     height: 50vh;
     min-height: 300px;
     max-height: 400px;
@@ -386,8 +429,8 @@ const platformIcons = {
   
   @media (min-width: 640px) {
     .hero-sizing {
-      /* Tablet: moderate height increase */
-      height: 55vh;
+      /* Tablet: doubled height */
+      height: 56vh;
       min-height: 350px;
       max-height: 450px;
     }
@@ -395,7 +438,7 @@ const platformIcons = {
   
   @media (min-width: 768px) {
     .hero-sizing {
-      /* Desktop: proportional but controlled height */
+      /* Desktop: doubled height */
       height: 60vh;
       min-height: 400px;
       max-height: 500px;
@@ -404,17 +447,17 @@ const platformIcons = {
   
   @media (min-width: 1024px) {
     .hero-sizing {
-      /* Large desktop: maximum practical height */
-      height: 65vh;
+      /* Large desktop: doubled height */
+      height: 64vh;
       min-height: 450px;
       max-height: 550px;
     }
   }
   
-  /* Ensure hero doesn't dominate on very tall screens */
+  /* Maintain proper dimensions on tall screens */
   @media (min-height: 900px) {
     .hero-sizing {
-      max-height: 500px;
+      max-height: 550px;
     }
   }
   
