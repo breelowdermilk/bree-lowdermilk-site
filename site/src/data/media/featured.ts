@@ -16,14 +16,14 @@ export type FeaturedItem = {
 const featuredItems: FeaturedItem[] = [
   {
     title: 'Run Away With Me',
-    youtubeId: 'dQw4w9WgXcQ',
+    youtubeId: 'jVwtGU3KOro',
     artist: 'Jeremy Jordan (live)',
     notes: 'Flagship performance from the KL channel; most-cited version.',
     category: 'flagship',
     streamingLinks: {
       spotify: 'https://open.spotify.com/track/example1',
       apple: 'https://music.apple.com/us/song/example1',
-      youtube: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+      youtube: 'https://www.youtube.com/watch?v=jVwtGU3KOro'
     }
   },
   {
@@ -52,13 +52,13 @@ const featuredItems: FeaturedItem[] = [
   },
   {
     title: 'Hand in Hand',
-    youtubeId: 'kJQP7kiw5Fk',
+    youtubeId: 'Gt76Mf6yAEo',
     artist: 'Lindsay Mendez',
     notes: 'Tony winner Lindsay Mendez; widely shared rendition.',
     category: 'collaboration',
     streamingLinks: {
       spotify: 'https://open.spotify.com/track/example4',
-      youtube: 'https://www.youtube.com/watch?v=kJQP7kiw5Fk'
+      youtube: 'https://www.youtube.com/watch?v=Gt76Mf6yAEo'
     }
   }
 ];

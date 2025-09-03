@@ -12,7 +12,7 @@ import videoItems from '~/data/media/video';
 
 const metadata = {
   title: 'Media | Bree Lowdermilk',
-  description: 'Explore Bree Lowdermilk\'s music, videos, and streaming platforms. Listen to acclaimed albums like The Mad Ones and Our First Mistake, watch live performances and collaborations.',
+  description: 'Award-winning composer behind The Mad Ones, with 30+ million streams. Explore music, videos, and streaming platforms.',
   openGraph: {
     title: 'Media | Bree Lowdermilk - Composer & Lyricist',
     description: 'Listen to award-winning compositions and watch performances by Bree Lowdermilk',
@@ -22,6 +22,37 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
+  <!-- Import Bree Theme CSS -->
+  <link rel="stylesheet" href="/src/assets/styles/bree-theme.css">
+
+  <!-- Hero Section with Bree Theme -->
+  <section class="media-section" style="padding-top: 40px; padding-bottom: 60px;">
+    <div class="media-container text-center">
+      <div class="featured-content" style="padding: 60px 48px;">
+        <h1 class="bree-h1 mb-6">Media</h1>
+        <p class="text-xl mb-8 max-w-3xl mx-auto" style="color: var(--text-medium); font-family: var(--font-body);">
+          Award-winning composer behind <em>The Mad Ones</em>, with 30+ million streams. 
+          Explore recordings, live performances, and official videos.
+        </p>
+        
+        <!-- Recognition Stats -->
+        <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mt-12">
+          <div class="media-card p-6">
+            <div class="text-3xl font-bold mb-2" style="color: var(--red-primary); font-family: var(--font-title);">30M+</div>
+            <div class="text-sm font-medium" style="color: var(--text-dark); font-family: var(--font-headers); text-transform: uppercase; letter-spacing: 0.05em;">STREAMS</div>
+          </div>
+          <div class="media-card p-6">
+            <div class="text-3xl font-bold mb-2" style="color: var(--red-primary); font-family: var(--font-title);">Off-Broadway</div>
+            <div class="text-sm font-medium" style="color: var(--text-dark); font-family: var(--font-headers); text-transform: uppercase; letter-spacing: 0.05em;">THE MAD ONES</div>
+          </div>
+          <div class="media-card p-6">
+            <div class="text-3xl font-bold mb-2" style="color: var(--red-primary); font-family: var(--font-title);">Awards</div>
+            <div class="text-sm font-medium" style="color: var(--text-dark); font-family: var(--font-headers); text-transform: uppercase; letter-spacing: 0.05em;">LARSON, MENKEN, RODGERS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   <!-- Hero Carousel Section -->
   <section class="relative">
     <HeroCarousel items={featuredItems} autoRotate={true} rotationInterval={8000} />
@@ -29,30 +60,42 @@ const metadata = {
 
 
   <!-- Featured Albums Section -->
-  <section class="py-2 bg-white dark:bg-gray-800">
-    <FeaturedReleases 
-      albums={albums}
-    />
+  <section class="media-section" style="background: rgba(249, 250, 251, 0.5);">
+    <div class="media-container">
+      <h2 class="bree-h2 mb-8 text-center">Featured Albums</h2>
+      <p class="text-lg mb-12 text-center max-w-4xl mx-auto" style="color: var(--text-medium); font-family: var(--font-body);">
+        Complete discography including studio recordings, live albums, and chart-toppers.
+      </p>
+      <div class="media-card p-8">
+        <FeaturedReleases albums={albums} />
+      </div>
+    </div>
   </section>
-
-  <!-- Section Divider -->
-  <div class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-1"></div>
 
   <!-- Video Gallery Section -->
-  <section class="py-2 bg-gray-50 dark:bg-gray-900">
-    <VideoGallery 
-      videos={videoItems}
-    />
+  <section class="media-section">
+    <div class="media-container">
+      <h2 class="bree-h2 mb-8 text-center">Video Gallery</h2>
+      <p class="text-lg mb-12 text-center max-w-4xl mx-auto" style="color: var(--text-medium); font-family: var(--font-body);">
+        Official performances, live recordings, and collaborations with Broadway stars.
+      </p>
+      <div class="media-card p-8">
+        <VideoGallery videos={videoItems} />
+      </div>
+    </div>
   </section>
 
-  <!-- Section Divider -->
-  <div class="bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 h-1"></div>
-
   <!-- Streaming Links Hub Section -->
-  <section class="py-2 bg-white dark:bg-gray-800">
-    <StreamingLinksHub 
-      items={featuredItems}
-    />
+  <section class="media-section" style="background: rgba(249, 250, 251, 0.5);">
+    <div class="media-container">
+      <h2 class="bree-h2 mb-8 text-center">Listen Everywhere</h2>
+      <p class="text-lg mb-12 text-center max-w-4xl mx-auto" style="color: var(--text-medium); font-family: var(--font-body);">
+        Stream on all major platforms. Find your favorite songs and discover new ones.
+      </p>
+      <div class="media-card p-8">
+        <StreamingLinksHub items={featuredItems} />
+      </div>
+    </div>
   </section>
 
 </Layout>
@@ -193,10 +236,10 @@ const metadata = {
   const preloadResources = () => {
     // Preload hero carousel images
     const heroImages = [
-      'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+      'https://img.youtube.com/vi/jVwtGU3KOro/maxresdefault.jpg',
       'https://img.youtube.com/vi/M7lc1UVf-VE/maxresdefault.jpg',
       'https://img.youtube.com/vi/PFlaiSCZAcU/maxresdefault.jpg',
-      'https://img.youtube.com/vi/kJQP7kiw5Fk/maxresdefault.jpg'
+      'https://img.youtube.com/vi/Gt76Mf6yAEo/maxresdefault.jpg'
     ];
     
     heroImages.forEach((src) => {
