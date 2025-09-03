@@ -1,0 +1,34 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import { getCollection } from 'astro:content';
+import defaultImg from '~/assets/images/default.png';
+
+const shows = (await getCollection('shows')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const metadata = {
+  title: 'Shows',
+};
+---
+<Layout metadata={metadata}>
+  <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-3xl font-bold tracking-tight mb-6">Shows</h1>
+    {shows.length === 0 ? (
+      <p class="text-muted">No shows available.</p>
+    ) : (
+      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {shows.map((s) => (
+          <li class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden hover:shadow-sm transition">
+            <a href={`/shows/${s.slug}`} class="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+              <img src={s.data.heroImage || defaultImg} alt="" class="w-full aspect-[16/9] object-cover" loading="lazy" />
+              <div class="p-4">
+                <h2 class="font-semibold text-lg">{s.data.title}</h2>
+                {s.data.synopsis && <p class="mt-1 text-sm text-gray-600 dark:text-gray-300 line-clamp-3">{s.data.synopsis}</p>}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Layout>
+
