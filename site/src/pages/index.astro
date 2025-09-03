@@ -1,14 +1,21 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import Hero from '~/components/widgets/Hero.astro';
+import Hero2 from '~/components/widgets/Hero2.astro';
 ---
 
 <Layout>
-  <Hero
+  <Hero2
+    title="Bree Lowdermilk"
+    subtitle="Composer • Lyricist • Performer"
     actions={[
       { variant: 'primary', text: 'Listen/Watch', href: '/media' },
       { text: 'Shows', href: '/shows' },
     ]}
+    image={{
+      src: '~/assets/images/bree-headshot-hero.png',
+      alt: 'Bree Lowdermilk headshot',
+      width: 600,
+      height: 600,
+    }}
   />
 </Layout>
-
