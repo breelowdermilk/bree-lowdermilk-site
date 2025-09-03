@@ -1,0 +1,238 @@
+---
+// GLightbox initialization component
+// This component sets up GLightbox for the entire site with proper Astro integration
+---
+
+<!-- GLightbox CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+
+<script>
+  // Import GLightbox dynamically
+  import GLightbox from 'glightbox';
+  
+  class GLightboxManager {
+    constructor() {
+      this.lightbox = null;
+      this.initLightbox();
+      this.setupViewTransitions();
+    }
+    
+    initLightbox() {
+      // Destroy existing instance if it exists
+      if (this.lightbox) {
+        this.lightbox.destroy();
+      }
+      
+      // Initialize GLightbox with custom settings for music content
+      this.lightbox = GLightbox({
+        selector: '.glightbox',
+        touchNavigation: true,
+        loop: true,
+        autoplayVideos: false, // Don't auto-play by default
+        plyr: {
+          css: 'https://cdn.plyr.io/3.6.8/plyr.css',
+          js: 'https://cdn.plyr.io/3.6.8/plyr.js',
+          config: {
+            ratio: '16:9',
+            youtube: {
+              noCookie: false,
+              rel: 0,
+              showinfo: 0,
+              iv_load_policy: 3,
+              modestbranding: 1
+            }
+          }
+        },
+        openEffect: 'fade',
+        closeEffect: 'fade',
+        slideEffect: 'slide',
+        moreText: 'View more',
+        moreLength: 60,
+        cssEfects: {
+          fade: { in: 'fadeIn', out: 'fadeOut' },
+          slide: { in: 'slideInRight', out: 'slideOutLeft' }
+        },
+        svg: {
+          close: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
+          next: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"></polyline></svg>',
+          prev: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"></polyline></svg>'
+        }
+      });
+      
+      // Add event listeners for video events
+      this.lightbox.on('slide_before_load', (data) => {
+        console.log('GLightbox: Loading slide', data);
+      });
+      
+      this.lightbox.on('slide_after_load', (data) => {
+        console.log('GLightbox: Slide loaded', data);
+      });
+    }
+    
+    setupViewTransitions() {
+      // Handle Astro View Transitions
+      document.addEventListener('astro:before-swap', () => {
+        if (this.lightbox) {
+          this.lightbox.destroy();
+        }
+      });
+      
+      document.addEventListener('astro:after-swap', () => {
+        this.initLightbox();
+      });
+    }
+    
+    // Helper method to add custom gallery items programmatically
+    addGalleryItem(selector, options = {}) {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(element => {
+        // Add glightbox class if not present
+        if (!element.classList.contains('glightbox')) {
+          element.classList.add('glightbox');
+        }
+        
+        // Set data attributes for GLightbox
+        Object.entries(options).forEach(([key, value]) => {
+          element.setAttribute(`data-${key}`, value);
+        });
+      });
+      
+      // Reinitialize to pick up new elements
+      this.initLightbox();
+    }
+    
+    // Helper method to create YouTube lightbox links
+    createYouTubeLink(youtubeId, title, description = '') {
+      return {
+        href: `https://www.youtube.com/watch?v=${youtubeId}`,
+        type: 'video',
+        source: 'youtube',
+        width: 900,
+        height: 506,
+        title: title,
+        description: description
+      };
+    }
+    
+    // Helper method to create Spotify embed lightbox
+    createSpotifyLink(spotifyId, title, description = '') {
+      const embedUrl = `https://open.spotify.com/embed/album/${spotifyId}?utm_source=generator&theme=0`;
+      return {
+        href: embedUrl,
+        type: 'iframe',
+        width: 900,
+        height: 600,
+        title: title,
+        description: description
+      };
+    }
+  }
+  
+  // Initialize GLightbox manager
+  let glightboxManager;
+  
+  const initializeGLightbox = () => {
+    if (!glightboxManager) {
+      glightboxManager = new GLightboxManager();
+    }
+    
+    // Make manager available globally for other components
+    window.glightboxManager = glightboxManager;
+  };
+  
+  // Initialize on different events to ensure it works with Astro
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeGLightbox);
+  } else {
+    initializeGLightbox();
+  }
+  
+  // Also initialize on page load as fallback
+  window.addEventListener('load', () => {
+    if (!window.glightboxManager) {
+      initializeGLightbox();
+    }
+  });
+  
+  // Handle Astro page transitions
+  document.addEventListener('astro:page-load', initializeGLightbox);
+</script>
+
+<style>
+  /* Custom GLightbox styling for music content */
+  :global(.glightbox-clean .gslide-description) {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+  
+  :global(.glightbox-clean .gslide-title) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+  }
+  
+  :global(.glightbox-clean .gslide-desc) {
+    color: #e5e7eb;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  
+  /* Style for video thumbnails with play button */
+  :global(.glightbox-video-thumb) {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+  }
+  
+  :global(.glightbox-video-thumb:hover) {
+    transform: scale(1.02);
+  }
+  
+  :global(.glightbox-video-thumb::after) {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%);
+    transition: opacity 0.3s ease;
+  }
+  
+  :global(.glightbox-video-thumb:hover::after) {
+    opacity: 0.7;
+  }
+  
+  /* Custom play button overlay */
+  :global(.glightbox-play-btn) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4rem;
+    height: 4rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+  }
+  
+  :global(.glightbox-video-thumb:hover .glightbox-play-btn) {
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  
+  :global(.glightbox-play-btn svg) {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #1f2937;
+    margin-left: 2px; /* Slight offset for visual balance */
+  }
+</style>

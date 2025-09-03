@@ -1,8 +1,9 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import HeroCarousel from '~/components/media/HeroCarousel.astro';
+import GLightboxInit from '~/components/media/GLightboxInit.astro';
+import HeroCarouselGLightbox from '~/components/media/HeroCarouselGLightbox.astro';
 import FeaturedReleases from '~/components/media/FeaturedReleases.astro';
-import VideoGallery from '~/components/media/VideoGallery.astro';
+import VideoGalleryGLightbox from '~/components/media/VideoGalleryGLightbox.astro';
 import StreamingLinksHub from '~/components/media/StreamingLinksHub.astro';
 
 // Import data
@@ -53,9 +54,12 @@ const metadata = {
       </div>
     </div>
   </section>
+  <!-- GLightbox Initialization -->
+  <GLightboxInit />
+  
   <!-- Hero Carousel Section -->
   <section class="relative">
-    <HeroCarousel items={featuredItems} autoRotate={true} rotationInterval={8000} />
+    <HeroCarouselGLightbox items={featuredItems} autoRotate={true} rotationInterval={8000} />
   </section>
 
 
@@ -80,7 +84,7 @@ const metadata = {
         Official performances, live recordings, and collaborations with Broadway stars.
       </p>
       <div class="media-card p-8">
-        <VideoGallery videos={videoItems} />
+        <VideoGalleryGLightbox videos={videoItems} />
       </div>
     </div>
   </section>
