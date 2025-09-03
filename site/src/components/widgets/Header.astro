@@ -49,8 +49,8 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
 
 <header
   class:list={[
-    { sticky: isSticky, relative: !isSticky, dark: isDark },
-    'top-0 z-40 flex-none mx-auto w-full border-b border-gray-50/0 transition-[opacity] ease-in-out',
+    { sticky: isSticky, relative: !isSticky },
+    'bree-header top-0 z-40 flex-none mx-auto w-full transition-[opacity] ease-in-out',
   ]}
   {...isSticky ? { 'data-aw-sticky-header': true } : {}}
   {...id ? { id } : {}}
@@ -79,11 +79,13 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
       </div>
     </div>
     <nav
-      class="items-center w-full md:w-auto hidden md:flex md:mx-5 text-default overflow-y-auto overflow-x-hidden md:overflow-y-visible md:overflow-x-auto md:justify-self-center"
+      class="items-center w-full md:w-auto hidden md:flex md:mx-5 overflow-y-auto overflow-x-hidden md:overflow-y-visible md:overflow-x-auto md:justify-self-center"
       aria-label="Main navigation"
+      style="color: #f9fafb;"
     >
       <ul
-        class="flex flex-col md:flex-row md:self-center w-full md:w-auto text-xl md:text-[0.9375rem] tracking-[0.01rem] font-medium md:justify-center"
+        class="flex flex-col md:flex-row md:self-center w-full md:w-auto text-xl md:text-[0.9375rem] tracking-[0.05em] font-bold md:justify-center"
+        style="font-family: var(--font-headers); text-transform: uppercase; letter-spacing: 0.05em;"
       >
         {
           links.map(({ text, href, links }) => (

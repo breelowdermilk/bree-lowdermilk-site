@@ -50,7 +50,7 @@ body {
 /* H1 Headings (Same as titles) */
 .bree-h1 {
   font-family: var(--font-title);
-  font-size: 2.625rem; 
+  font-size: 3.5rem; 
   font-weight: 300;
   color: var(--red-primary);
   line-height: 1.2;
@@ -80,20 +80,45 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
+  transition: all 0.3s ease;
 }
 
+/* Header text styling - adapts to background changes */
 .bree-header h1, 
-.bree-header a, 
 .bree-header nav a {
-  color: #f9fafb !important;
   font-family: var(--font-headers) !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.05em !important;
+  transition: color 0.3s ease !important;
 }
 
+/* Default dark header state */
+.bree-header h1,
+.bree-header nav a {
+  color: #f9fafb !important;
+}
+
+/* Light header state (when scrolled/background changes) */
+.bree-header.header-scrolled h1,
+.bree-header.header-scrolled nav a {
+  color: var(--text-dark) !important;
+}
+
+/* Logo stays red in both states */
+.bree-header .logo-text {
+  color: var(--red-primary) !important;
+  font-family: var(--font-title) !important;
+  font-weight: 300 !important;
+}
+
+/* Hover states */
 .bree-header nav a:hover {
   color: var(--red-primary) !important;
+}
+
+.bree-header.header-scrolled nav a:hover {
+  color: var(--red-hover) !important;
 }
 
 /* Buttons with Warm Charcoal Gradient */
@@ -200,7 +225,7 @@ body {
   }
   
   .bree-h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
   
   .featured-content {

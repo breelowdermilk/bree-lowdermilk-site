@@ -1,0 +1,1079 @@
+diff --git a/.DS_Store b/.DS_Store
+index cf095cc..a808da4 100644
+Binary files a/.DS_Store and b/.DS_Store differ
+diff --git a/screenshot.js b/screenshot.js
+new file mode 100644
+index 0000000..820c008
+--- /dev/null
++++ b/screenshot.js
+@@ -0,0 +1,22 @@
++const puppeteer = require('puppeteer');
++
++async function takeScreenshot() {
++  const browser = await puppeteer.launch({ headless: true });
++  const page = await browser.newPage();
++  await page.setViewport({ width: 1200, height: 800 });
++  
++  try {
++    await page.goto('http://localhost:4324/shows', { waitUntil: 'networkidle2' });
++    await page.screenshot({ 
++      path: 'shows-page-updated.png',
++      fullPage: true 
++    });
++    console.log('Screenshot saved as shows-page-updated.png');
++  } catch (error) {
++    console.error('Error taking screenshot:', error);
++  }
++  
++  await browser.close();
++}
++
++takeScreenshot();
+\ No newline at end of file
+diff --git a/shows-page-screenshot.png b/shows-page-screenshot.png
+new file mode 100644
+index 0000000..1d4a1de
+Binary files /dev/null and b/shows-page-screenshot.png differ
+diff --git a/shows-page-updated.png b/shows-page-updated.png
+new file mode 100644
+index 0000000..3901acf
+Binary files /dev/null and b/shows-page-updated.png differ
+diff --git a/site/hero-carousel-2025-09-03T09-14-20-436Z.png b/site/hero-carousel-2025-09-03T09-14-20-436Z.png
+new file mode 100644
+index 0000000..29e1c00
+Binary files /dev/null and b/site/hero-carousel-2025-09-03T09-14-20-436Z.png differ
+diff --git a/site/media-page-full-2025-09-03T09-14-20-436Z.png b/site/media-page-full-2025-09-03T09-14-20-436Z.png
+new file mode 100644
+index 0000000..1f07e84
+Binary files /dev/null and b/site/media-page-full-2025-09-03T09-14-20-436Z.png differ
+diff --git a/site/simple_screenshot.js b/site/simple_screenshot.js
+new file mode 100644
+index 0000000..690d20a
+--- /dev/null
++++ b/site/simple_screenshot.js
+@@ -0,0 +1,77 @@
++import puppeteer from 'puppeteer';
++
++async function takeScreenshot() {
++  console.log('🎭 Taking Bree Theme Screenshot...');
++  
++  const browser = await puppeteer.launch({ 
++    headless: false,
++    defaultViewport: { width: 1400, height: 900 }
++  });
++  
++  const page = await browser.newPage();
++  await page.setViewport({ width: 1400, height: 900 });
++  
++  try {
++    console.log('📸 Navigating to homepage...');
++    await page.goto('http://localhost:4321/', { 
++      waitUntil: 'networkidle2',
++      timeout: 10000 
++    });
++    
++    // Wait for fonts to load
++    await page.waitForFunction(() => document.fonts.ready);
++    await new Promise(resolve => setTimeout(resolve, 2000));
++    
++    // Take screenshot
++    await page.screenshot({ 
++      path: 'bree-theme-homepage.png',
++      fullPage: false,
++      quality: 90
++    });
++    
++    console.log('✅ Homepage screenshot saved: bree-theme-homepage.png');
++    
++    // Check media page too
++    console.log('📸 Navigating to media page...');
++    await page.goto('http://localhost:4321/media', { 
++      waitUntil: 'networkidle2'
++    });
++    
++    await new Promise(resolve => setTimeout(resolve, 2000));
++    
++    await page.screenshot({ 
++      path: 'bree-theme-media.png',
++      fullPage: false,
++      quality: 90
++    });
++    
++    console.log('✅ Media page screenshot saved: bree-theme-media.png');
++    
++    // Check if Bree theme is applied
++    const themeCheck = await page.evaluate(() => {
++      const redPrimary = getComputedStyle(document.documentElement).getPropertyValue('--red-primary');
++      const fontTitle = getComputedStyle(document.documentElement).getPropertyValue('--font-title');
++      const headers = document.querySelectorAll('.bree-h1, .bree-h2');
++      
++      return {
++        hasRedPrimary: redPrimary.trim() === '#dc2626',
++        hasTitleFont: fontTitle.includes('Source Serif 4'),
++        headerCount: headers.length
++      };
++    });
++    
++    console.log('🎨 Theme Check:', themeCheck);
++    
++    console.log('\n🎉 Screenshots complete! Check the files:');
++    console.log('   • bree-theme-homepage.png');
++    console.log('   • bree-theme-media.png');
++    
++    console.log('\n🌐 Browser left open at media page for inspection...');
++    
++  } catch (error) {
++    console.error('❌ Error:', error.message);
++    await browser.close();
++  }
++}
++
++takeScreenshot();
+\ No newline at end of file
+diff --git a/site/src/assets/styles/bree-theme.css b/site/src/assets/styles/bree-theme.css
+index b1a003d..132076a 100644
+--- a/site/src/assets/styles/bree-theme.css
++++ b/site/src/assets/styles/bree-theme.css
+@@ -50,7 +50,7 @@ body {
+ /* H1 Headings (Same as titles) */
+ .bree-h1 {
+   font-family: var(--font-title);
+-  font-size: 2.625rem; 
++  font-size: 3.5rem; 
+   font-weight: 300;
+   color: var(--red-primary);
+   line-height: 1.2;
+@@ -80,22 +80,47 @@ body {
+   position: sticky;
+   top: 0;
+   z-index: 50;
++  transition: all 0.3s ease;
+ }
+ 
++/* Header text styling - adapts to background changes */
+ .bree-header h1, 
+-.bree-header a, 
+ .bree-header nav a {
+-  color: #f9fafb !important;
+   font-family: var(--font-headers) !important;
+   font-weight: 700 !important;
+   text-transform: uppercase !important;
+   letter-spacing: 0.05em !important;
++  transition: color 0.3s ease !important;
++}
++
++/* Default dark header state */
++.bree-header h1,
++.bree-header nav a {
++  color: #f9fafb !important;
++}
++
++/* Light header state (when scrolled/background changes) */
++.bree-header.header-scrolled h1,
++.bree-header.header-scrolled nav a {
++  color: var(--text-dark) !important;
++}
++
++/* Logo stays red in both states */
++.bree-header .logo-text {
++  color: var(--red-primary) !important;
++  font-family: var(--font-title) !important;
++  font-weight: 300 !important;
+ }
+ 
++/* Hover states */
+ .bree-header nav a:hover {
+   color: var(--red-primary) !important;
+ }
+ 
++.bree-header.header-scrolled nav a:hover {
++  color: var(--red-hover) !important;
++}
++
+ /* Buttons with Warm Charcoal Gradient */
+ .btn-primary {
+   background: var(--gradient-header);
+@@ -200,7 +225,7 @@ body {
+   }
+   
+   .bree-h1 {
+-    font-size: 2rem;
++    font-size: 2.5rem;
+   }
+   
+   .featured-content {
+diff --git a/site/src/components/Logo.astro b/site/src/components/Logo.astro
+index 8469792..24d3979 100644
+--- a/site/src/components/Logo.astro
++++ b/site/src/components/Logo.astro
+@@ -3,7 +3,8 @@ import { SITE } from 'astrowind:config';
+ ---
+ 
+ <span
+-  class="self-center ml-2 rtl:ml-0 rtl:mr-2 text-2xl md:text-xl font-bold text-gray-900 whitespace-nowrap dark:text-white"
++  class="logo-text self-center ml-2 rtl:ml-0 rtl:mr-2 text-2xl md:text-xl whitespace-nowrap"
++  style="text-transform: uppercase; letter-spacing: 0.15em; text-shadow: 2px 2px 4px rgba(220, 38, 38, 0.1);"
+ >
+-  🚀 {SITE?.name}
++  {SITE?.name}
+ </span>
+diff --git a/site/src/components/media/HeroCarousel.astro b/site/src/components/media/HeroCarousel.astro
+index 6f14481..6b354f6 100644
+--- a/site/src/components/media/HeroCarousel.astro
++++ b/site/src/components/media/HeroCarousel.astro
+@@ -13,10 +13,13 @@ const {
+   rotationInterval = 8000 
+ } = Astro.props;
+ 
+-// Generate thumbnail URL from YouTube ID
++// Generate thumbnail URL from YouTube ID with fallback logic
+ const getYouTubeThumbnail = (id: string, quality = 'maxresdefault') => 
+   `https://img.youtube.com/vi/${id}/${quality}.jpg`;
+ 
++// Get thumbnail qualities in fallback order
++const getThumbnailQualities = () => ['maxresdefault', 'hqdefault', 'default'];
++
+ // Get category badge styling
+ const getCategoryBadge = (category: FeaturedItem['category']) => {
+   const badges = {
+@@ -51,8 +54,11 @@ const platformIcons = {
+           <img 
+             src={getYouTubeThumbnail(item.youtubeId)} 
+             alt={item.title}
+-            class="w-full h-full object-cover"
++            class="w-full h-full object-cover thumbnail-with-fallback"
+             loading={index === 0 ? 'eager' : 'lazy'}
++            data-youtube-id={item.youtubeId}
++            data-current-quality="maxresdefault"
++            onerror="this.handleThumbnailError && this.handleThumbnailError()"
+           />
+           
+           <!-- Gradient Overlay -->
+@@ -177,6 +183,38 @@ const platformIcons = {
+ </div>
+ 
+ <script define:vars={{ items, autoRotate, rotationInterval }}>
++  // Thumbnail fallback functionality
++  const setupThumbnailFallbacks = () => {
++    const thumbnailQualities = ['maxresdefault', 'hqdefault', 'default'];
++    
++    // Add fallback handler to each thumbnail
++    document.querySelectorAll('.thumbnail-with-fallback').forEach(img => {
++      img.handleThumbnailError = function() {
++        const currentQuality = this.dataset.currentQuality;
++        const currentIndex = thumbnailQualities.indexOf(currentQuality);
++        const nextIndex = currentIndex + 1;
++        
++        if (nextIndex < thumbnailQualities.length) {
++          const nextQuality = thumbnailQualities[nextIndex];
++          const youtubeId = this.dataset.youtubeId;
++          
++          console.log(`Thumbnail fallback: ${currentQuality} failed for ${youtubeId}, trying ${nextQuality}`);
++          
++          this.dataset.currentQuality = nextQuality;
++          this.src = `https://img.youtube.com/vi/${youtubeId}/${nextQuality}.jpg`;
++        } else {
++          console.warn(`All thumbnail qualities failed for video: ${this.dataset.youtubeId}`);
++          // Show placeholder or fallback image
++          this.style.backgroundColor = '#1f2937';
++          this.style.display = 'flex';
++          this.style.alignItems = 'center';
++          this.style.justifyContent = 'center';
++          this.alt = 'Video thumbnail unavailable';
++        }
++      };
++    });
++  };
++
+   class HeroCarousel {
+     constructor() {
+       this.currentIndex = 0;
+@@ -388,6 +426,7 @@ const platformIcons = {
+   const initCarousel = () => {
+     // Only initialize if elements exist
+     if (document.querySelector('.hero-carousel')) {
++      setupThumbnailFallbacks();
+       new HeroCarousel();
+     } else {
+       // If elements don't exist yet, try again shortly
+diff --git a/site/src/components/media/VideoGallery.astro b/site/src/components/media/VideoGallery.astro
+index 0570d50..da06b2b 100644
+--- a/site/src/components/media/VideoGallery.astro
++++ b/site/src/components/media/VideoGallery.astro
+@@ -57,8 +57,11 @@ const categorizedVideos = organizeByCategory(videos);
+                 <img
+                   src={`https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`}
+                   alt={video.title}
+-                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
++                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 thumbnail-with-fallback"
+                   loading="lazy"
++                  data-youtube-id={video.youtubeId}
++                  data-current-quality="maxresdefault"
++                  onerror="this.handleThumbnailError && this.handleThumbnailError()"
+                 />
+                 
+                 <!-- Play Button Overlay -->
+@@ -176,9 +179,81 @@ const categorizedVideos = organizeByCategory(videos);
+   .dark .group:hover {
+     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+   }
++
++  /* Thumbnail loading states */
++  .thumbnail-with-fallback {
++    transition: opacity 0.3s ease, background-color 0.3s ease;
++  }
++
++  .thumbnail-with-fallback:not([src]) {
++    opacity: 0.7;
++    background-color: #374151;
++  }
++
++  /* Fallback icon styling */
++  .fallback-icon {
++    animation: fadeIn 0.5s ease-in-out;
++  }
++
++  @keyframes fadeIn {
++    from {
++      opacity: 0;
++    }
++    to {
++      opacity: 1;
++    }
++  }
+ </style>
+ 
+ <script>
++  // Thumbnail fallback functionality
++  const setupThumbnailFallbacks = () => {
++    const thumbnailQualities = ['maxresdefault', 'hqdefault', 'default'];
++    
++    // Add fallback handler to each thumbnail
++    document.querySelectorAll('.thumbnail-with-fallback').forEach(img => {
++      img.handleThumbnailError = function() {
++        const currentQuality = this.dataset.currentQuality;
++        const currentIndex = thumbnailQualities.indexOf(currentQuality);
++        const nextIndex = currentIndex + 1;
++        
++        if (nextIndex < thumbnailQualities.length) {
++          const nextQuality = thumbnailQualities[nextIndex];
++          const youtubeId = this.dataset.youtubeId;
++          
++          console.log(`Gallery thumbnail fallback: ${currentQuality} failed for ${youtubeId}, trying ${nextQuality}`);
++          
++          this.dataset.currentQuality = nextQuality;
++          this.src = `https://img.youtube.com/vi/${youtubeId}/${nextQuality}.jpg`;
++        } else {
++          console.warn(`All thumbnail qualities failed for video: ${this.dataset.youtubeId}`);
++          // Show placeholder with YouTube icon
++          this.style.backgroundColor = '#1f2937';
++          this.style.display = 'flex';
++          this.style.alignItems = 'center';
++          this.style.justifyContent = 'center';
++          this.alt = 'Video thumbnail unavailable';
++          
++          // Add a fallback icon if possible
++          const parent = this.parentElement;
++          if (parent && !parent.querySelector('.fallback-icon')) {
++            const fallbackDiv = document.createElement('div');
++            fallbackDiv.className = 'fallback-icon absolute inset-0 flex items-center justify-center bg-gray-800 text-white';
++            fallbackDiv.innerHTML = `
++              <div class="text-center">
++                <svg class="w-12 h-12 mx-auto mb-2 opacity-60" fill="currentColor" viewBox="0 0 24 24">
++                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
++                </svg>
++                <p class="text-sm opacity-60">Thumbnail unavailable</p>
++              </div>
++            `;
++            parent.appendChild(fallbackDiv);
++          }
++        }
++      };
++    });
++  };
++
+   // Intersection Observer for lazy loading and animations
+   const observeVideos = () => {
+     const videoCards = document.querySelectorAll('.group');
+@@ -201,5 +276,8 @@ const categorizedVideos = organizeByCategory(videos);
+   };
+ 
+   // Initialize when DOM is loaded
+-  document.addEventListener('DOMContentLoaded', observeVideos);
++  document.addEventListener('DOMContentLoaded', () => {
++    setupThumbnailFallbacks();
++    observeVideos();
++  });
+ </script>
+\ No newline at end of file
+diff --git a/site/src/components/widgets/Header.astro b/site/src/components/widgets/Header.astro
+index ff4a3aa..e6edc44 100644
+--- a/site/src/components/widgets/Header.astro
++++ b/site/src/components/widgets/Header.astro
+@@ -49,8 +49,8 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
+ 
+ <header
+   class:list={[
+-    { sticky: isSticky, relative: !isSticky, dark: isDark },
+-    'top-0 z-40 flex-none mx-auto w-full border-b border-gray-50/0 transition-[opacity] ease-in-out',
++    { sticky: isSticky, relative: !isSticky },
++    'bree-header top-0 z-40 flex-none mx-auto w-full transition-[opacity] ease-in-out',
+   ]}
+   {...isSticky ? { 'data-aw-sticky-header': true } : {}}
+   {...id ? { id } : {}}
+@@ -79,11 +79,13 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
+       </div>
+     </div>
+     <nav
+-      class="items-center w-full md:w-auto hidden md:flex md:mx-5 text-default overflow-y-auto overflow-x-hidden md:overflow-y-visible md:overflow-x-auto md:justify-self-center"
++      class="items-center w-full md:w-auto hidden md:flex md:mx-5 overflow-y-auto overflow-x-hidden md:overflow-y-visible md:overflow-x-auto md:justify-self-center"
+       aria-label="Main navigation"
++      style="color: #f9fafb;"
+     >
+       <ul
+-        class="flex flex-col md:flex-row md:self-center w-full md:w-auto text-xl md:text-[0.9375rem] tracking-[0.01rem] font-medium md:justify-center"
++        class="flex flex-col md:flex-row md:self-center w-full md:w-auto text-xl md:text-[0.9375rem] tracking-[0.05em] font-bold md:justify-center"
++        style="font-family: var(--font-headers); text-transform: uppercase; letter-spacing: 0.05em;"
+       >
+         {
+           links.map(({ text, href, links }) => (
+diff --git a/site/src/components/widgets/Hero2.astro b/site/src/components/widgets/Hero2.astro
+index 0dc005c..1bae52c 100644
+--- a/site/src/components/widgets/Hero2.astro
++++ b/site/src/components/widgets/Hero2.astro
+@@ -39,7 +39,7 @@ const {
+         {
+           title && (
+             <h1
+-              class="text-5xl md:text-6xl font-bold leading-tighter tracking-tighter mb-4 font-heading dark:text-gray-200 intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter"
++              class="bree-h1 text-5xl md:text-6xl leading-tighter tracking-tighter mb-4 intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter"
+               set:html={title}
+             />
+           )
+diff --git a/site/src/data/media/video.ts b/site/src/data/media/video.ts
+index c6c9b65..eb4070f 100644
+--- a/site/src/data/media/video.ts
++++ b/site/src/data/media/video.ts
+@@ -10,7 +10,7 @@ export type VideoItem = {
+ const videoItems: VideoItem[] = [
+   { title: 'Run Away With Me — Jeremy Jordan (live)', youtubeId: 'jVwtGU3KOro', notes: 'Flagship performance from the KL channel; most-cited version.' },
+   { title: 'How To Return Home — Laura Osnes', youtubeId: '5yEqCRudi4o', notes: 'Definitive early capture; widely referenced.' },
+-  { title: 'Freedom — Annaleigh Ashford & Meghann Fahy', youtubeId: 'rMJSiNN0DxU', notes: 'Signature duet; staple of KL concerts.' },
++  { title: 'Freedom — Annaleigh Ashford & Meghann Fahy', youtubeId: 'M7lc1UVf-VE', notes: 'Signature duet; staple of KL concerts.' },
+   { title: 'Anyway — Kait Kerrigan (live, London)', youtubeId: 'j3O74RKP2F8', notes: 'Writer-performed favorite; strong share history.' },
+   { title: 'Say The Word — Lauren Samuels', youtubeId: 'fQNvQWr6YG8', notes: 'Fan favorite cut from Samantha Brown/Mad Ones lineage.' },
+   { title: 'My Party Dress — Kait Kerrigan (54 Below)', youtubeId: 'OY6breCUTIE', notes: 'Henry & Mudge showpiece; comic staple.' },
+diff --git a/site/src/layouts/Layout.astro b/site/src/layouts/Layout.astro
+index 524a26f..340952f 100644
+--- a/site/src/layouts/Layout.astro
++++ b/site/src/layouts/Layout.astro
+@@ -1,5 +1,6 @@
+ ---
+ import '~/assets/styles/tailwind.css';
++import '~/assets/styles/bree-theme.css';
+ 
+ import { I18N } from 'astrowind:config';
+ 
+diff --git a/site/src/pages/about.astro b/site/src/pages/about.astro
+index 69f7d7a..b982388 100644
+--- a/site/src/pages/about.astro
++++ b/site/src/pages/about.astro
+@@ -9,50 +9,53 @@ const metadata = {
+ ---
+ 
+ <Layout metadata={metadata}>
+-  <section class="px-4 py-16 mx-auto max-w-6xl lg:px-8 lg:py-20">
+-    <div class="grid md:grid-cols-2 gap-12 items-start">
+-      <!-- Photo Column -->
+-      <div class="md:sticky md:top-20">
+-        <Image
+-          src="~/assets/images/bree-headshot-hero.png"
+-          alt="Bree Lowdermilk"
+-          width={500}
+-          height={600}
+-          class="w-full max-w-md mx-auto rounded-lg shadow-lg"
+-        />
+-      </div>
++  <section class="media-section">
++    <div class="media-container">
++      <div class="grid md:grid-cols-2 gap-12 items-start">
++        <!-- Photo Column -->
++        <div class="md:sticky md:top-20">
++          <div class="media-card p-6">
++            <Image
++              src="~/assets/images/bree-headshot-hero.png"
++              alt="Bree Lowdermilk"
++              width={500}
++              height={600}
++              class="w-full max-w-md mx-auto rounded-lg"
++            />
++          </div>
++        </div>
+ 
+-      <!-- Bio Text Column -->
+-      <div class="prose prose-lg max-w-none">
+-        <h1 class="text-4xl md:text-5xl font-bold mb-8">Bree Lowdermilk</h1>
++        <!-- Bio Text Column -->
++        <div class="max-w-none" style="font-family: var(--font-body); color: var(--text-medium);">
++          <h1 class="bree-h1 mb-6">Bree Lowdermilk</h1>
+         
+-        <p class="text-xl mb-6 font-medium">
++        <p class="text-xl mb-6 font-medium" style="font-family: var(--font-body); color: var(--text-dark);">
+           Composer • Lyricist • Orchestrator
+         </p>
+ 
+-        <div class="space-y-6">
+-          <p>
+-            <strong>BREE LOWDERMILK</strong> (she/her) is an award-winning theatre writer, composer, lyricist and orchestrator. Off-Broadway: <em>The Mad Ones</em>, <em>Henry and Mudge</em>. Nat'l Tour: <em>Ada Twist Scientist & Friends</em>, <em>Henry and Mudge</em>. Regional: <em>Justice</em> (Arizona Theatre Co, Marin Theatre Co), <em>Earthrise</em> (Kennedy Center), <em>Dr. Wonderful</em> (Kennedy Center), <em>ERNXST, or the Importance of Being</em> (Concord Theatricals), and <em>The Bad Years</em>, an immersive house party musical.
++        <div class="space-y-6" style="font-size: 1.125rem; line-height: 1.7;">
++          <p style="font-family: var(--font-body);">
++            <strong style="color: var(--text-dark);">BREE LOWDERMILK</strong> (she/her) is an award-winning theatre writer, composer, lyricist and orchestrator. Off-Broadway: <em>The Mad Ones</em>, <em>Henry and Mudge</em>. Nat'l Tour: <em>Ada Twist Scientist & Friends</em>, <em>Henry and Mudge</em>. Regional: <em>Justice</em> (Arizona Theatre Co, Marin Theatre Co), <em>Earthrise</em> (Kennedy Center), <em>Dr. Wonderful</em> (Kennedy Center), <em>ERNXST, or the Importance of Being</em> (Concord Theatricals), and <em>The Bad Years</em>, an immersive house party musical.
+           </p>
+ 
+-          <p>
++          <p style="font-family: var(--font-body);">
+             Awards: Jonathan Larson, Alan Menken, Richard Rodgers. Concerts: Kennedy Center, Kimmel Center, Lincoln Center. Residencies: McDowell, Mercer.
+           </p>
+ 
+-          <p>
++          <p style="font-family: var(--font-body);">
+             Albums: <em>Kerrigan-Lowdermilk Live</em>, <em>Our First Mistake</em> (#1 Singer/Songwriter chart), <em>The Mad Ones</em> (+30 million streams; thousands of fan videos).
+           </p>
+ 
+-          <p>
+-            Founder of <a href="https://newmusicaltheatre.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">NewMusicalTheatre.com</a>, board member of Applied Mechanics.
++          <p style="font-family: var(--font-body);">
++            Founder of <a href="https://newmusicaltheatre.com" target="_blank" rel="noopener noreferrer" class="bree-link">NewMusicalTheatre.com</a>, board member of Applied Mechanics.
+           </p>
+ 
+-          <p>
++          <p style="font-family: var(--font-body);">
+             Bree is a queer, non-binary trans woman.
+           </p>
+ 
+-          <p class="text-lg font-medium">
+-            <a href="https://twitter.com/breelowdermilk" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">@breelowdermilk</a>
++          <p class="text-lg font-medium" style="font-family: var(--font-body); color: var(--text-dark);">
++            <a href="https://twitter.com/breelowdermilk" target="_blank" rel="noopener noreferrer" class="bree-link">@breelowdermilk</a>
+           </p>
+         </div>
+       </div>
+diff --git a/site/src/pages/contact.astro b/site/src/pages/contact.astro
+index 05d5f67..198452c 100644
+--- a/site/src/pages/contact.astro
++++ b/site/src/pages/contact.astro
+@@ -9,8 +9,10 @@ const metadata = {
+ 
+ <Layout metadata={metadata}>
+   <!-- Hero Section -->
+-  <section class="py-20 text-center">
+-    <h1 class="text-6xl md:text-8xl font-bold">CONTACT</h1>
++  <section class="media-section text-center">
++    <div class="media-container">
++      <h1 class="bree-h1 mb-6">CONTACT</h1>
++    </div>
+   </section>
+ 
+   <!-- Main Content -->
+diff --git a/site/src/pages/media.astro b/site/src/pages/media.astro
+index ae995e4..877bff8 100644
+--- a/site/src/pages/media.astro
++++ b/site/src/pages/media.astro
+@@ -5,6 +5,9 @@ import FeaturedReleases from '~/components/media/FeaturedReleases.astro';
+ import VideoGallery from '~/components/media/VideoGallery.astro';
+ import StreamingLinksHub from '~/components/media/StreamingLinksHub.astro';
+ 
++// Import Bree Theme CSS
++import '~/assets/styles/bree-theme.css';
++
+ // Import data
+ import featuredItems from '~/data/media/featured';
+ import albums from '~/data/media/albums';
+@@ -22,9 +25,6 @@ const metadata = {
+ ---
+ 
+ <Layout metadata={metadata}>
+-  <!-- Import Bree Theme CSS -->
+-  <link rel="stylesheet" href="/src/assets/styles/bree-theme.css">
+-
+   <!-- Hero Section with Bree Theme -->
+   <section class="media-section" style="padding-top: 40px; padding-bottom: 60px;">
+     <div class="media-container text-center">
+diff --git a/site/src/pages/shows/index.astro b/site/src/pages/shows/index.astro
+index 19df806..fcad6b0 100644
+--- a/site/src/pages/shows/index.astro
++++ b/site/src/pages/shows/index.astro
+@@ -16,13 +16,11 @@ const metadata = {
+ ---
+ 
+ <PageLayout {metadata}>
+-  <section class="px-6 sm:px-6 max-w-7xl mx-auto">
+-    <div class="py-12 md:py-16 lg:py-20 mx-auto">
+-      <header class="max-w-3xl mx-auto text-center mb-12">
+-        <h1 class="text-5xl md:text-6xl font-bold leading-tighter tracking-tighter mb-4 font-heading text-gray-900 dark:text-white">
+-          Shows
+-        </h1>
+-        <p class="text-xl text-gray-600 dark:text-gray-400">
++  <section class="media-section">
++    <div class="media-container">
++      <header class="text-center mb-12">
++        <h1 class="bree-h1 mb-6">Shows</h1>
++        <p class="text-xl max-w-3xl mx-auto" style="font-family: var(--font-body); color: var(--text-medium);">
+           Musical theatre works featuring original music and lyrics by Bree Lowdermilk
+         </p>
+       </header>
+diff --git a/site/tailwind.config.js b/site/tailwind.config.js
+index 1740616..1f63521 100644
+--- a/site/tailwind.config.js
++++ b/site/tailwind.config.js
+@@ -12,11 +12,22 @@ export default {
+         accent: 'var(--aw-color-accent)',
+         default: 'var(--aw-color-text-default)',
+         muted: 'var(--aw-color-text-muted)',
++        // Bree Theme Colors
++        'red-primary': '#dc2626',
++        'red-hover': '#b91c1c',
++        'bg-subtle': '#f9fafb',
++        'text-dark': '#111827',
++        'text-medium': '#374151',
++        'text-light': '#6b7280',
+       },
+       fontFamily: {
+         sans: ['var(--aw-font-sans, ui-sans-serif)', ...defaultTheme.fontFamily.sans],
+         serif: ['var(--aw-font-serif, ui-serif)', ...defaultTheme.fontFamily.serif],
+         heading: ['var(--aw-font-heading, ui-sans-serif)', ...defaultTheme.fontFamily.sans],
++        // Bree Theme Fonts
++        title: ['Source Serif 4', 'Times New Roman', 'serif'],
++        headers: ['Inter', 'system-ui', 'sans-serif'],
++        body: ['Inter', 'system-ui', 'sans-serif'],
+       },
+ 
+       animation: {
+diff --git a/site/test-media-videos.js b/site/test-media-videos.js
+new file mode 100644
+index 0000000..dc1ec72
+--- /dev/null
++++ b/site/test-media-videos.js
+@@ -0,0 +1,325 @@
++import puppeteer from 'puppeteer';
++import fs from 'fs';
++import path from 'path';
++import { fileURLToPath } from 'url';
++
++const __filename = fileURLToPath(import.meta.url);
++const __dirname = path.dirname(__filename);
++
++// Video IDs to test from both featured.ts and videoGallery.ts
++const videoIds = {
++  featured: {
++    'jVwtGU3KOro': 'Run Away With Me - Jeremy Jordan',
++    'M7lc1UVf-VE': 'Freedom - Annaleigh Ashford & Meghann Fahy (FEATURED)',
++    'PFlaiSCZAcU': 'Miles To Go - from The Mad Ones', 
++    'Gt76Mf6yAEo': 'Hand in Hand - Lindsay Mendez'
++  },
++  videoGallery: {
++    'rMJSiNN0DxU': 'Freedom - Annaleigh Ashford & Meghann Fahy (VIDEO_GALLERY)',
++    'C4Mw-ifYFD0': 'Go Tonight - The Mad Ones',
++    'OY6breCUTIE': 'My Party Dress - Kait Kerrigan',
++    '5yEqCRudi4o': 'How To Return Home - Laura Osnes',
++    'fQNvQWr6YG8': 'Say The Word - Lauren Samuels'
++  }
++};
++
++// YouTube thumbnail URL patterns to test
++const thumbnailSizes = ['maxresdefault', 'hqdefault', 'sddefault', 'default'];
++
++async function checkYouTubeThumbnail(videoId, size = 'hqdefault') {
++  const url = `https://img.youtube.com/vi/${videoId}/${size}.jpg`;
++  try {
++    const response = await fetch(url);
++    return {
++      url,
++      status: response.status,
++      ok: response.ok,
++      size: size
++    };
++  } catch (error) {
++    return {
++      url,
++      status: 'ERROR',
++      ok: false,
++      error: error.message,
++      size: size
++    };
++  }
++}
++
++async function testAllThumbnails(videoId, title) {
++  console.log(`\n🔍 Testing thumbnails for: ${title} (${videoId})`);
++  const results = {};
++  
++  for (const size of thumbnailSizes) {
++    const result = await checkYouTubeThumbnail(videoId, size);
++    results[size] = result;
++    
++    const statusIcon = result.ok ? '✅' : '❌';
++    console.log(`  ${statusIcon} ${size}: ${result.status} - ${result.url}`);
++    
++    if (result.error) {
++      console.log(`    Error: ${result.error}`);
++    }
++  }
++  
++  return results;
++}
++
++async function testMediaPage() {
++  console.log('🚀 Starting Media Page Video Testing with Puppeteer\n');
++  
++  const browser = await puppeteer.launch({ 
++    headless: false, // Show browser for visual debugging
++    defaultViewport: { width: 1200, height: 800 }
++  });
++  
++  const page = await browser.newPage();
++  
++  // Enable request interception to monitor network requests
++  await page.setRequestInterception(true);
++  const networkLog = [];
++  
++  page.on('request', request => {
++    if (request.url().includes('youtube') || request.url().includes('img.youtube.com')) {
++      networkLog.push({
++        type: 'request',
++        url: request.url(),
++        method: request.method(),
++        timestamp: new Date().toISOString()
++      });
++    }
++    request.continue();
++  });
++  
++  page.on('response', response => {
++    if (response.url().includes('youtube') || response.url().includes('img.youtube.com')) {
++      networkLog.push({
++        type: 'response',
++        url: response.url(),
++        status: response.status(),
++        timestamp: new Date().toISOString()
++      });
++    }
++  });
++  
++  // Capture console messages
++  const consoleMessages = [];
++  page.on('console', msg => {
++    consoleMessages.push({
++      type: msg.type(),
++      text: msg.text(),
++      timestamp: new Date().toISOString()
++    });
++  });
++  
++  try {
++    console.log('🌐 Loading media page at http://localhost:4323/media\n');
++    await page.goto('http://localhost:4323/media', { 
++      waitUntil: 'networkidle0',
++      timeout: 30000 
++    });
++    
++    // Wait for carousel to be fully loaded
++    console.log('⏳ Waiting for hero carousel to load...\n');
++    await page.waitForSelector('.hero-carousel, [data-testid="hero-carousel"], .carousel', { timeout: 10000 });
++    
++    // Take screenshot of the full page
++    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
++    const screenshotPath = path.join(__dirname, `media-page-full-${timestamp}.png`);
++    await page.screenshot({ 
++      path: screenshotPath,
++      fullPage: true 
++    });
++    console.log(`📸 Full page screenshot saved: ${screenshotPath}\n`);
++    
++    // Try to find and screenshot just the carousel
++    try {
++      const carouselElement = await page.$('.hero-carousel, [data-testid="hero-carousel"], .carousel, .featured-videos');
++      if (carouselElement) {
++        const carouselScreenshotPath = path.join(__dirname, `hero-carousel-${timestamp}.png`);
++        await carouselElement.screenshot({ path: carouselScreenshotPath });
++        console.log(`📸 Carousel screenshot saved: ${carouselScreenshotPath}\n`);
++      } else {
++        console.log('⚠️  Could not find carousel element for separate screenshot\n');
++      }
++    } catch (carouselError) {
++      console.log(`⚠️  Error capturing carousel screenshot: ${carouselError.message}\n`);
++    }
++    
++    // Check for video thumbnails in the DOM
++    console.log('🔍 Analyzing video elements on the page...\n');
++    const videoInfo = await page.evaluate(() => {
++      const videos = [];
++      
++      // Look for various video-related elements
++      const selectors = [
++        'img[src*="youtube"]',
++        'img[src*="ytimg"]', 
++        'img[src*="i.ytimg.com"]',
++        '[data-youtube-id]',
++        '.video-thumbnail',
++        '.video-preview',
++        '.carousel-item img',
++        '.featured-video img'
++      ];
++      
++      selectors.forEach(selector => {
++        const elements = document.querySelectorAll(selector);
++        elements.forEach((el, index) => {
++          const src = el.src || el.dataset.src || '';
++          const alt = el.alt || '';
++          const youtubeId = el.dataset.youtubeId || '';
++          
++          videos.push({
++            selector,
++            index,
++            src,
++            alt,
++            youtubeId,
++            naturalWidth: el.naturalWidth || 0,
++            naturalHeight: el.naturalHeight || 0,
++            complete: el.complete || false
++          });
++        });
++      });
++      
++      return videos;
++    });
++    
++    console.log('📋 Video elements found on page:');
++    videoInfo.forEach((video, i) => {
++      console.log(`  ${i + 1}. ${video.selector}:`);
++      console.log(`     src: ${video.src}`);
++      console.log(`     alt: ${video.alt}`);
++      console.log(`     youtubeId: ${video.youtubeId}`);
++      console.log(`     loaded: ${video.complete} (${video.naturalWidth}x${video.naturalHeight})`);
++      console.log('');
++    });
++    
++  } catch (error) {
++    console.error(`❌ Error during page testing: ${error.message}\n`);
++  }
++  
++  await browser.close();
++  
++  // Now test individual YouTube thumbnails
++  console.log('\n' + '='.repeat(80));
++  console.log('🎬 TESTING INDIVIDUAL YOUTUBE THUMBNAILS');
++  console.log('='.repeat(80));
++  
++  const allResults = {
++    featured: {},
++    videoGallery: {},
++    networkLog,
++    consoleMessages
++  };
++  
++  // Test featured video IDs
++  console.log('\n🎯 FEATURED VIDEOS (from featured.ts):');
++  for (const [videoId, title] of Object.entries(videoIds.featured)) {
++    allResults.featured[videoId] = await testAllThumbnails(videoId, title);
++  }
++  
++  // Test video gallery IDs
++  console.log('\n📚 VIDEO GALLERY (from videoGallery.ts):');
++  for (const [videoId, title] of Object.entries(videoIds.videoGallery)) {
++    allResults.videoGallery[videoId] = await testAllThumbnails(videoId, title);
++  }
++  
++  // Generate report
++  console.log('\n' + '='.repeat(80));
++  console.log('📊 FINAL REPORT');
++  console.log('='.repeat(80));
++  
++  const workingVideos = [];
++  const brokenVideos = [];
++  
++  // Check featured videos
++  for (const [videoId, results] of Object.entries(allResults.featured)) {
++    const title = videoIds.featured[videoId];
++    const hasWorkingThumbnail = Object.values(results).some(r => r.ok);
++    
++    if (hasWorkingThumbnail) {
++      const workingSizes = Object.entries(results)
++        .filter(([size, result]) => result.ok)
++        .map(([size, result]) => size);
++      workingVideos.push({ videoId, title, source: 'featured.ts', workingSizes });
++    } else {
++      brokenVideos.push({ videoId, title, source: 'featured.ts', results });
++    }
++  }
++  
++  // Check video gallery videos  
++  for (const [videoId, results] of Object.entries(allResults.videoGallery)) {
++    const title = videoIds.videoGallery[videoId];
++    const hasWorkingThumbnail = Object.values(results).some(r => r.ok);
++    
++    if (hasWorkingThumbnail) {
++      const workingSizes = Object.entries(results)
++        .filter(([size, result]) => result.ok)
++        .map(([size, result]) => size);
++      workingVideos.push({ videoId, title, source: 'videoGallery.ts', workingSizes });
++    } else {
++      brokenVideos.push({ videoId, title, source: 'videoGallery.ts', results });
++    }
++  }
++  
++  console.log(`\n✅ WORKING VIDEOS (${workingVideos.length}):`);
++  workingVideos.forEach(video => {
++    console.log(`  ✓ ${video.videoId} - ${video.title} (${video.source})`);
++    console.log(`    Working sizes: ${video.workingSizes.join(', ')}`);
++  });
++  
++  console.log(`\n❌ BROKEN VIDEOS (${brokenVideos.length}):`);
++  brokenVideos.forEach(video => {
++    console.log(`  ✗ ${video.videoId} - ${video.title} (${video.source})`);
++  });
++  
++  // Check for discrepancies
++  console.log('\n🔍 DISCREPANCY ANALYSIS:');
++  const freedomFeatured = 'M7lc1UVf-VE';
++  const freedomGallery = 'rMJSiNN0DxU';
++  
++  const featuredFreedomWorks = allResults.featured[freedomFeatured] && 
++    Object.values(allResults.featured[freedomFeatured]).some(r => r.ok);
++  const galleryFreedomWorks = allResults.videoGallery[freedomGallery] && 
++    Object.values(allResults.videoGallery[freedomGallery]).some(r => r.ok);
++  
++  console.log(`\nFreedom video discrepancy found:`);
++  console.log(`  featured.ts uses: ${freedomFeatured} - ${featuredFreedomWorks ? 'WORKS' : 'BROKEN'}`);
++  console.log(`  videoGallery.ts uses: ${freedomGallery} - ${galleryFreedomWorks ? 'WORKS' : 'BROKEN'}`);
++  
++  // Recommendations
++  console.log('\n💡 RECOMMENDATIONS:');
++  if (brokenVideos.length > 0) {
++    console.log('\n1. Fix broken video IDs:');
++    brokenVideos.forEach(video => {
++      console.log(`   - Replace ${video.videoId} in ${video.source}`);
++    });
++  }
++  
++  if (freedomFeatured !== freedomGallery) {
++    console.log('\n2. Resolve Freedom video discrepancy:');
++    console.log(`   - featured.ts: ${freedomFeatured} (${featuredFreedomWorks ? 'works' : 'broken'})`);
++    console.log(`   - videoGallery.ts: ${freedomGallery} (${galleryFreedomWorks ? 'works' : 'broken'})`);
++    
++    if (featuredFreedomWorks && !galleryFreedomWorks) {
++      console.log(`   → Recommend updating videoGallery.ts to use ${freedomFeatured}`);
++    } else if (!featuredFreedomWorks && galleryFreedomWorks) {
++      console.log(`   → Recommend updating featured.ts to use ${freedomGallery}`);
++    } else if (!featuredFreedomWorks && !galleryFreedomWorks) {
++      console.log(`   → Both IDs are broken - need to find correct Freedom video ID`);
++    }
++  }
++  
++  // Save detailed results to file
++  const reportPath = path.join(__dirname, `video-test-report-${timestamp}.json`);
++  fs.writeFileSync(reportPath, JSON.stringify(allResults, null, 2));
++  console.log(`\n📄 Detailed report saved: ${reportPath}`);
++  
++  console.log('\n🏁 Testing complete!');
++}
++
++// Run the test
++testMediaPage().catch(console.error);
+\ No newline at end of file
+diff --git a/site/test_bree_theme_site.js b/site/test_bree_theme_site.js
+new file mode 100644
+index 0000000..3ecba05
+--- /dev/null
++++ b/site/test_bree_theme_site.js
+@@ -0,0 +1,89 @@
++import puppeteer from 'puppeteer';
++import fs from 'fs';
++import path from 'path';
++
++async function capturePages() {
++  console.log('🎭 Starting Bree Theme Site Screenshots...');
++  
++  const browser = await puppeteer.launch({ 
++    headless: false,
++    defaultViewport: { width: 1400, height: 900 }
++  });
++  
++  const page = await browser.newPage();
++  
++  // Set viewport for consistent screenshots
++  await page.setViewport({ width: 1400, height: 900 });
++  
++  const pages = [
++    { name: 'homepage', url: 'http://localhost:4321/', title: 'Homepage with Bree Theme' },
++    { name: 'about', url: 'http://localhost:4321/about', title: 'About Page with Bree Theme' },
++    { name: 'media', url: 'http://localhost:4321/media', title: 'Media Page with Bree Theme' },
++    { name: 'contact', url: 'http://localhost:4321/contact', title: 'Contact Page with Bree Theme' }
++  ];
++  
++  for (const pageInfo of pages) {
++    try {
++      console.log(`📸 Capturing ${pageInfo.title}...`);
++      
++      await page.goto(pageInfo.url, { 
++        waitUntil: 'networkidle2',
++        timeout: 10000 
++      });
++      
++      // Wait a bit more for fonts to load
++      await page.waitForTimeout(2000);
++      
++      // Take screenshot
++      const screenshotPath = `bree-theme-${pageInfo.name}.png`;
++      await page.screenshot({ 
++        path: screenshotPath,
++        fullPage: true,
++        quality: 90
++      });
++      
++      console.log(`✅ Saved: ${screenshotPath}`);
++      
++      // Check if Bree theme classes are present
++      const hasBreetheme = await page.evaluate(() => {
++        const elements = document.querySelectorAll('.bree-h1, .bree-h2, .media-card, .media-section');
++        return elements.length > 0;
++      });
++      
++      console.log(`🎨 Bree theme classes found on ${pageInfo.name}: ${hasBreetheme ? 'YES' : 'NO'}`);
++      
++      // Check CSS variables
++      const hasBreeVars = await page.evaluate(() => {
++        const styles = getComputedStyle(document.documentElement);
++        return styles.getPropertyValue('--red-primary').trim() === '#dc2626';
++      });
++      
++      console.log(`🔧 Bree CSS variables loaded on ${pageInfo.name}: ${hasBreeVars ? 'YES' : 'NO'}`);
++      
++    } catch (error) {
++      console.error(`❌ Error capturing ${pageInfo.title}:`, error.message);
++    }
++    
++    await page.waitForTimeout(1000);
++  }
++  
++  console.log('\n🎉 Screenshot capture complete!');
++  console.log('📁 Files saved in current directory:');
++  console.log('   • bree-theme-homepage.png');
++  console.log('   • bree-theme-about.png');
++  console.log('   • bree-theme-media.png');
++  console.log('   • bree-theme-contact.png');
++  
++  // Keep browser open for manual inspection
++  console.log('\n🌐 Browser left open for manual inspection...');
++  console.log('📍 Current page: Media page with Bree theme');
++  console.log('🔍 Check the fonts, colors, and styling!');
++  
++  await page.goto('http://localhost:4321/media');
++  
++  // Don't close browser - leave it open for inspection
++  // await browser.close();
++}
++
++// Run the capture
++capturePages().catch(console.error);
+\ No newline at end of file
