@@ -1,0 +1,26 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import AudioPlayer from '~/components/media/AudioPlayer.astro';
+import VideoPlayer from '~/components/media/VideoPlayer.astro';
+import audioTracks from '~/data/media/audio';
+import videoItems from '~/data/media/video';
+
+const metadata = { title: 'Media' };
+---
+<Layout metadata={metadata}>
+  <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-3xl font-bold tracking-tight">Media</h1>
+    <p class="mt-2 text-gray-600 dark:text-gray-300 max-w-2xl">Listen to selected tracks and watch recent videos.</p>
+
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold mb-3">Audio</h2>
+      <AudioPlayer tracks={audioTracks} />
+    </div>
+
+    <div class="mt-12">
+      <h2 class="text-xl font-semibold mb-3">Video</h2>
+      <VideoPlayer items={videoItems} />
+    </div>
+  </section>
+</Layout>
+
