@@ -37,25 +37,6 @@ const { title, subtitle, year, category, className = '', credits, shortBlurb } =
           })()}
         </h3>
         
-        {className?.includes('show-tile') && credits && (
-          <div class="mb-4">
-            {credits
-              .filter((c) => !(c?.trim()?.toLowerCase()?.startsWith('based on')))
-              .slice(0, 2)
-              .map((credit) => (
-              <p class="text-white opacity-95 text-base sm:text-lg font-medium mb-1" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9);">
-                {credit}
-              </p>
-            ))}
-          </div>
-        )}
-        
-        {className?.includes('show-tile') && shortBlurb && (
-          <p class="text-white opacity-90 text-base sm:text-lg italic leading-relaxed mb-3" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9);">
-            {shortBlurb}
-          </p>
-        )}
-        
         {!className?.includes('show-tile') && subtitle && (
           <p class={`text-white opacity-95 mb-2 ${className?.includes('video-tile') ? 'text-base' : 'text-sm'}`} style="text-shadow: 0 1px 4px rgba(0,0,0,0.9);">
             {subtitle}

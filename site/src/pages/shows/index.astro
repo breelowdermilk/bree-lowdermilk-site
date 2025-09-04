@@ -163,16 +163,7 @@ const metadata = {
     return (
       <div id={`show-${show.slug}`} class="show-modal-content" style="display: none;" aria-hidden="true">
         <div class="modal-inner">
-          <!-- Hero Image -->
-          <div class="modal-image-container">
-            <img 
-              src={imageUrl} 
-              alt={show.data.title || 'Show image'}
-              class="modal-hero-image"
-            />
-          </div>
-          
-          <!-- Content -->
+          <!-- Content on Left -->
           <div class="modal-content-body">
             <h2 class="modal-title">
               {show.slug === 'ernxst' && typeof show.data.title === 'string' && show.data.title.includes(', or ')
@@ -262,6 +253,15 @@ const metadata = {
               </div>
             )}
           </div>
+          
+          <!-- Image on Right -->
+          <div class="modal-image-container">
+            <img 
+              src={imageUrl} 
+              alt={show.data.title || 'Show image'}
+              class="modal-hero-image"
+            />
+          </div>
         </div>
       </div>
     );
@@ -288,27 +288,38 @@ const metadata = {
     background: white;
     border-radius: 12px;
     overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    min-height: 400px;
   }
   
   .modal-image-container {
-    width: 100%;
-    max-height: 220px; /* smaller hero inside inline */
+    width: 35%;
+    flex-shrink: 0;
     overflow: hidden;
-    background: #f3f4f6;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1.5rem;
   }
   
   .modal-hero-image {
     width: 100%;
-    height: 100%;
+    height: 300px;
     object-fit: cover;
   }
   
   .modal-content-body {
     padding: 2rem;
+    flex-grow: 1;
+    width: 65%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
   }
   
   .modal-title {
-    font-size: 2.75rem;
+    font-size: 2.5rem;
     font-weight: 300;
     margin-bottom: 1rem;
     color: #111827;
@@ -316,6 +327,7 @@ const metadata = {
     letter-spacing: 0.05em;
     font-family: var(--font-title);
     text-transform: uppercase;
+    text-align: center;
   }
   .modal-title .modal-title-line1, .modal-title .modal-title-line2 { display: block; }
   .modal-title .modal-title-line2 { font-size: 0.7em; opacity: 0.98; }
@@ -343,7 +355,7 @@ const metadata = {
   .modal-section-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; color: #111827; }
   .modal-credits-list { list-style: disc; padding-left: 1.25rem; color: #4b5563; }
   /* Based-on line styling under title */
-  .modal-based-on { text-align: center; font-style: italic; color: #6b7280; font-size: 1rem; margin-top: -0.25rem; margin-bottom: 0.75rem; }
+  .modal-based-on { text-align: center; font-style: italic; color: #6b7280; font-size: 1rem; margin-top: -0.25rem; margin-bottom: 1.5rem; }
   /* Credits rendered as lines (same size as synopsis) */
   .modal-credits-inline { color: #4b5563; font-size: 1.125rem; text-align: left; }
   .modal-credits-inline .credit-line { margin: 0 0 0.25rem 0; }
@@ -389,8 +401,22 @@ const metadata = {
   }
   
   /* Mobile responsiveness */
-  @media (max-width: 640px) {
-    .modal-content-body { padding: 1.5rem; }
+  @media (max-width: 768px) {
+    .modal-inner { 
+      flex-direction: column;
+    }
+    .modal-content-body { 
+      padding: 1.5rem;
+      width: 100%;
+    }
+    .modal-image-container {
+      width: 100%;
+      padding: 0;
+      order: -1; /* Image on top on mobile */
+    }
+    .modal-hero-image {
+      height: 200px;
+    }
     .modal-title { font-size: 2rem; }
   }
 

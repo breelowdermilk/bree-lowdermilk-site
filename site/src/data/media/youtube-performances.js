@@ -26,77 +26,25 @@ export const youtubePerformances = [
     priority: 1
   },
   {
-    id: "run-away-rachel-zegler",
-    title: "Run Away With Me",
+    id: "anyway-rachel-zegler",
+    title: "Anyway",
     performer: "Rachel Zegler",
-    show: "The Mad Ones",
-    searchQuery: "Rachel Zegler Run Away With Me musical theatre",
-    thumbnail: "/src/assets/images/media/run-away-rachel-zegler.png",
+    searchQuery: "Rachel Zegler Anyway Kerrigan Lowdermilk",
+    youtubeId: "q9WNdqZeYrQ",
     priority: 1
   },
 
   // Freedom
   {
-    id: "freedom-kerrigan-lowdermilk",
+    id: "freedom-sarah-melissa",
     title: "Freedom",
-    performer: "Kerrigan-Lowdermilk",
-    show: "Original",
-    searchQuery: "Freedom Kerrigan Lowdermilk official",
-    thumbnail: "/src/assets/images/media/freedom-official.png",
+    performer: "Sarah Hyland & Melissa Benoist",
+    searchQuery: "Sarah Hyland Melissa Benoist Freedom Kerrigan Lowdermilk",
+    youtubeId: "vjVkXlxsO8E",
     priority: 1
-  },
-  {
-    id: "freedom-melissa-benoist",
-    title: "Freedom", 
-    performer: "Melissa Benoist",
-    show: "From Samantha Brown",
-    venue: "Goodspeed Musicals",
-    searchQuery: "Melissa Benoist Freedom Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/freedom-melissa.png",
-    priority: 2
   },
 
-  // Say The Word
-  {
-    id: "say-the-word-melissa-benoist",
-    title: "Say The Word",
-    performer: "Melissa Benoist",
-    show: "Tales from Bad Children",
-    venue: "54 Below",
-    searchQuery: "Melissa Benoist Say The Word Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/say-word-melissa.png",
-    priority: 1
-  },
-  {
-    id: "say-the-word-barrett-weed",
-    title: "Say The Word",
-    performer: "Barrett Wilbert Weed",
-    show: "The Mad Ones",
-    venue: "The Cabaret Theatre",
-    searchQuery: "Barrett Wilbert Weed Say The Word",
-    thumbnail: "/src/assets/images/media/say-word-barrett.png",
-    priority: 2
-  },
 
-  // My Party Dress
-  {
-    id: "party-dress-sarah-hyland",
-    title: "My Party Dress",
-    performer: "Sarah Hyland",
-    show: "Henry and Mudge",
-    searchQuery: "Sarah Hyland My Party Dress Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/party-dress-sarah.png",
-    priority: 1
-  },
-  {
-    id: "party-dress-jenni-barber",
-    title: "My Party Dress",
-    performer: "Jenni Barber",
-    show: "Henry and Mudge",
-    searchQuery: "Jenni Barber My Party Dress live",
-    thumbnail: "/src/assets/images/media/party-dress-jenni.png",
-    priority: 3
-  },
 
   // Hand in Hand
   {
@@ -120,13 +68,12 @@ export const youtubePerformances = [
 
   // Go Tonight
   {
-    id: "go-tonight-mad-ones",
+    id: "go-tonight-emma",
     title: "Go Tonight",
-    performer: "Emma Hunton & Krystina Alabado",
+    performer: "Emma Hunton",
     show: "The Mad Ones",
-    venue: "59E59 Theaters (2017)",
     searchQuery: "Emma Hunton Go Tonight The Mad Ones",
-    thumbnail: "/src/assets/images/media/go-tonight-emma.png",
+    youtubeId: "mj-v6VL2Bjc",
     priority: 1
   },
 
@@ -188,33 +135,14 @@ export const youtubePerformances = [
     priority: 1
   },
 
-  // The Mad Ones
-  {
-    id: "mad-ones-title",
-    title: "The Mad Ones",
-    performer: "Emma Hunton & Krystina Alabado",
-    show: "The Mad Ones",
-    venue: "Off-Broadway Cast",
-    searchQuery: "Emma Hunton Krystina Alabado The Mad Ones title song",
-    thumbnail: "/src/assets/images/media/mad-ones-title.png",
-    priority: 1
-  },
 
-  // Rise
+  // Holding On
   {
-    id: "rise-michael-arden",
-    title: "Rise",
-    performer: "Michael Arden",
-    searchQuery: "Michael Arden Rise Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/rise-michael.png",
-    priority: 1
-  },
-  {
-    id: "rise-keala-settle",
-    title: "Rise",
+    id: "holding-on-keala",
+    title: "Holding On",
     performer: "Keala Settle",
-    searchQuery: "Keala Settle Rise Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/rise-keala.png",
+    searchQuery: "Keala Settle Holding On Kerrigan Lowdermilk",
+    youtubeId: "XLFEvHWD_NE",
     priority: 1
   },
 
@@ -232,7 +160,7 @@ export const youtubePerformances = [
   {
     id: "miles-to-go-mad-ones",
     title: "Miles to Go",
-    performer: "The Mad Ones Cast",
+    performer: "Emma Hunton & Krystina Alabado",
     show: "The Mad Ones",
     searchQuery: "Miles to Go The Mad Ones Kerrigan Lowdermilk",
     thumbnail: "/src/assets/images/media/miles-to-go.png",
