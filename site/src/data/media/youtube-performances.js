@@ -41,6 +41,7 @@ export const youtubePerformances = [
     performer: "Sarah Hyland & Melissa Benoist",
     venue: "Catalina Bar & Grill (January 20, 2013)",
     searchQuery: "Sarah Hyland Melissa Benoist Freedom Kerrigan Lowdermilk",
+    youtubeId: "MNKpuVxVxng",
     priority: 1
   },
 
@@ -59,49 +60,34 @@ export const youtubePerformances = [
   
   // Avalanche
   {
-    id: "avalanche-lindsay-andy",
+    id: "avalanche-lindsay",
     title: "Avalanche",
-    performer: "Lindsay Mendez & Andy Mientus",
-    searchQuery: "Lindsay Mendez Andy Mientus Avalanche Kerrigan Lowdermilk",
-    priority: 2
+    performer: "Lindsay Mendez",
+    searchQuery: "Lindsay Mendez Avalanche Kerrigan Lowdermilk",
+    youtubeId: "zXMnhdybkMY",
+    priority: 1
   },
 
-  // Go Tonight
+  // Go Tonight (Animatic)
   {
-    id: "go-tonight-emma-krystina",
-    title: "Go Tonight",
+    id: "go-tonight-animatic",
+    title: "Go Tonight (Animatic)",
     performer: "Emma Hunton & Krystina Alabado",
     show: "The Mad Ones",
     searchQuery: "Go Tonight animatic Mad Ones Miranda Pla",
+    youtubeId: "DVUyVjon7r8",
     priority: 1
   },
 
-  // I'm Sorry
-  {
-    id: "im-sorry-grant-gustin",
-    title: "I'm Sorry",
-    performer: "Grant Gustin",
-    searchQuery: "Grant Gustin I'm Sorry Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/im-sorry-grant.png",
-    priority: 1
-  },
 
-  // Two Strangers
+  // Run Away With Me
   {
-    id: "two-strangers-colton-haynes",
-    title: "Two Strangers",
+    id: "run-away-colton-haynes",
+    title: "Run Away With Me",
     performer: "Colton Haynes",
-    searchQuery: "Colton Haynes Two Strangers Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/two-strangers-colton.png",
+    searchQuery: "Colton Haynes Run Away With Me Kerrigan Lowdermilk",
+    youtubeId: "cp6XzrVeq3c",
     priority: 1
-  },
-  {
-    id: "two-strangers-andy-mientus",
-    title: "Two Strangers",
-    performer: "Andy Mientus & Colton Haynes",
-    searchQuery: "Andy Mientus Colton Haynes Two Strangers duet",
-    thumbnail: "/src/assets/images/media/two-strangers-duet.png",
-    priority: 2
   },
 
   // How to Return Home
@@ -120,17 +106,17 @@ export const youtubePerformances = [
     title: "The Girl Who Drove Away",
     performer: "Laura Osnes",
     searchQuery: "Laura Osnes The Girl Who Drove Away",
-    thumbnail: "/src/assets/images/media/girl-drove-laura.png",
+    youtubeId: "ETupK7XBqsY",
     priority: 1
   },
 
   // Vegas
   {
-    id: "vegas-andy-steven",
+    id: "vegas-michael-andy",
     title: "Vegas",
-    performer: "Andy Mientus & Steven Booth",
-    searchQuery: "Andy Mientus Steven Booth Vegas Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/vegas-andy-steven.png",
+    performer: "Michael Arden & Andy Mientus",
+    searchQuery: "Michael Arden Andy Mientus Vegas Kerrigan Lowdermilk",
+    youtubeId: "r9P-bNRZfew",
     priority: 1
   },
 
@@ -141,38 +127,38 @@ export const youtubePerformances = [
     title: "Holding On",
     performer: "Keala Settle",
     searchQuery: "Keala Settle Holding On Kerrigan Lowdermilk",
-    youtubeId: "XLFEvHWD_NE",
+    youtubeId: "KcDMrmilTdE",
     priority: 1
   },
 
-  // Avalanche
+
+  // Rise
   {
-    id: "avalanche-ciara-renee",
-    title: "Avalanche",
-    performer: "Ciara Renée",
-    searchQuery: "Ciara Renée Avalanche Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/avalanche-ciara.png",
+    id: "rise-michael-arden",
+    title: "Rise",
+    performer: "Michael Arden",
+    searchQuery: "Michael Arden Rise Kerrigan Lowdermilk",
+    youtubeId: "3or3GaYO884",
     priority: 1
   },
-
+  
   // Miles to Go
   {
-    id: "miles-to-go-mad-ones",
+    id: "miles-to-go-katie",
     title: "Miles to Go",
-    performer: "Emma Hunton & Krystina Alabado",
-    show: "The Mad Ones",
-    searchQuery: "Miles to Go The Mad Ones Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/miles-to-go.png",
-    priority: 2
+    performer: "Katie Thompson",
+    searchQuery: "Katie Thompson Miles to Go Kerrigan Lowdermilk",
+    youtubeId: "u-E2p_-8uDI",
+    priority: 1
   },
 
-  // The Bad Years
+  // I'll Still Be
   {
-    id: "bad-years-uzo",
-    title: "The Bad Years",
+    id: "ill-still-be-uzo",
+    title: "I'll Still Be",
     performer: "Uzo Aduba",
-    searchQuery: "Uzo Aduba The Bad Years Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/bad-years-uzo.png",
+    searchQuery: "Uzo Aduba I'll Still Be Kerrigan Lowdermilk",
+    youtubeId: "4WKLe1uZ5cc",
     priority: 1
   },
 
@@ -188,37 +174,28 @@ export const youtubePerformances = [
 
   // Additional performances with celebrities
   {
-    id: "ordinary-senior-meghann",
-    title: "Ordinary Senior Year",
+    id: "close-call-sutton",
+    title: "Close Call",
+    performer: "Sutton Foster",
+    searchQuery: "Sutton Foster Close Call Kerrigan Lowdermilk",
+    youtubeId: "upTSHDYlJk0",
+    priority: 1
+  },
+  {
+    id: "say-the-word-meghann",
+    title: "Say the Word",
     performer: "Meghann Fahy",
-    show: "The Mad Ones",
-    searchQuery: "Meghann Fahy Ordinary Senior Year Mad Ones",
-    thumbnail: "/src/assets/images/media/ordinary-meghann.png",
+    searchQuery: "Meghann Fahy Say the Word Kerrigan Lowdermilk",
+    youtubeId: "6LhEZccYPy4",
     priority: 1
   },
   {
-    id: "berkeley-colleen",
-    title: "Berkeley",
+    id: "party-dress-colleen",
+    title: "My Party Dress",
     performer: "Colleen Ballinger",
-    searchQuery: "Colleen Ballinger Berkeley Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/berkeley-colleen.png",
+    searchQuery: "Colleen Ballinger My Party Dress Kerrigan Lowdermilk",
+    youtubeId: "Xv5TLhfdCB4",
     priority: 1
-  },
-  {
-    id: "nothing-wonderful-lindsay",
-    title: "Nothing Short of Wonderful",
-    performer: "Lindsay Mendez",
-    searchQuery: "Lindsay Mendez Nothing Short of Wonderful",
-    thumbnail: "/src/assets/images/media/nothing-lindsay.png",
-    priority: 1
-  },
-  {
-    id: "welcome-party-andy",
-    title: "Welcome To The Party",
-    performer: "Andy Mientus & Krysta Rodriguez",
-    searchQuery: "Andy Mientus Krysta Rodriguez Welcome To The Party",
-    thumbnail: "/src/assets/images/media/welcome-andy.png",
-    priority: 2
   },
   {
     id: "rewrite-carrie",

@@ -22,7 +22,6 @@ const getCelebrityImage = (performer) => {
     'Keala Settle': '/src/assets/images/media/keala settle.avif',
     'Emma Hunton': '/src/assets/images/media/go-tonight.png',
     'Emma Hunton & Krystina Alabado': '/src/assets/images/media/go-tonight.png',
-    'Grant Gustin': '/src/assets/images/media/grant gustin.jpg',
     'Sarah Hyland & Melissa Benoist': '/src/assets/images/media/sarah hyland and melissa benoist.png',
     'Colleen Ballinger': '/src/assets/images/media/colleen ballinger.jpg',
     'Colton Haynes': '/src/assets/images/media/colton haynes.webp',
@@ -32,12 +31,12 @@ const getCelebrityImage = (performer) => {
     'Andy Mientus & Colton Haynes': '/src/assets/images/media/michael arden andy mientus.png',
     'Andy Mientus & Steven Booth': '/src/assets/images/media/michael arden andy mientus.png',
     'Uzo Aduba': '/src/assets/images/media/uzo aduba.webp',
-    'Ciara Renée': '/src/assets/images/media/ciara renee.jpeg',
     'Sutton Foster': '/src/assets/images/media/sutton foster.jpg',
     'Lindsay Mendez': '/src/assets/images/media/lindsay-mendez.jpeg',
     'Lindsay Mendez & Andy Mientus': '/src/assets/images/media/michael arden andy mientus.png',
     'Andy Mientus & Krysta Rodriguez': '/src/assets/images/media/michael arden andy mientus.png',
     'Laura Osnes': '/src/assets/images/media/laura-osnes.jpg',
+    'Katie Thompson': '/src/assets/images/media/katie-thompson.jpg',
     'Mandy Gonzalez': null,
     'Carrie Manolakos': null
   };
@@ -61,8 +60,19 @@ const workingYouTubeIds = {
   'Aaron Tveit': '61EL69OZSlY',  // Run Away With Me - verified
   'Jeremy Jordan': 'jVwtGU3KOro',  // Run Away With Me - verified
   'Rachel Zegler': 'Z9ZMLjLqAgE',  // Anyway - verified
-  'Lindsay Mendez': 'Gt76Mf6yAEo',  // Hand in Hand - verified
-  'Keala Settle': 'XLFEvHWD_NE',  // Holding On - verified
+  'Lindsay Mendez': 'Gt76Mf6yAEo',  // Hand in Hand - verified (can map to multiple)
+  'Sarah Hyland & Melissa Benoist': 'MNKpuVxVxng',  // Freedom - verified
+  'Emma Hunton & Krystina Alabado': 'DVUyVjon7r8',  // Go Tonight Animatic - verified
+  'Michael Arden': '3or3GaYO884',  // Rise - verified
+  'Keala Settle': 'KcDMrmilTdE',  // Holding On - verified
+  'Uzo Aduba': '4WKLe1uZ5cc',  // I'll Still Be - verified
+  'Colleen Ballinger': 'Xv5TLhfdCB4',  // My Party Dress - verified
+  'Sutton Foster': 'upTSHDYlJk0',  // Performance - verified
+  'Michael Arden & Andy Mientus': 'r9P-bNRZfew',  // Vegas - verified
+  'Colton Haynes': 'cp6XzrVeq3c',  // Run Away With Me - verified
+  'Laura Osnes': 'ETupK7XBqsY',  // The Girl Who Drove Away - verified
+  'Meghann Fahy': '6LhEZccYPy4',  // Say the Word - verified
+  'Katie Thompson': 'u-E2p_-8uDI',  // Miles to Go - verified
 };
 
 // Prepare performance data with images and URLs
@@ -72,10 +82,20 @@ const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).m
   
   // Use working YouTube ID if available
   let youtubeId = performance.youtubeId;
-  for (const [performer, id] of Object.entries(workingYouTubeIds)) {
-    if (performance.performer.includes(performer)) {
-      youtubeId = id;
-      break;
+  
+  // Special handling for Lindsay Mendez who has multiple songs
+  if (performance.performer === 'Lindsay Mendez') {
+    if (performance.title === 'Avalanche') {
+      youtubeId = 'zXMnhdybkMY';
+    } else if (performance.title === 'Hand in Hand') {
+      youtubeId = 'Gt76Mf6yAEo';
+    }
+  } else {
+    for (const [performer, id] of Object.entries(workingYouTubeIds)) {
+      if (performance.performer.includes(performer)) {
+        youtubeId = id;
+        break;
+      }
     }
   }
   
@@ -144,26 +164,21 @@ const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).m
               class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
               loading="lazy"
             />
-            
-            <!-- Gradient Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-            
-            <!-- Text Overlay - Always visible at bottom -->
-            <div class="absolute bottom-0 left-0 right-0 p-2 text-white">
-              <h3 class="text-sm font-bold mb-0.5 drop-shadow-lg line-clamp-1">
-                {performance.performer}
-              </h3>
-              <p class="text-xs opacity-90 drop-shadow-lg line-clamp-1">
-                {performance.title}
-              </p>
-            </div>
-            
-            <!-- Play Button on Hover -->
-            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <div class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center">
-                <svg class="w-5 h-5 text-gray-900 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
+            <!-- Hover Overlay with Performer + Title only -->
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
+              <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-center px-3">
+                <!-- Performer: large, uppercase; downsize slightly for long names -->
+                <h3 class={`${
+                  (performance.performer || '').length > 24
+                    ? 'text-xl sm:text-2xl md:text-3xl'
+                    : 'text-2xl sm:text-3xl md:text-4xl'
+                } drop-shadow-lg font-extrabold uppercase tracking-tight leading-tight`}>
+                  {performance.performer}
+                </h3>
+                <!-- Song title: smaller, medium weight, in quotes -->
+                <p class="mt-2 drop-shadow-lg font-medium leading-snug text-sm sm:text-base md:text-lg opacity-95">
+                  &ldquo;{performance.title}&rdquo;
+                </p>
               </div>
             </div>
           </a>
