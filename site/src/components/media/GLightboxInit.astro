@@ -36,7 +36,7 @@ const { profile = 'media', options = {} } = Astro.props;
     constructor() {
       this.lightbox = null;
       this.GL = null;
-      this.initLightbox();
+      // Defer initialization until DOM is ready to ensure inline anchors exist
       this.setupViewTransitions();
     }
     
