@@ -3,10 +3,25 @@ import { getCollection } from 'astro:content';
 import PageLayout from '~/layouts/PageLayout.astro';
 import MediaTileOverlay from '~/components/media/MediaTileOverlay.astro';
 import defaultImg from '~/assets/images/default.png';
-import GLightboxInit from '~/components/media/GLightboxInit.astro';
+// Inline GLightbox init for shows page (CDN-only, simple and robust)
 
 const shows = await getCollection('shows');
-const sortedShows = shows.sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+// Only include requested shows for now
+const showWhitelist = new Set([
+  'ada-twist-scientist',
+  'tales-from-the-bad-years',
+  'ernxst',
+  'justice',
+  'republic',
+  'the-mad-ones',
+  'kill-the-boy-band',
+  'dr-wonderful',
+]);
+
+const sortedShows = shows
+  .filter((s) => showWhitelist.has(s.slug))
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
 
 // Render content for each show to include in inline modals
 const showsWithContent = await Promise.all(
@@ -26,8 +41,41 @@ const metadata = {
 ---
 
 <PageLayout {metadata}>
-  <!-- Initialize GLightbox -->
-  <GLightboxInit />
+  <!-- GLightbox CSS/JS (CDN) and page-scoped init -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js" defer></script>
+  <script is:inline>
+    const setupShowsLightbox = () => {
+      if (!window.GLightbox) {
+        // Wait for CDN script to attach
+        setTimeout(setupShowsLightbox, 60);
+        return;
+      }
+      if (window.__showsLightbox) {
+        try { window.__showsLightbox.destroy(); } catch {}
+      }
+      window.__showsLightbox = window.GLightbox({
+        selector: 'a.glightbox[data-type="inline"]',
+        loop: false,
+        touchNavigation: true,
+        closeOnOutsideClick: true,
+        openEffect: 'fade',
+        closeEffect: 'fade',
+        slideEffect: 'slide',
+      });
+      // Debug: count anchors
+      try {
+        const count = document.querySelectorAll('a.glightbox[data-type="inline"]').length;
+        console.log(`[shows] GLightbox bound to ${count} inline anchors`);
+      } catch {}
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupShowsLightbox);
+    } else {
+      setupShowsLightbox();
+    }
+    document.addEventListener('astro:page-load', setupShowsLightbox);
+  </script>
   
   <section class="px-6 sm:px-6 max-w-7xl mx-auto">
     <div class="py-12 md:py-16 lg:py-20 mx-auto">
@@ -35,9 +83,6 @@ const metadata = {
         <h1 class="bree-h1-small mb-4">
           Shows
         </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-400">
-          Musical theatre works featuring original music and lyrics by Bree Lowdermilk
-        </p>
       </header>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
@@ -52,7 +97,7 @@ const metadata = {
               title={show.data.title}
               subtitle={show.data.status || show.data.year}
               category={show.data.venue || 'Theater'}
-              className="aspect-[6/7] show-tile"
+              className="aspect-[7/8] show-tile"
               credits={show.data.credits}
               shortBlurb={shortBlurb}
             >
@@ -62,8 +107,8 @@ const metadata = {
                 data-gallery="shows"
                 data-title={show.data.title}
                 data-type="inline"
-                data-width="58vw"
-                data-height="72vh"
+                data-width="900"
+                data-height="720"
               >
                 <img
                   src={imageUrl}
