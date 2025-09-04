@@ -22,13 +22,18 @@ const { profile = 'media', options = {} } = Astro.props;
       console.log('[glightbox] Loaded via ESM');
       return mod.default;
     } catch (err) {
-      console.warn('[glightbox] ESM import failed, trying CDN global');
-      await new Promise(r => setTimeout(r, 50));
+      console.warn('[glightbox] ESM import failed, waiting for CDN global…');
+      // Wait up to 2000ms for the deferred CDN script to attach window.GLightbox
+      const start = Date.now();
+      while (!window.GLightbox && Date.now() - start < 2000) {
+        await new Promise(r => setTimeout(r, 50));
+      }
       if (window.GLightbox) {
         console.log('[glightbox] Loaded via CDN global');
         return window.GLightbox;
       }
-      throw new Error('GLightbox not available');
+      console.error('[glightbox] Not available after waiting for CDN');
+      return null;
     }
   };
 
@@ -49,6 +54,7 @@ const { profile = 'media', options = {} } = Astro.props;
       if (!this.GL) {
         this.GL = await loadGL();
       }
+      if (!this.GL) return; // Gracefully bail if not available yet
 
       // Base defaults shared across pages
       const baseOptions = {
@@ -129,6 +135,10 @@ const { profile = 'media', options = {} } = Astro.props;
       });
       
       document.addEventListener('astro:after-swap', () => {
+        this.initLightbox();
+      });
+      // Also re-initialize on history navigation/popstate just in case
+      window.addEventListener('popstate', () => {
         this.initLightbox();
       });
     }
