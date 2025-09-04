@@ -39,8 +39,8 @@ export const youtubePerformances = [
     id: "freedom-sarah-melissa",
     title: "Freedom",
     performer: "Sarah Hyland & Melissa Benoist",
+    venue: "Catalina Bar & Grill (January 20, 2013)",
     searchQuery: "Sarah Hyland Melissa Benoist Freedom Kerrigan Lowdermilk",
-    youtubeId: "vjVkXlxsO8E",
     priority: 1
   },
 
@@ -53,25 +53,26 @@ export const youtubePerformances = [
     performer: "Lindsay Mendez",
     venue: "54 Below (June 4, 2012)",
     searchQuery: "Lindsay Mendez Hand in Hand Kerrigan Lowdermilk",
+    youtubeId: "Gt76Mf6yAEo",
     priority: 1
   },
+  
+  // Avalanche
   {
-    id: "hand-in-hand-andy-mientus",
-    title: "Hand in Hand",
+    id: "avalanche-lindsay-andy",
+    title: "Avalanche",
     performer: "Lindsay Mendez & Andy Mientus",
-    searchQuery: "Andy Mientus Lindsay Mendez Hand in Hand duet",
-    thumbnail: "/src/assets/images/media/hand-in-hand-duet.png",
+    searchQuery: "Lindsay Mendez Andy Mientus Avalanche Kerrigan Lowdermilk",
     priority: 2
   },
 
   // Go Tonight
   {
-    id: "go-tonight-emma",
+    id: "go-tonight-emma-krystina",
     title: "Go Tonight",
-    performer: "Emma Hunton",
+    performer: "Emma Hunton & Krystina Alabado",
     show: "The Mad Ones",
-    searchQuery: "Emma Hunton Go Tonight The Mad Ones",
-    youtubeId: "mj-v6VL2Bjc",
+    searchQuery: "Go Tonight animatic Mad Ones Miranda Pla",
     priority: 1
   },
 
