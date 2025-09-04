@@ -109,14 +109,21 @@ const lindsaySecond = performanceDataRaw.find((i) => i.id === 'avalanche-lindsay
 // Exclude the items we will place later (katie, uzo) from the main flow
 const excludeLater = new Set([katieItem?.id, uzoItem?.id].filter(Boolean));
 const rest = performanceDataRaw.filter((i) => !curatedIds.has(i.id) && !excludeLater.has(i.id));
-// Build the final ordered list: curated, rest, ensure Lindsay Avalanche is a square within grid,
-// then pinned Katie (left) and Uzo (right) as the last two items
+
+// Move Katie and Uzo up one row: insert them before the last few items
+const tailCount = Math.min(6, rest.length);
+const restHead = rest.slice(0, rest.length - tailCount);
+const restTail = rest.slice(rest.length - tailCount);
+
+// Build the final ordered list: curated, most of the rest, then Lindsay (square),
+// then Katie (left) and Uzo (right), then the remaining tail items.
 const performanceData = [
   ...curated,
-  ...rest,
+  ...restHead,
   ...(lindsaySecond ? [{ ...lindsaySecond, __variant: 'square' }] : []),
   ...(katieItem ? [{ ...katieItem, __variant: 'tall', __colStart: 'md:col-start-1' }] : []),
   ...(uzoItem ? [{ ...uzoItem, __variant: 'tall', __colStart: 'md:col-start-4' }] : []),
+  ...restTail,
 ];
 
 // Standardized collage rules (4 columns, no gaps)
@@ -220,29 +227,5 @@ const getLayout = (item) => {
 <!-- Katie Thompson and Uzo Aduba are now pinned within the main grid order as the last two tall items
      with explicit col-start (Katie left, Uzo right). -->
 
-<!-- Absolute bottom: second Lindsay Mendez video (Avalanche) -->
-{lindsaySecond && (
-  <section class="px-4 pt-0 pb-24 mx-auto max-w-6xl lg:px-8">
-    <div class="group relative overflow-hidden">
-      <a
-        href={lindsaySecond.youtubeUrl}
-        class={`glightbox block relative overflow-hidden aspect-[2/1] md:aspect-[16/9]`}
-        data-gallery="performances-collage-4"
-        data-title={lindsaySecond.title}
-        data-description={`Performed by ${lindsaySecond.performer}`}
-        data-type={lindsaySecond.youtubeId ? "video" : "external"}
-        target={lindsaySecond.youtubeId ? "_self" : "_blank"}
-        rel={lindsaySecond.youtubeId ? "" : "noopener noreferrer"}
-      >
-        <img src={lindsaySecond.imageUrl} alt={`${lindsaySecond.performer} - ${lindsaySecond.title}`} class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
-        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
-          <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-center px-3">
-            <h3 class={`${(lindsaySecond.performer || '').length > 24 ? 'text-xl sm:text-2xl md:text-3xl' : 'text-2xl sm:text-3xl md:text-4xl'} drop-shadow-lg font-extrabold uppercase tracking-tight leading-tight`}>{lindsaySecond.performer}</h3>
-            <p class="mt-2 drop-shadow-lg font-medium leading-snug text-sm sm:text-base md:text-lg opacity-95">&ldquo;{lindsaySecond.title}&rdquo;</p>
-          </div>
-        </div>
-      </a>
-    </div>
-  </section>
-)}
+<!-- Lindsay Mendez 'Avalanche' kept as a 1x1 square within the main grid above. -->
     'Matt Doyle': '/src/assets/images/media/matt-doyle.jpg',

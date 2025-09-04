@@ -17,10 +17,9 @@ const metadata = {
 const getCelebrityImage = (performer, songTitle) => {
   // Special handling for Lindsay Mendez who has different images for different songs
   if (performer === 'Lindsay Mendez') {
-    if (songTitle === 'Hand in Hand') {
-      return '/src/assets/images/media/lindsay-mendez-hand-in-hand.jpg';
+    if (songTitle === 'Avalanche') {
+      return '/src/assets/images/media/lindsay-mendez-headshot.jpg';
     } else {
-      // Avalanche uses the original image
       return '/src/assets/images/media/lindsay-mendez.jpeg';
     }
   }

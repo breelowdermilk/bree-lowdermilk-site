@@ -20,30 +20,32 @@ const metadata = {
       <!-- Left Column - Professional Contact & Form -->
       <div class="space-y-8">
         <!-- Professional Inquiries Section - Two Column Layout -->
-        <div class="grid grid-cols-2 gap-6">
-          <div>
-            <h2 class="text-lg font-bold mb-3 tracking-wide">THEATRICAL</h2>
-            <a href="mailto:sglewen@gersh.com" 
-               class="inline-block px-3 py-2 bg-gray-900 text-white font-medium text-xs tracking-widest hover:shadow-lg hover:shadow-gray-500/30 transition-shadow duration-300">
-              SETH GLEWEN | GERSH
-            </a>
+        <div class="space-y-6">
+          <div class="grid grid-cols-2 gap-6">
+            <div class="text-center">
+              <h2 class="text-lg font-bold mb-3 tracking-wide">THEATRICAL</h2>
+              <a href="mailto:sglewen@gersh.com" 
+                 class="inline-block px-3 py-2 bg-gray-900 text-white font-medium text-xs tracking-widest hover:shadow-lg hover:shadow-gray-500/30 transition-shadow duration-300">
+                SETH GLEWEN | GERSH
+              </a>
+            </div>
+
+            <div class="text-center">
+              <h2 class="text-lg font-bold mb-3 tracking-wide">FILM/TV</h2>
+              <a href="mailto:lkeele.asst@gershla.com" 
+                 class="inline-block px-3 py-2 bg-gray-900 text-white font-medium text-xs tracking-widest hover:shadow-lg hover:shadow-gray-500/30 transition-shadow duration-300">
+                LEE KEELE | GERSH
+              </a>
+            </div>
           </div>
 
-          <div>
-            <h2 class="text-lg font-bold mb-3 tracking-wide">FILM/TV</h2>
-            <a href="mailto:lkeele.asst@gershla.com" 
+          <div class="text-center">
+            <h2 class="text-lg font-bold mb-3 tracking-wide">LITERARY</h2>
+            <a href="mailto:jordan@awfulagent.com" 
                class="inline-block px-3 py-2 bg-gray-900 text-white font-medium text-xs tracking-widest hover:shadow-lg hover:shadow-gray-500/30 transition-shadow duration-300">
-              LEE KEELE | GERSH
+              JORDAN HAMESSLEY | JABBERWOCKY
             </a>
           </div>
-        </div>
-
-        <div>
-          <h2 class="text-lg font-bold mb-3 tracking-wide">JABBERWOCKY</h2>
-          <a href="mailto:jordan@awfulagent.com" 
-             class="inline-block px-3 py-2 bg-gray-900 text-white font-medium text-xs tracking-widest hover:shadow-lg hover:shadow-gray-500/30 transition-shadow duration-300">
-            JORDAN HAMESSLEY | JABBERWOCKY
-          </a>
         </div>
 
         <!-- Contact Form -->
@@ -112,12 +114,13 @@ const metadata = {
       </div>
 
       <!-- Right Column - Photo -->
-      <div class="lg:sticky lg:top-24">
-        <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg p-8">
+      <div class="lg:sticky lg:top-12">
+        <div class="p-8 overflow-hidden">
           <img 
             src="/images/bree-accordion.png" 
             alt="Bree Lowdermilk with accordion"
             class="w-full object-contain"
+            style="margin-top: -10%; transform: translateY(-5%);"
           />
         </div>
       </div>
@@ -125,20 +128,26 @@ const metadata = {
   </section>
 
   <!-- Links Section -->
-  <section class="px-4 pb-16 mx-auto max-w-4xl lg:px-8">
+  <section class="px-4 pb-16 mx-auto max-w-6xl lg:px-8">
     <div class="grid md:grid-cols-2 gap-8 text-center">
       <div class="p-6">
-        <h3 class="text-lg font-semibold mb-2 tracking-wide">SHEET MUSIC</h3>
-        <a href="https://newmusicaltheatre.com" target="_blank" rel="noopener noreferrer" 
-           class="inline-block px-4 py-2 bg-gray-900 text-white font-medium text-xs tracking-widest hover:shadow-lg hover:shadow-gray-500/30 transition-shadow duration-300">
-          NEWMUSICALTHEATRE.COM
-        </a>
+        <h3 class="text-lg font-semibold mb-4 tracking-wide">SHEET MUSIC</h3>
+        <div class="space-y-3 flex flex-col items-center">
+          <a href="https://newmusicaltheatre.com" target="_blank" rel="noopener noreferrer" 
+             class="inline-block px-6 py-2 bg-gray-900 text-white font-medium text-xs tracking-widest hover:shadow-lg hover:shadow-gray-500/30 transition-shadow duration-300">
+            NEWMUSICALTHEATRE.COM
+          </a>
+          <a href="https://musicnotes.com" target="_blank" rel="noopener noreferrer" 
+             class="inline-block px-6 py-2 bg-gray-900 text-white font-medium text-xs tracking-widest hover:shadow-lg hover:shadow-gray-500/30 transition-shadow duration-300">
+            MUSIC NOTES
+          </a>
+        </div>
       </div>
 
       <div class="p-6">
-        <h3 class="text-lg font-semibold mb-2 tracking-wide">FOLLOW ALONG</h3>
-        <a href="https://twitter.com/breelowdermilk" target="_blank" rel="noopener noreferrer" 
-           class="inline-block px-4 py-2 bg-gray-900 text-white font-medium text-xs tracking-widest hover:shadow-lg hover:shadow-gray-500/30 transition-shadow duration-300">
+        <h3 class="text-lg font-semibold mb-4 tracking-wide">FOLLOW ALONG</h3>
+        <a href="https://instagram.com/breelowdermilk" target="_blank" rel="noopener noreferrer" 
+           class="inline-block px-6 py-2 bg-gray-900 text-white font-medium text-xs tracking-widest hover:shadow-lg hover:shadow-gray-500/30 transition-shadow duration-300">
           @BREELOWDERMILK
         </a>
       </div>
