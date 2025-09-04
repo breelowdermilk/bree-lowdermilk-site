@@ -11,5 +11,8 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    { "source": "/media-v3", "destination": "/media", "permanent": true }
   ]
 }
