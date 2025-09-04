@@ -26,77 +26,26 @@ export const youtubePerformances = [
     priority: 1
   },
   {
-    id: "run-away-rachel-zegler",
-    title: "Run Away With Me",
+    id: "anyway-rachel-zegler",
+    title: "Anyway",
     performer: "Rachel Zegler",
-    show: "The Mad Ones",
-    searchQuery: "Rachel Zegler Run Away With Me musical theatre",
-    thumbnail: "/src/assets/images/media/run-away-rachel-zegler.png",
+    searchQuery: "Rachel Zegler Anyway Kerrigan Lowdermilk",
+    youtubeId: "Z9ZMLjLqAgE",
     priority: 1
   },
 
   // Freedom
   {
-    id: "freedom-kerrigan-lowdermilk",
+    id: "freedom-sarah-melissa",
     title: "Freedom",
-    performer: "Kerrigan-Lowdermilk",
-    show: "Original",
-    searchQuery: "Freedom Kerrigan Lowdermilk official",
-    thumbnail: "/src/assets/images/media/freedom-official.png",
+    performer: "Sarah Hyland & Melissa Benoist",
+    venue: "Catalina Bar & Grill (January 20, 2013)",
+    searchQuery: "Sarah Hyland Melissa Benoist Freedom Kerrigan Lowdermilk",
+    youtubeId: "MNKpuVxVxng",
     priority: 1
-  },
-  {
-    id: "freedom-melissa-benoist",
-    title: "Freedom", 
-    performer: "Melissa Benoist",
-    show: "From Samantha Brown",
-    venue: "Goodspeed Musicals",
-    searchQuery: "Melissa Benoist Freedom Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/freedom-melissa.png",
-    priority: 2
   },
 
-  // Say The Word
-  {
-    id: "say-the-word-melissa-benoist",
-    title: "Say The Word",
-    performer: "Melissa Benoist",
-    show: "Tales from Bad Children",
-    venue: "54 Below",
-    searchQuery: "Melissa Benoist Say The Word Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/say-word-melissa.png",
-    priority: 1
-  },
-  {
-    id: "say-the-word-barrett-weed",
-    title: "Say The Word",
-    performer: "Barrett Wilbert Weed",
-    show: "The Mad Ones",
-    venue: "The Cabaret Theatre",
-    searchQuery: "Barrett Wilbert Weed Say The Word",
-    thumbnail: "/src/assets/images/media/say-word-barrett.png",
-    priority: 2
-  },
 
-  // My Party Dress
-  {
-    id: "party-dress-sarah-hyland",
-    title: "My Party Dress",
-    performer: "Sarah Hyland",
-    show: "Henry and Mudge",
-    searchQuery: "Sarah Hyland My Party Dress Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/party-dress-sarah.png",
-    priority: 1
-  },
-  {
-    id: "party-dress-jenni-barber",
-    title: "My Party Dress",
-    performer: "Jenni Barber",
-    show: "Henry and Mudge",
-    searchQuery: "Jenni Barber My Party Dress live",
-    thumbnail: "/src/assets/images/media/party-dress-jenni.png",
-    priority: 3
-  },
 
   // Hand in Hand
   {
@@ -105,57 +54,40 @@ export const youtubePerformances = [
     performer: "Lindsay Mendez",
     venue: "54 Below (June 4, 2012)",
     searchQuery: "Lindsay Mendez Hand in Hand Kerrigan Lowdermilk",
-    youtubeId: "Gt76Mf6yAEo", // From search results
-    thumbnail: "/src/assets/images/media/hand-in-hand-lindsay.png",
+    youtubeId: "Gt76Mf6yAEo",
     priority: 1
   },
+  
+  // Avalanche
   {
-    id: "hand-in-hand-andy-mientus",
-    title: "Hand in Hand",
-    performer: "Lindsay Mendez & Andy Mientus",
-    searchQuery: "Andy Mientus Lindsay Mendez Hand in Hand duet",
-    thumbnail: "/src/assets/images/media/hand-in-hand-duet.png",
-    priority: 2
+    id: "avalanche-lindsay",
+    title: "Avalanche",
+    performer: "Lindsay Mendez",
+    searchQuery: "Lindsay Mendez Avalanche Kerrigan Lowdermilk",
+    youtubeId: "zXMnhdybkMY",
+    priority: 1
   },
 
-  // Go Tonight
+  // Go Tonight (Animatic)
   {
-    id: "go-tonight-mad-ones",
-    title: "Go Tonight",
+    id: "go-tonight-animatic",
+    title: "Go Tonight (Animatic)",
     performer: "Emma Hunton & Krystina Alabado",
     show: "The Mad Ones",
-    venue: "59E59 Theaters (2017)",
-    searchQuery: "Emma Hunton Go Tonight The Mad Ones",
-    thumbnail: "/src/assets/images/media/go-tonight-emma.png",
+    searchQuery: "Go Tonight animatic Mad Ones Miranda Pla",
+    youtubeId: "DVUyVjon7r8",
     priority: 1
   },
 
-  // I'm Sorry
-  {
-    id: "im-sorry-grant-gustin",
-    title: "I'm Sorry",
-    performer: "Grant Gustin",
-    searchQuery: "Grant Gustin I'm Sorry Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/im-sorry-grant.png",
-    priority: 1
-  },
 
-  // Two Strangers
+  // Run Away With Me
   {
-    id: "two-strangers-colton-haynes",
-    title: "Two Strangers",
+    id: "run-away-colton-haynes",
+    title: "Run Away With Me",
     performer: "Colton Haynes",
-    searchQuery: "Colton Haynes Two Strangers Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/two-strangers-colton.png",
+    searchQuery: "Colton Haynes Run Away With Me Kerrigan Lowdermilk",
+    youtubeId: "cp6XzrVeq3c",
     priority: 1
-  },
-  {
-    id: "two-strangers-andy-mientus",
-    title: "Two Strangers",
-    performer: "Andy Mientus & Colton Haynes",
-    searchQuery: "Andy Mientus Colton Haynes Two Strangers duet",
-    thumbnail: "/src/assets/images/media/two-strangers-duet.png",
-    priority: 2
   },
 
   // How to Return Home
@@ -174,31 +106,31 @@ export const youtubePerformances = [
     title: "The Girl Who Drove Away",
     performer: "Laura Osnes",
     searchQuery: "Laura Osnes The Girl Who Drove Away",
-    thumbnail: "/src/assets/images/media/girl-drove-laura.png",
+    youtubeId: "ETupK7XBqsY",
     priority: 1
   },
 
   // Vegas
   {
-    id: "vegas-andy-steven",
+    id: "vegas-michael-andy",
     title: "Vegas",
-    performer: "Andy Mientus & Steven Booth",
-    searchQuery: "Andy Mientus Steven Booth Vegas Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/vegas-andy-steven.png",
+    performer: "Michael Arden & Andy Mientus",
+    searchQuery: "Michael Arden Andy Mientus Vegas Kerrigan Lowdermilk",
+    youtubeId: "r9P-bNRZfew",
     priority: 1
   },
 
-  // The Mad Ones
+
+  // Holding On
   {
-    id: "mad-ones-title",
-    title: "The Mad Ones",
-    performer: "Emma Hunton & Krystina Alabado",
-    show: "The Mad Ones",
-    venue: "Off-Broadway Cast",
-    searchQuery: "Emma Hunton Krystina Alabado The Mad Ones title song",
-    thumbnail: "/src/assets/images/media/mad-ones-title.png",
+    id: "holding-on-keala",
+    title: "Holding On",
+    performer: "Keala Settle",
+    searchQuery: "Keala Settle Holding On Kerrigan Lowdermilk",
+    youtubeId: "KcDMrmilTdE",
     priority: 1
   },
+
 
   // Rise
   {
@@ -206,46 +138,27 @@ export const youtubePerformances = [
     title: "Rise",
     performer: "Michael Arden",
     searchQuery: "Michael Arden Rise Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/rise-michael.png",
+    youtubeId: "3or3GaYO884",
     priority: 1
   },
-  {
-    id: "rise-keala-settle",
-    title: "Rise",
-    performer: "Keala Settle",
-    searchQuery: "Keala Settle Rise Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/rise-keala.png",
-    priority: 1
-  },
-
-  // Avalanche
-  {
-    id: "avalanche-ciara-renee",
-    title: "Avalanche",
-    performer: "Ciara Renée",
-    searchQuery: "Ciara Renée Avalanche Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/avalanche-ciara.png",
-    priority: 1
-  },
-
+  
   // Miles to Go
   {
-    id: "miles-to-go-mad-ones",
+    id: "miles-to-go-katie",
     title: "Miles to Go",
-    performer: "The Mad Ones Cast",
-    show: "The Mad Ones",
-    searchQuery: "Miles to Go The Mad Ones Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/miles-to-go.png",
-    priority: 2
+    performer: "Katie Thompson",
+    searchQuery: "Katie Thompson Miles to Go Kerrigan Lowdermilk",
+    youtubeId: "u-E2p_-8uDI",
+    priority: 1
   },
 
-  // The Bad Years
+  // I'll Still Be
   {
-    id: "bad-years-uzo",
-    title: "The Bad Years",
+    id: "ill-still-be-uzo",
+    title: "I'll Still Be",
     performer: "Uzo Aduba",
-    searchQuery: "Uzo Aduba The Bad Years Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/bad-years-uzo.png",
+    searchQuery: "Uzo Aduba I'll Still Be Kerrigan Lowdermilk",
+    youtubeId: "4WKLe1uZ5cc",
     priority: 1
   },
 
@@ -261,37 +174,36 @@ export const youtubePerformances = [
 
   // Additional performances with celebrities
   {
-    id: "ordinary-senior-meghann",
-    title: "Ordinary Senior Year",
+    id: "close-call-sutton",
+    title: "Close Call",
+    performer: "Sutton Foster",
+    searchQuery: "Sutton Foster Close Call Kerrigan Lowdermilk",
+    youtubeId: "upTSHDYlJk0",
+    priority: 1
+  },
+  {
+    id: "say-the-word-meghann",
+    title: "Say the Word",
     performer: "Meghann Fahy",
-    show: "The Mad Ones",
-    searchQuery: "Meghann Fahy Ordinary Senior Year Mad Ones",
-    thumbnail: "/src/assets/images/media/ordinary-meghann.png",
+    searchQuery: "Meghann Fahy Say the Word Kerrigan Lowdermilk",
+    youtubeId: "6LhEZccYPy4",
     priority: 1
   },
   {
-    id: "berkeley-colleen",
-    title: "Berkeley",
+    id: "party-dress-colleen",
+    title: "My Party Dress",
     performer: "Colleen Ballinger",
-    searchQuery: "Colleen Ballinger Berkeley Kerrigan Lowdermilk",
-    thumbnail: "/src/assets/images/media/berkeley-colleen.png",
+    searchQuery: "Colleen Ballinger My Party Dress Kerrigan Lowdermilk",
+    youtubeId: "Xv5TLhfdCB4",
     priority: 1
   },
   {
-    id: "nothing-wonderful-lindsay",
-    title: "Nothing Short of Wonderful",
-    performer: "Lindsay Mendez",
-    searchQuery: "Lindsay Mendez Nothing Short of Wonderful",
-    thumbnail: "/src/assets/images/media/nothing-lindsay.png",
+    id: "last-weeks-alcohol-matt",
+    title: "Last Week's Alcohol",
+    performer: "Matt Doyle",
+    searchQuery: "Matt Doyle Last Week's Alcohol Kerrigan Lowdermilk",
+    youtubeId: "NCZkYGv-d-U",
     priority: 1
-  },
-  {
-    id: "welcome-party-andy",
-    title: "Welcome To The Party",
-    performer: "Andy Mientus & Krysta Rodriguez",
-    searchQuery: "Andy Mientus Krysta Rodriguez Welcome To The Party",
-    thumbnail: "/src/assets/images/media/welcome-andy.png",
-    priority: 2
   },
   {
     id: "rewrite-carrie",
