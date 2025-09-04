@@ -86,41 +86,65 @@ const workingYouTubeIds = {
   'Matt Doyle': 'NCZkYGv-d-U',  // Last Week's Alcohol - verified
 };
 
-// Prepare performance data with images and URLs
-const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).map((performance) => {
-  const celebrityImage = getCelebrityImage(performance.performer, performance.title);
-  const imageUrl = celebrityImage || getYouTubeThumbnail(performance.youtubeId);
-  
-  // Use working YouTube ID if available
-  let youtubeId = performance.youtubeId;
-  
-  // Special handling for Lindsay Mendez who has multiple songs
-  if (performance.performer === 'Lindsay Mendez') {
-    if (performance.title === 'Avalanche') {
-      youtubeId = 'zXMnhdybkMY';
-    } else if (performance.title === 'Hand in Hand') {
-      youtubeId = 'Gt76Mf6yAEo';
-    }
-  } else {
-    for (const [performer, id] of Object.entries(workingYouTubeIds)) {
-      if (performance.performer.includes(performer)) {
-        youtubeId = id;
-        break;
+// Build data with collage rules (mirrors media-3)
+const performanceDataRaw = youtubePerformances
+  .filter((p) => p.priority <= 2)
+  .map((p) => {
+    const celebrityImage = getCelebrityImage(p.performer, p.title);
+    const lindsayAvalanche = (p.title === 'Avalanche') && (p.performer || '') === 'Lindsay Mendez';
+    const imageUrl = lindsayAvalanche
+      ? '/src/assets/images/media/lindsay-mendez-headshot.jpg'
+      : (celebrityImage || getYouTubeThumbnail(p.youtubeId));
+    // Preserve Avalanche YouTube ID specifically; otherwise allow performer-level overrides
+    let youtubeId = p.youtubeId;
+    const allowOverride = !(lindsayAvalanche);
+    if (allowOverride) {
+      for (const [performer, id] of Object.entries(workingYouTubeIds)) {
+        if (p.performer.includes(performer)) { youtubeId = id; break; }
       }
+    } else {
+      youtubeId = 'zXMnhdybkMY';
     }
-  }
-  
-  const youtubeUrl = youtubeId 
-    ? `https://www.youtube.com/watch?v=${youtubeId}`
-    : `https://www.youtube.com/results?search_query=${encodeURIComponent(performance.searchQuery || `${performance.performer} ${performance.title} Kerrigan Lowdermilk`)}`;
-  
-  return {
-    ...performance,
-    imageUrl,
-    youtubeUrl,
-    youtubeId
-  };
-}).filter(p => p.imageUrl && p.imageUrl !== 'null'); // Only include items with valid images
+    const youtubeUrl = youtubeId
+      ? `https://www.youtube.com/watch?v=${youtubeId}`
+      : `https://www.youtube.com/results?search_query=${encodeURIComponent(p.searchQuery || `${p.performer} ${p.title} Kerrigan Lowdermilk`)}`;
+    return { ...p, imageUrl, youtubeUrl, youtubeId };
+  })
+  .filter((p) => p.imageUrl && p.imageUrl !== 'null');
+
+// Curate the first rows explicitly by order and span variant
+const byId = Object.fromEntries(performanceDataRaw.map((i) => [i.id, i]));
+const curated = [];
+if (byId['run-away-aaron-tveit']) curated.push({ ...byId['run-away-aaron-tveit'], __variant: 'square' });
+if (byId['anyway-rachel-zegler']) curated.push({ ...byId['anyway-rachel-zegler'], __variant: 'square' });
+if (byId['run-away-jeremy-jordan']) curated.push({ ...byId['run-away-jeremy-jordan'], __variant: 'big' });
+if (byId['go-tonight-animatic']) curated.push({ ...byId['go-tonight-animatic'], __variant: 'wide' });
+if (byId['say-the-word-meghann']) curated.push({ ...byId['say-the-word-meghann'], __variant: 'big' });
+
+const curatedIds = new Set(curated.map((i) => i.id));
+const katieItem = performanceDataRaw.find((i) => (i.performer || '').includes('Katie Thompson'));
+const lindsayAvalancheItem = performanceDataRaw.find((i) => i.id === 'avalanche-lindsay');
+
+const excludeLater = new Set([katieItem?.id, lindsayAvalancheItem?.id].filter(Boolean));
+let rest = performanceDataRaw.filter((i) => !curatedIds.has(i.id) && !excludeLater.has(i.id));
+
+// Promote key items to help fill gaps
+const priorityNames = ['Sutton Foster', 'Colleen Ballinger', 'Matt Doyle'];
+rest = rest.sort((a, b) => {
+  const w = (x) => (priorityNames.some((n) => (x.performer || '').includes(n)) ? 0 : 1);
+  return w(a) - w(b);
+});
+
+// Insert Katie Thompson immediately after Keala Settle
+const kealaIndex = rest.findIndex((i) => i.id === 'holding-on-keala');
+if (katieItem && kealaIndex !== -1) {
+  rest.splice(kealaIndex + 1, 0, { ...katieItem, __variant: 'tall' });
+}
+
+// Ensure one Lindsay Avalanche as a square in the flow
+if (lindsayAvalancheItem) rest.push({ ...lindsayAvalancheItem, __variant: 'square' });
+
+const performanceData = [...curated, ...rest];
 ---
 
 <Layout metadata={metadata}>
@@ -155,48 +179,61 @@ const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).m
   <section class="px-4 py-16 mx-auto max-w-6xl lg:px-8 lg:py-20">
     <h1 class="bree-h1-small mb-8 text-center">Media</h1>
     
-    <!-- Celebrity Performances Grid - Regular sized grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-      {performanceData.slice(0, 20).map((performance) => (
-        <div class="group relative aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
-          <a
-            href={performance.youtubeUrl}
-            class="glightbox block relative overflow-hidden h-full"
-            data-gallery="performances"
-            data-title={performance.title}
-            data-description={`Performed by ${performance.performer}`}
-            data-type={performance.youtubeId ? "video" : "external"}
-            target={performance.youtubeId ? "_self" : "_blank"}
-            rel={performance.youtubeId ? "" : "noopener noreferrer"}
-          >
-            <img 
-              src={performance.imageUrl}
-              alt={`${performance.performer} - ${performance.title}`}
-              class={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 ${
-                (performance.performer || '').includes('Meghann Fahy') ? 'object-top' : 'object-center'
-              }`}
-              loading="lazy"
-            />
-            <!-- Hover Overlay with Performer + Title only -->
-            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
-              <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-center px-3">
-                <!-- Performer: large, uppercase; downsize slightly for long names -->
-                <h3 class={`${
-                  (performance.performer || '').length > 24
-                    ? 'text-xl sm:text-2xl md:text-3xl'
-                    : 'text-2xl sm:text-3xl md:text-4xl'
-                } drop-shadow-lg font-extrabold uppercase tracking-tight leading-tight`}>
-                  {performance.performer}
-                </h3>
-                <!-- Song title: smaller, medium weight, in quotes -->
-                <p class="mt-2 drop-shadow-lg font-medium leading-snug text-sm sm:text-base md:text-lg opacity-95">
-                  &ldquo;{performance.title}&rdquo;
-                </p>
+    <!-- Collage grid: 4 columns, dense packing, varied sizes -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-0 collage-grid">
+      {performanceData.slice(0, 48).map((item) => {
+        const getLayout = (item) => {
+          let variant = item.__variant || 'square';
+          const title = (item.title || '').toLowerCase();
+          const perf = (item.performer || '');
+          if (!item.__variant) {
+            if (title.includes('go tonight') || item.title === 'Freedom') variant = 'wide';
+            if (perf.includes('Uzo Aduba') || perf.includes('Katie Thompson')) variant = 'tall';
+          }
+          if (variant === 'wide') return { span: 'col-span-2 row-span-1', aspect: 'aspect-[2/1]' };
+          if (variant === 'tall') return { span: 'col-span-1 row-span-2', aspect: 'aspect-[1/2]' };
+          if (variant === 'big') return { span: 'col-span-2 row-span-2', aspect: 'aspect-square' };
+          return { span: 'col-span-1 row-span-1', aspect: 'aspect-square' };
+        };
+        const { span, aspect } = getLayout(item);
+        return (
+          <div class={`group relative overflow-hidden ${span}`}>
+            <a
+              href={item.youtubeUrl}
+              class={`glightbox block relative overflow-hidden ${aspect}`}
+              data-gallery="performances"
+              data-title={item.title}
+              data-description={`Performed by ${item.performer}`}
+              data-type={item.youtubeId ? "video" : "external"}
+              target={item.youtubeId ? "_self" : "_blank"}
+              rel={item.youtubeId ? "" : "noopener noreferrer"}
+            >
+              <img 
+                src={item.imageUrl}
+                alt={`${item.performer} - ${item.title}`}
+                class={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${
+                  (item.performer || '').includes('Meghann Fahy') ? 'object-top' : 'object-center'
+                }`}
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
+                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-center px-3">
+                  <h3 class={`${
+                    (item.performer || '').length > 24
+                      ? 'text-xl sm:text-2xl md:text-3xl'
+                      : 'text-2xl sm:text-3xl md:text-4xl'
+                  } drop-shadow-lg font-extrabold uppercase tracking-tight leading-tight`}>
+                    {item.performer}
+                  </h3>
+                  <p class="mt-2 drop-shadow-lg font-medium leading-snug text-sm sm:text-base md:text-lg opacity-95">
+                    &ldquo;{item.title}&rdquo;
+                  </p>
+                </div>
               </div>
-            </div>
-          </a>
-        </div>
-      ))}
+            </a>
+          </div>
+        );
+      })}
     </div>
 
     <!-- Spotify Albums Section -->
@@ -236,9 +273,8 @@ const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).m
 
 <style>
 /* Text Shadow for better readability */
-.drop-shadow-lg {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 1px 2px rgba(0, 0, 0, 0.8);
-}
+.drop-shadow-lg { text-shadow: 0 2px 4px rgba(0,0,0,.9), 0 1px 2px rgba(0,0,0,.8); }
+.collage-grid { grid-auto-flow: dense; }
 
 /* Line clamp utility */
 .line-clamp-1 {
