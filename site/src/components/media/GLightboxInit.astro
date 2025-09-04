@@ -3,28 +3,48 @@
 // This component sets up GLightbox for the entire site with proper Astro integration
 ---
 
-<!-- GLightbox CSS -->
+<!-- GLightbox CSS + JS fallback -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js" defer></script>
 
-<script>
-  // Import GLightbox dynamically
-  import GLightbox from 'glightbox';
-  
+<script type="module">
+  // Robust loader: try ESM, fallback to CDN global
+  const loadGL = async () => {
+    try {
+      const mod = await import('glightbox');
+      console.log('[glightbox] Loaded via ESM');
+      return mod.default;
+    } catch (err) {
+      console.warn('[glightbox] ESM import failed, trying CDN global');
+      await new Promise(r => setTimeout(r, 50));
+      if (window.GLightbox) {
+        console.log('[glightbox] Loaded via CDN global');
+        return window.GLightbox;
+      }
+      throw new Error('GLightbox not available');
+    }
+  };
+
   class GLightboxManager {
     constructor() {
       this.lightbox = null;
+      this.GL = null;
       this.initLightbox();
       this.setupViewTransitions();
     }
     
-    initLightbox() {
+    async initLightbox() {
       // Destroy existing instance if it exists
       if (this.lightbox) {
         this.lightbox.destroy();
       }
-      
+      // Ensure library is available
+      if (!this.GL) {
+        this.GL = await loadGL();
+      }
+
       // Initialize GLightbox with custom settings for music content
-      this.lightbox = GLightbox({
+      this.lightbox = this.GL({
         selector: '.glightbox',
         touchNavigation: true,
         loop: true,
@@ -134,8 +154,9 @@
   const initializeGLightbox = () => {
     if (!glightboxManager) {
       glightboxManager = new GLightboxManager();
+    } else {
+      glightboxManager.initLightbox();
     }
-    
     // Make manager available globally for other components
     window.glightboxManager = glightboxManager;
   };
@@ -156,6 +177,19 @@
   
   // Handle Astro page transitions
   document.addEventListener('astro:page-load', initializeGLightbox);
+
+  // Prevent default hash jump if init is delayed
+  let ready = false;
+  document.addEventListener('click', (e) => {
+    const a = e.target && e.target.closest ? e.target.closest('a.glightbox[data-type="inline"]') : null;
+    if (a) {
+      if (!window.glightboxManager || !window.glightboxManager.lightbox) {
+        e.preventDefault();
+        initializeGLightbox();
+        setTimeout(() => a.click(), 100);
+      }
+    }
+  }, { capture: true });
 </script>
 
 <style>
@@ -235,4 +269,16 @@
     color: #1f2937;
     margin-left: 2px; /* Slight offset for visual balance */
   }
+</style>
+
+<style is:global>
+  /* Speed up GLightbox animations slightly */
+  .gfadeIn { animation-duration: 0.28s !important; }
+  .gfadeOut { animation-duration: 0.24s !important; }
+  .gzoomIn { animation-duration: 0.28s !important; }
+  .gzoomOut { animation-duration: 0.24s !important; }
+  .gslideInRight, .gslideInLeft { animation-duration: 0.25s !important; }
+  .gslideOutRight, .gslideOutLeft { animation-duration: 0.22s !important; }
+  /* Reduce slide transform transition slightly */
+  .glightbox-container .gslider { transition: transform 0.25s ease !important; }
 </style>
