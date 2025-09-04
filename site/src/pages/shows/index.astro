@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import PageLayout from '~/layouts/PageLayout.astro';
 import MediaTileOverlay from '~/components/media/MediaTileOverlay.astro';
 import defaultImg from '~/assets/images/default.png';
-import GLightboxInit from '~/components/media/GLightboxInit.astro';
+// Inline GLightbox init for shows page (CDN-only, simple and robust)
 
 const shows = await getCollection('shows');
 
@@ -41,8 +41,41 @@ const metadata = {
 ---
 
 <PageLayout {metadata}>
-  <!-- Initialize GLightbox -->
-  <GLightboxInit profile="shows" />
+  <!-- GLightbox CSS/JS (CDN) and page-scoped init -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js" defer></script>
+  <script is:inline>
+    const setupShowsLightbox = () => {
+      if (!window.GLightbox) {
+        // Wait for CDN script to attach
+        setTimeout(setupShowsLightbox, 60);
+        return;
+      }
+      if (window.__showsLightbox) {
+        try { window.__showsLightbox.destroy(); } catch {}
+      }
+      window.__showsLightbox = window.GLightbox({
+        selector: 'a.glightbox[data-type="inline"]',
+        loop: false,
+        touchNavigation: true,
+        closeOnOutsideClick: true,
+        openEffect: 'fade',
+        closeEffect: 'fade',
+        slideEffect: 'slide',
+      });
+      // Debug: count anchors
+      try {
+        const count = document.querySelectorAll('a.glightbox[data-type="inline"]').length;
+        console.log(`[shows] GLightbox bound to ${count} inline anchors`);
+      } catch {}
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupShowsLightbox);
+    } else {
+      setupShowsLightbox();
+    }
+    document.addEventListener('astro:page-load', setupShowsLightbox);
+  </script>
   
   <section class="px-6 sm:px-6 max-w-7xl mx-auto">
     <div class="py-12 md:py-16 lg:py-20 mx-auto">

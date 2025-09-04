@@ -1,6 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import GLightboxInit from '~/components/media/GLightboxInit.astro';
+// Page-scoped GLightbox init for Media (CDN-only)
 import { youtubePerformances, spotifyAlbums } from '~/data/media/youtube-performances.js';
 
 const metadata = {
@@ -114,8 +114,32 @@ const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).m
 ---
 
 <Layout metadata={metadata}>
-  <!-- GLightbox Initialization -->
-  <GLightboxInit profile="media" />
+  <!-- GLightbox CSS/JS (CDN) and page-scoped init for video links -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js" defer></script>
+  <script is:inline>
+    const setupMediaLightbox = () => {
+      if (!window.GLightbox) { setTimeout(setupMediaLightbox, 60); return; }
+      if (window.__mediaLightbox) { try { window.__mediaLightbox.destroy(); } catch {} }
+      window.__mediaLightbox = window.GLightbox({
+        selector: 'a.glightbox',
+        loop: true,
+        touchNavigation: true,
+        closeOnOutsideClick: true,
+        openEffect: 'fade',
+        closeEffect: 'fade',
+        slideEffect: 'slide',
+        autoplayVideos: false,
+      });
+      try { console.log(`[media] GLightbox bound: `, document.querySelectorAll('a.glightbox').length); } catch {}
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupMediaLightbox);
+    } else {
+      setupMediaLightbox();
+    }
+    document.addEventListener('astro:page-load', setupMediaLightbox);
+  </script>
   
   <!-- Header Section - Matching About/Contact style -->
   <section class="px-4 py-16 mx-auto max-w-6xl lg:px-8 lg:py-20">
