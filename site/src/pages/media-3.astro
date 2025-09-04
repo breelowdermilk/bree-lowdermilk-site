@@ -26,13 +26,14 @@ const getCelebrityImage = (performer) => {
     'Colleen Ballinger': '/src/assets/images/media/colleen ballinger.jpg',
     'Colton Haynes': '/src/assets/images/media/colton haynes.webp',
     'Meghann Fahy': '/src/assets/images/media/meghann fahy.png',
-    'Michael Arden': '/src/assets/images/media/michael arden andy mientus.png',
+    'Michael Arden': '/src/assets/images/media/michael-arden.jpg', // headshot (please add file)
     'Andy Mientus': '/src/assets/images/media/michael arden andy mientus.png',
     'Andy Mientus & Colton Haynes': '/src/assets/images/media/michael arden andy mientus.png',
     'Andy Mientus & Steven Booth': '/src/assets/images/media/michael arden andy mientus.png',
     'Uzo Aduba': '/src/assets/images/media/uzo aduba.webp',
     'Ciara Renée': '/src/assets/images/media/ciara renee.jpeg',
     'Sutton Foster': '/src/assets/images/media/sutton foster.jpg',
+    // Default Lindsay image (non-Avalanche)
     'Lindsay Mendez': '/src/assets/images/media/lindsay-mendez.jpeg',
     'Lindsay Mendez & Andy Mientus': '/src/assets/images/media/michael arden andy mientus.png',
     'Andy Mientus & Krysta Rodriguez': '/src/assets/images/media/michael arden andy mientus.png',
@@ -63,11 +64,15 @@ const workingYouTubeIds = {
   'Keala Settle': 'KcDMrmilTdE',
 };
 
-const performanceData = youtubePerformances
+const performanceDataRaw = youtubePerformances
   .filter((p) => p.priority <= 2)
   .map((p) => {
     const celebrityImage = getCelebrityImage(p.performer);
-    const imageUrl = celebrityImage || getYouTubeThumbnail(p.youtubeId);
+    // Special-case: Use separate Lindsay Mendez headshot for Avalanche
+    const lindsayAvalanche = (p.title === 'Avalanche') && (p.performer || '').includes('Lindsay Mendez');
+    const imageUrl = lindsayAvalanche
+      ? '/src/assets/images/media/lindsay-mendez-headshot.jpg' // headshot (please add file)
+      : (celebrityImage || getYouTubeThumbnail(p.youtubeId));
     let youtubeId = p.youtubeId;
     for (const [performer, id] of Object.entries(workingYouTubeIds)) {
       if (p.performer.includes(performer)) { youtubeId = id; break; }
@@ -77,21 +82,38 @@ const performanceData = youtubePerformances
       : `https://www.youtube.com/results?search_query=${encodeURIComponent(p.searchQuery || `${p.performer} ${p.title} Kerrigan Lowdermilk`)}`;
     return { ...p, imageUrl, youtubeUrl, youtubeId };
   })
-  .filter((p) => p.imageUrl && p.imageUrl !== 'null')
-  // Custom ordering: bump specific items
-  .sort((a, b) => {
-    const weight = (item) => {
-      const id = item.id || '';
-      const perf = item.performer || '';
-      const title = item.title || '';
-      if (id === 'go-tonight-animatic') return 0; // move up
-      if (id === 'run-away-jeremy-jordan') return 1; // Jeremy Jordan large
-      if (perf.includes('Meghann Fahy')) return 2; // Meghann Fahy large
-      if (id === 'run-away-aaron-tveit') return 5; // Aaron Tveit large but placed later
-      return 100;
-    };
-    return weight(a) - weight(b);
-  });
+  .filter((p) => p.imageUrl && p.imageUrl !== 'null');
+
+// Curate the first rows explicitly by order and span variant
+const byId = Object.fromEntries(performanceDataRaw.map((i) => [i.id, i]));
+const curated = [];
+
+// 1: Aaron Tveit (small square)
+if (byId['run-away-aaron-tveit']) curated.push({ ...byId['run-away-aaron-tveit'], __variant: 'square' });
+// 2: Rachel Zegler (small square)
+if (byId['anyway-rachel-zegler']) curated.push({ ...byId['anyway-rachel-zegler'], __variant: 'square' });
+// 3-4-7-8: Jeremy Jordan (big 2x2)
+if (byId['run-away-jeremy-jordan']) curated.push({ ...byId['run-away-jeremy-jordan'], __variant: 'big' });
+// 5-6: Go Tonight (wide 2x1)
+if (byId['go-tonight-animatic']) curated.push({ ...byId['go-tonight-animatic'], __variant: 'wide' });
+// Next featured: Meghann Fahy (big 2x2)
+if (byId['say-the-word-meghann']) curated.push({ ...byId['say-the-word-meghann'], __variant: 'big' });
+
+const curatedIds = new Set(curated.map((i) => i.id));
+// Identify items to pin
+const katieItem = performanceDataRaw.find((i) => (i.performer || '').includes('Katie Thompson'));
+const uzoItem = performanceDataRaw.find((i) => (i.performer || '').includes('Uzo Aduba'));
+const lindsaySecond = performanceDataRaw.find((i) => i.id === 'avalanche-lindsay');
+// Exclude the items we will place later (katie, uzo, lindsaySecond) from the main flow
+const excludeLater = new Set([katieItem?.id, uzoItem?.id, lindsaySecond?.id].filter(Boolean));
+const rest = performanceDataRaw.filter((i) => !curatedIds.has(i.id) && !excludeLater.has(i.id));
+// Build the final ordered list: curated, rest, then pinned Katie (left) and Uzo (right)
+const performanceData = [
+  ...curated,
+  ...rest,
+  ...(katieItem ? [{ ...katieItem, __variant: 'tall', __colStart: 'md:col-start-1' }] : []),
+  ...(uzoItem ? [{ ...uzoItem, __variant: 'tall', __colStart: 'md:col-start-4' }] : []),
+];
 
 // Standardized collage rules (4 columns, no gaps)
 // Variants:
@@ -104,15 +126,19 @@ const getLayout = (item) => {
   const title = (item.title || '').toLowerCase();
   const perf = (item.performer || '');
 
-  // Make these wide
-  if (title.includes('go tonight') || item.title === 'Freedom') variant = 'wide';
-  if (perf.includes('Jeremy Jordan') || perf.includes('Aaron Tveit') || perf.includes('Meghann Fahy')) variant = 'wide';
-
-  // Make these tall
-  if (perf.includes('Uzo Aduba') || perf.includes('Katie Thompson')) variant = 'tall';
+  // Explicit curated variants take precedence
+  if (item.__variant) {
+    variant = item.__variant;
+  } else {
+    // Make these wide by default
+    if (title.includes('go tonight') || item.title === 'Freedom') variant = 'wide';
+    // Make these tall
+    if (perf.includes('Uzo Aduba') || perf.includes('Katie Thompson')) variant = 'tall';
+  }
 
   if (variant === 'wide') return { span: 'col-span-2 row-span-1', aspect: 'aspect-[2/1]' };
   if (variant === 'tall') return { span: 'col-span-1 row-span-2', aspect: 'aspect-[1/2]' };
+  if (variant === 'big') return { span: 'col-span-2 row-span-2', aspect: 'aspect-square' };
   return { span: 'col-span-1 row-span-1', aspect: 'aspect-square' };
 };
 ---
@@ -137,8 +163,9 @@ const getLayout = (item) => {
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-0 collage-grid">
       {performanceData.slice(0, 36).map((item) => {
         const { span, aspect } = getLayout(item);
+        const colStart = item.__colStart || '';
         return (
-          <div class={`group relative overflow-hidden ${span}`}>
+          <div class={`group relative overflow-hidden ${span} ${colStart}`}>
             <a
               href={item.youtubeUrl}
               class={`glightbox block relative overflow-hidden ${aspect}`}
@@ -180,6 +207,35 @@ const getLayout = (item) => {
 </Layout>
 
 <style>
-.collage-grid { grid-auto-flow: dense; }
+.collage-grid { grid-auto-flow: row; }
 .drop-shadow-lg { text-shadow: 0 2px 4px rgba(0,0,0,.9), 0 1px 2px rgba(0,0,0,.8); }
 </style>
+
+<!-- Katie Thompson and Uzo Aduba are now pinned within the main grid order as the last two tall items
+     with explicit col-start (Katie left, Uzo right). -->
+
+<!-- Absolute bottom: second Lindsay Mendez video (Avalanche) -->
+{lindsaySecond && (
+  <section class="px-4 pt-0 pb-24 mx-auto max-w-6xl lg:px-8">
+    <div class="group relative overflow-hidden">
+      <a
+        href={lindsaySecond.youtubeUrl}
+        class={`glightbox block relative overflow-hidden aspect-[2/1] md:aspect-[16/9]`}
+        data-gallery="performances-collage-4"
+        data-title={lindsaySecond.title}
+        data-description={`Performed by ${lindsaySecond.performer}`}
+        data-type={lindsaySecond.youtubeId ? "video" : "external"}
+        target={lindsaySecond.youtubeId ? "_self" : "_blank"}
+        rel={lindsaySecond.youtubeId ? "" : "noopener noreferrer"}
+      >
+        <img src={lindsaySecond.imageUrl} alt={`${lindsaySecond.performer} - ${lindsaySecond.title}`} class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
+          <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-center px-3">
+            <h3 class={`${(lindsaySecond.performer || '').length > 24 ? 'text-xl sm:text-2xl md:text-3xl' : 'text-2xl sm:text-3xl md:text-4xl'} drop-shadow-lg font-extrabold uppercase tracking-tight leading-tight`}>{lindsaySecond.performer}</h3>
+            <p class="mt-2 drop-shadow-lg font-medium leading-snug text-sm sm:text-base md:text-lg opacity-95">&ldquo;{lindsaySecond.title}&rdquo;</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+)}

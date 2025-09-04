@@ -198,6 +198,14 @@ export const youtubePerformances = [
     priority: 1
   },
   {
+    id: "last-weeks-alcohol-matt",
+    title: "Last Week's Alcohol",
+    performer: "Matt Doyle",
+    searchQuery: "Matt Doyle Last Week's Alcohol Kerrigan Lowdermilk",
+    youtubeId: "NCZkYGv-d-U",
+    priority: 1
+  },
+  {
     id: "rewrite-carrie",
     title: "Rewrite",
     performer: "Carrie Manolakos",
