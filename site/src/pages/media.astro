@@ -17,14 +17,16 @@ const metadata = {
 const getCelebrityImage = (performer, songTitle) => {
   // Special handling for Lindsay Mendez who has different images for different songs
   if (performer === 'Lindsay Mendez') {
-    if (songTitle === 'Avalanche') {
-      return '/src/assets/images/media/lindsay-mendez-avalanche.jpg';
+    if (songTitle === 'Hand in Hand') {
+      return '/src/assets/images/media/lindsay-mendez-hand-in-hand.jpg';
     } else {
+      // Avalanche uses the original image
       return '/src/assets/images/media/lindsay-mendez.jpeg';
     }
   }
   
   const imageMap = {
+    'Michael Arden & Andy Mientus': '/src/assets/images/media/michael arden andy mientus.png',
     'Aaron Tveit': '/src/assets/images/media/aaron tveit.jpg',
     'Jeremy Jordan': '/src/assets/images/media/jeremy jordan.jpg',
     'Rachel Zegler': '/src/assets/images/media/rachel zegler.jpg',
@@ -44,8 +46,8 @@ const getCelebrityImage = (performer, songTitle) => {
     'Lindsay Mendez & Andy Mientus': '/src/assets/images/media/michael arden andy mientus.png',
     'Andy Mientus & Krysta Rodriguez': '/src/assets/images/media/michael arden andy mientus.png',
     'Laura Osnes': '/src/assets/images/media/laura-osnes.jpg',
-    'Katie Thompson': '/src/assets/images/media/katie-thompson.jpg',
     'Matt Doyle': '/src/assets/images/media/matt-doyle.jpg',
+    'Katie Thompson': '/src/assets/images/media/katie-thompson.jpg',
     'Mandy Gonzalez': null,
     'Carrie Manolakos': null
   };
@@ -171,7 +173,9 @@ const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).m
             <img 
               src={performance.imageUrl}
               alt={`${performance.performer} - ${performance.title}`}
-              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              class={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 ${
+                (performance.performer || '').includes('Meghann Fahy') ? 'object-top' : 'object-center'
+              }`}
               loading="lazy"
             />
             <!-- Hover Overlay with Performer + Title only -->
