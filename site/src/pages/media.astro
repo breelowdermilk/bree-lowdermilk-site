@@ -240,33 +240,22 @@ const performanceData = [...curated, ...rest];
 
     <!-- Spotify Albums Section -->
     <div class="mt-16">
-      <h2 class="text-2xl font-bold mb-6">Albums</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <h2 class="bree-h1-small mb-8 text-center">Albums</h2>
+      <div class="space-y-8">
         {spotifyAlbums.map((album) => (
-          <a
-            href={album.spotifyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
-          >
-            <div class="aspect-square">
-              <img 
-                src={album.coverImage}
-                alt={album.title}
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                loading="lazy"
-              />
-              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-center p-3">
-                  <h3 class="font-bold text-sm mb-1">{album.title}</h3>
-                  <p class="text-xs opacity-90">{album.year}</p>
-                  <div class="mt-2">
-                    <span class="text-xs bg-green-500 px-2 py-1 rounded-full">Spotify</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-semibold mb-4">{album.title} ({album.year})</h3>
+            <iframe
+              src={`https://open.spotify.com/embed/album/${album.spotifyId}?utm_source=generator`}
+              width="100%"
+              height="450"
+              frameBorder="0"
+              allowfullscreen=""
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+              class="rounded-lg"
+            ></iframe>
+          </div>
         ))}
       </div>
     </div>
