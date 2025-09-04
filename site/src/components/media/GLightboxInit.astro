@@ -185,9 +185,8 @@ const { profile = 'media', options = {} } = Astro.props;
   const initializeGLightbox = () => {
     if (!glightboxManager) {
       glightboxManager = new GLightboxManager();
-    } else {
-      glightboxManager.initLightbox();
     }
+    glightboxManager.initLightbox();
     // Make manager available globally for other components
     window.glightboxManager = glightboxManager;
   };
