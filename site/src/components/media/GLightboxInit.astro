@@ -1,6 +1,7 @@
 ---
 // GLightbox initialization component
 // This component sets up GLightbox for the entire site with proper Astro integration
+const { profile = 'media', options = {} } = Astro.props;
 ---
 
 <!-- GLightbox CSS + JS fallback -->
@@ -8,6 +9,12 @@
 <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js" defer></script>
 
 <script type="module">
+  // Component config injected from Astro props
+  const componentConfig = {
+    profile: ${JSON.stringify(profile)},
+    options: ${JSON.stringify(options)}
+  };
+
   // Robust loader: try ESM, fallback to CDN global
   const loadGL = async () => {
     try {
@@ -43,12 +50,21 @@
         this.GL = await loadGL();
       }
 
-      // Initialize GLightbox with custom settings for music content
-      this.lightbox = this.GL({
+      // Base defaults shared across pages
+      const baseOptions = {
         selector: '.glightbox',
         touchNavigation: true,
+        autoplayVideos: false,
         loop: true,
-        autoplayVideos: false, // Don't auto-play by default
+        openEffect: 'fade',
+        closeEffect: 'fade',
+        slideEffect: 'slide',
+        moreText: 'View more',
+        moreLength: 60,
+        cssEfects: {
+          fade: { in: 'fadeIn', out: 'fadeOut' },
+          slide: { in: 'slideInRight', out: 'slideOutLeft' }
+        },
         plyr: {
           css: 'https://cdn.plyr.io/3.6.8/plyr.css',
           js: 'https://cdn.plyr.io/3.6.8/plyr.js',
@@ -63,20 +79,35 @@
             }
           }
         },
-        openEffect: 'fade',
-        closeEffect: 'fade',
-        slideEffect: 'slide',
-        moreText: 'View more',
-        moreLength: 60,
-        cssEfects: {
-          fade: { in: 'fadeIn', out: 'fadeOut' },
-          slide: { in: 'slideInRight', out: 'slideOutLeft' }
-        },
         svg: {
           close: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
           next: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"></polyline></svg>',
           prev: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"></polyline></svg>'
         }
+      };
+
+      // Profile-specific presets
+      const mediaPreset = {
+        // Media page: video gallery UX
+        loop: true,
+        autoplayVideos: false,
+      };
+
+      const showsPreset = {
+        // Shows page: inline modal UX
+        loop: false,
+        autoplayVideos: false,
+        closeOnOutsideClick: true
+      };
+
+      const preset = (componentConfig.profile === 'shows') ? showsPreset : mediaPreset;
+      const pageOverrides = componentConfig.options || {};
+
+      // Initialize GLightbox with merged settings
+      this.lightbox = this.GL({
+        ...baseOptions,
+        ...preset,
+        ...pageOverrides
       });
       
       // Add event listeners for video events
