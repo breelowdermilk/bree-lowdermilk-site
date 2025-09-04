@@ -115,6 +115,12 @@ body {
 .bree-header.header-scrolled nav a {
   color: var(--text-dark) !important;
 }
+/* Support alternate class names from media-nav */
+.bree-header.nav-scrolled h1,
+.bree-header.nav-scrolled nav a { color: var(--text-dark) !important; }
+.bree-header.nav-scrolled nav a:hover { color: var(--red-hover) !important; }
+.bree-header.nav-top h1,
+.bree-header.nav-top nav a { color: #f9fafb !important; }
 
 /* Logo stays white in both states */
 .bree-header .logo-text {
@@ -131,6 +137,15 @@ body {
 .bree-header.header-scrolled nav a:hover {
   color: var(--red-hover) !important;
 }
+
+/* Map sticky header scroll class used by scripts (#header.scroll)
+   to the light header visual state (black text on white bg). */
+#header.scroll { background: #ffffff !important; color: var(--text-dark) !important; }
+#header.scroll nav a { color: var(--text-dark) !important; }
+#header.scroll nav a:hover { color: var(--red-hover) !important; }
+#header.scroll .logo-text, #header.scroll h1 { color: var(--text-dark) !important; }
+#header.scroll .aw-link-active { color: var(--text-dark) !important; }
+#header.scroll svg, #header.scroll .icon { color: var(--text-dark) !important; }
 
 /* Buttons with Warm Charcoal Gradient */
 .btn-primary {
