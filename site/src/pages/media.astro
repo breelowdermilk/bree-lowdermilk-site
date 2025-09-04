@@ -14,7 +14,16 @@ const metadata = {
 };
 
 // Get actual image paths from existing media folder
-const getCelebrityImage = (performer) => {
+const getCelebrityImage = (performer, songTitle) => {
+  // Special handling for Lindsay Mendez who has different images for different songs
+  if (performer === 'Lindsay Mendez') {
+    if (songTitle === 'Avalanche') {
+      return '/src/assets/images/media/lindsay-mendez-avalanche.jpg';
+    } else {
+      return '/src/assets/images/media/lindsay-mendez.jpeg';
+    }
+  }
+  
   const imageMap = {
     'Aaron Tveit': '/src/assets/images/media/aaron tveit.jpg',
     'Jeremy Jordan': '/src/assets/images/media/jeremy jordan.jpg',
@@ -32,7 +41,6 @@ const getCelebrityImage = (performer) => {
     'Andy Mientus & Steven Booth': '/src/assets/images/media/michael arden andy mientus.png',
     'Uzo Aduba': '/src/assets/images/media/uzo aduba.webp',
     'Sutton Foster': '/src/assets/images/media/sutton foster.jpg',
-    'Lindsay Mendez': '/src/assets/images/media/lindsay-mendez.jpeg',
     'Lindsay Mendez & Andy Mientus': '/src/assets/images/media/michael arden andy mientus.png',
     'Andy Mientus & Krysta Rodriguez': '/src/assets/images/media/michael arden andy mientus.png',
     'Laura Osnes': '/src/assets/images/media/laura-osnes.jpg',
@@ -77,7 +85,7 @@ const workingYouTubeIds = {
 
 // Prepare performance data with images and URLs
 const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).map((performance) => {
-  const celebrityImage = getCelebrityImage(performance.performer);
+  const celebrityImage = getCelebrityImage(performance.performer, performance.title);
   const imageUrl = celebrityImage || getYouTubeThumbnail(performance.youtubeId);
   
   // Use working YouTube ID if available
@@ -142,7 +150,7 @@ const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).m
   
   <!-- Header Section - Matching About/Contact style -->
   <section class="px-4 py-16 mx-auto max-w-6xl lg:px-8 lg:py-20">
-    <h1 class="bree-h1-small mb-8">Media</h1>
+    <h1 class="bree-h1-small mb-8 text-center">Media</h1>
     
     <!-- Celebrity Performances Grid - Regular sized grid -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
