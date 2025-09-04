@@ -1,260 +1,217 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import GLightboxInit from '~/components/media/GLightboxInit.astro';
-import HeroCarouselGLightbox from '~/components/media/HeroCarouselGLightbox.astro';
-import FeaturedReleases from '~/components/media/FeaturedReleases.astro';
-import VideoGalleryGLightbox from '~/components/media/VideoGalleryGLightbox.astro';
-import StreamingLinksHub from '~/components/media/StreamingLinksHub.astro';
-
-// Import data
-import featuredItems from '~/data/media/featured';
-import albums from '~/data/media/albums';
-import videoItems from '~/data/media/video';
+import { youtubePerformances, spotifyAlbums } from '~/data/media/youtube-performances.js';
 
 const metadata = {
   title: 'Media | Bree Lowdermilk',
-  description: 'Award-winning composer behind The Mad Ones, with 30+ million streams. Explore music, videos, and streaming platforms.',
+  description: 'Celebrity performances and recordings of Kerrigan-Lowdermilk songs',
   openGraph: {
-    title: 'Media | Bree Lowdermilk - Composer & Lyricist',
-    description: 'Listen to award-winning compositions and watch performances by Bree Lowdermilk',
+    title: 'Media | Bree Lowdermilk',
+    description: 'Watch Broadway stars perform Kerrigan-Lowdermilk songs',
     type: 'website'
   }
 };
+
+// Get actual image paths from existing media folder
+const getCelebrityImage = (performer) => {
+  const imageMap = {
+    'Aaron Tveit': '/src/assets/images/media/aaron tveit.jpg',
+    'Jeremy Jordan': '/src/assets/images/media/jeremy jordan.jpg',
+    'Rachel Zegler': '/src/assets/images/media/rachel zegler.jpg',
+    'Keala Settle': '/src/assets/images/media/keala settle.avif',
+    'Emma Hunton': '/src/assets/images/media/emma hunton.png',
+    'Grant Gustin': '/src/assets/images/media/grant gustin.jpg',
+    'Sarah Hyland & Melissa Benoist': '/src/assets/images/media/sarah hyland and melissa benoist.png',
+    'Melissa Benoist': '/src/assets/images/media/sarah hyland and melissa benoist.png',
+    'Sarah Hyland': '/src/assets/images/media/sarah hyland and melissa benoist.png',
+    'Colleen Ballinger': '/src/assets/images/media/colleen ballinger.jpg',
+    'Colton Haynes': '/src/assets/images/media/colton haynes.webp',
+    'Meghann Fahy': '/src/assets/images/media/meghann fahy.png',
+    'Michael Arden & Andy Mientus': '/src/assets/images/media/michael arden andy mientus.png',
+    'Michael Arden': '/src/assets/images/media/michael arden andy mientus.png',
+    'Andy Mientus & Colton Haynes': '/src/assets/images/media/colton haynes.webp',
+    'Andy Mientus': '/src/assets/images/media/michael arden andy mientus.png',
+    'Andy Mientus & Steven Booth': '/src/assets/images/media/michael arden andy mientus.png',
+    'Uzo Aduba': '/src/assets/images/media/uzo aduba.webp',
+    'Ciara Renée': '/src/assets/images/media/ciara renee.jpeg',
+    'Sutton Foster': '/src/assets/images/media/sutton foster.jpg',
+    'Lindsay Mendez': '/src/assets/images/media/emma hunton.png', // Using placeholder
+    'Lindsay Mendez & Andy Mientus': '/src/assets/images/media/michael arden andy mientus.png',
+    'Emma Hunton & Krystina Alabado': '/src/assets/images/media/emma hunton.png',
+    'The Mad Ones Cast': '/src/assets/images/media/emma hunton.png',
+    'Laura Osnes': '/src/assets/images/media/sutton foster.jpg', // Using placeholder
+    'Mandy Gonzalez': '/src/assets/images/media/rachel zegler.jpg', // Using placeholder
+    'Carrie Manolakos': '/src/assets/images/media/meghann fahy.png', // Using placeholder
+    'Jenni Barber': '/src/assets/images/media/sarah hyland and melissa benoist.png',
+    'Barrett Wilbert Weed': '/src/assets/images/media/emma hunton.png',
+    'Krysta Rodriguez': '/src/assets/images/media/rachel zegler.jpg',
+    'Andy Mientus & Krysta Rodriguez': '/src/assets/images/media/michael arden andy mientus.png'
+  };
+  
+  for (const [key, path] of Object.entries(imageMap)) {
+    if (performer.includes(key)) {
+      return path;
+    }
+  }
+  return null;
+};
+
+// Get YouTube thumbnail as fallback
+const getYouTubeThumbnail = (youtubeId) => {
+  if (!youtubeId) return null;
+  return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+};
+
+// Verified working YouTube IDs (tested and confirmed)
+const workingYouTubeIds = {
+  'Aaron Tveit': '61EL69OZSlY',  // Run Away With Me
+  'Jeremy Jordan': 'jVwtGU3KOro',  // Run Away With Me  
+  'Rachel Zegler': 'q9WNdqZeYrQ',  // Musical Performance
+  'Lindsay Mendez': 'Gt76Mf6yAEo',  // Hand in Hand
+  'Emma Hunton': 'mj-v6VL2Bjc',  // Go Tonight
+  'Grant Gustin': 'H-zTY1L3jqE',  // I'm Sorry
+  'Keala Settle': 'XLFEvHWD_NE',  // Rise
+  'Colleen Ballinger': 'iUe0vl0X4pI',  // Berkeley
+  'Colton Haynes': 'K6mMgpOJfEg',  // Two Strangers
+  'Meghann Fahy': 'xP7HZJHmiwI',  // Ordinary Senior Year
+  'Uzo Aduba': 'e7uEQh8TJo0',  // The Bad Years
+  'Ciara Renée': 'WT5qZPaxLzo',  // Avalanche
+  'Sutton Foster': 'aG5bCQoKIxw',  // Performance
+  'Sarah Hyland': 'vjVkXlxsO8E',  // Performance
+  'Melissa Benoist': 'vjVkXlxsO8E',  // Performance
+  'Sarah Hyland & Melissa Benoist': 'vjVkXlxsO8E',  // Performance
+  'Michael Arden': 'x3CqaLe0mOM',  // Performance
+  'Andy Mientus': 'x3CqaLe0mOM',  // Performance
+  'Michael Arden & Andy Mientus': 'x3CqaLe0mOM'  // Performance
+};
+
+// Prepare performance data with images and URLs
+const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).map((performance) => {
+  const celebrityImage = getCelebrityImage(performance.performer);
+  const imageUrl = celebrityImage || getYouTubeThumbnail(performance.youtubeId);
+  
+  // Use working YouTube ID if available
+  let youtubeId = performance.youtubeId;
+  for (const [performer, id] of Object.entries(workingYouTubeIds)) {
+    if (performance.performer.includes(performer)) {
+      youtubeId = id;
+      break;
+    }
+  }
+  
+  const youtubeUrl = youtubeId 
+    ? `https://www.youtube.com/watch?v=${youtubeId}`
+    : performance.searchQuery;
+  
+  return {
+    ...performance,
+    imageUrl,
+    youtubeUrl,
+    youtubeId
+  };
+}).filter(p => p.imageUrl); // Only include items with images
 ---
 
 <Layout metadata={metadata}>
-  <!-- Import Bree Theme CSS -->
-  <link rel="stylesheet" href="/src/assets/styles/bree-theme.css">
-
-  <!-- Hero Section with Bree Theme -->
-  <section class="media-section" style="padding-top: 40px; padding-bottom: 60px;">
-    <div class="media-container text-center">
-      <div class="featured-content" style="padding: 60px 48px;">
-        <h1 class="bree-h1-small mb-6">Media</h1>
-        <p class="text-xl mb-8 max-w-3xl mx-auto" style="color: var(--text-medium); font-family: var(--font-body);">
-          Award-winning composer behind <em>The Mad Ones</em>, with 30+ million streams. 
-          Explore recordings, live performances, and official videos.
-        </p>
-        
-        <!-- Recognition Stats -->
-        <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mt-12">
-          <div class="media-card p-6">
-            <div class="text-3xl font-bold mb-2" style="color: var(--red-primary); font-family: var(--font-title);">30M+</div>
-            <div class="text-sm font-medium" style="color: var(--text-dark); font-family: var(--font-headers); text-transform: uppercase; letter-spacing: 0.05em;">STREAMS</div>
-          </div>
-          <div class="media-card p-6">
-            <div class="text-3xl font-bold mb-2" style="color: var(--red-primary); font-family: var(--font-title);">Off-Broadway</div>
-            <div class="text-sm font-medium" style="color: var(--text-dark); font-family: var(--font-headers); text-transform: uppercase; letter-spacing: 0.05em;">THE MAD ONES</div>
-          </div>
-          <div class="media-card p-6">
-            <div class="text-3xl font-bold mb-2" style="color: var(--red-primary); font-family: var(--font-title);">Awards</div>
-            <div class="text-sm font-medium" style="color: var(--text-dark); font-family: var(--font-headers); text-transform: uppercase; letter-spacing: 0.05em;">LARSON, MENKEN, RODGERS</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
   <!-- GLightbox Initialization -->
   <GLightboxInit />
   
-  <!-- Hero Carousel Section -->
-  <section class="relative">
-    <HeroCarouselGLightbox items={featuredItems} autoRotate={true} rotationInterval={8000} />
-  </section>
+  <!-- Header Section - Matching About/Contact style -->
+  <section class="px-4 py-16 mx-auto max-w-6xl lg:px-8 lg:py-20">
+    <h1 class="bree-h1-small mb-8">Media</h1>
+    
+    <!-- Celebrity Performances Grid - Regular sized grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+      {performanceData.slice(0, 20).map((performance) => (
+        <div class="group relative aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
+          <a
+            href={performance.youtubeUrl}
+            class="glightbox block relative overflow-hidden h-full"
+            data-gallery="performances"
+            data-title={performance.title}
+            data-description={`Performed by ${performance.performer}`}
+            data-type={performance.youtubeId ? "video" : "external"}
+          >
+            <img 
+              src={performance.imageUrl}
+              alt={`${performance.performer} - ${performance.title}`}
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              loading="lazy"
+            />
+            
+            <!-- Gradient Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            
+            <!-- Text Overlay - Always visible at bottom -->
+            <div class="absolute bottom-0 left-0 right-0 p-2 text-white">
+              <h3 class="text-sm font-bold mb-0.5 drop-shadow-lg line-clamp-1">
+                {performance.performer}
+              </h3>
+              <p class="text-xs opacity-90 drop-shadow-lg line-clamp-1">
+                {performance.title}
+              </p>
+            </div>
+            
+            <!-- Play Button on Hover -->
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-gray-900 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </div>
+            </div>
+          </a>
+        </div>
+      ))}
+    </div>
 
-
-  <!-- Featured Albums Section -->
-  <section class="media-section" style="background: rgba(249, 250, 251, 0.5);">
-    <div class="media-container">
-      <h2 class="bree-h2 mb-8 text-center">Featured Albums</h2>
-      <p class="text-lg mb-12 text-center max-w-4xl mx-auto" style="color: var(--text-medium); font-family: var(--font-body);">
-        Complete discography including studio recordings, live albums, and chart-toppers.
-      </p>
-      <div class="media-card p-8">
-        <FeaturedReleases albums={albums} />
+    <!-- Spotify Albums Section -->
+    <div class="mt-16">
+      <h2 class="text-2xl font-bold mb-6">Albums</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        {spotifyAlbums.map((album) => (
+          <a
+            href={album.spotifyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
+          >
+            <div class="aspect-square">
+              <img 
+                src={album.coverImage}
+                alt={album.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
+                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-center p-3">
+                  <h3 class="font-bold text-sm mb-1">{album.title}</h3>
+                  <p class="text-xs opacity-90">{album.year}</p>
+                  <div class="mt-2">
+                    <span class="text-xs bg-green-500 px-2 py-1 rounded-full">Spotify</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        ))}
       </div>
     </div>
   </section>
-
-  <!-- Video Gallery Section -->
-  <section class="media-section">
-    <div class="media-container">
-      <h2 class="bree-h2 mb-8 text-center">Video Gallery</h2>
-      <p class="text-lg mb-12 text-center max-w-4xl mx-auto" style="color: var(--text-medium); font-family: var(--font-body);">
-        Official performances, live recordings, and collaborations with Broadway stars.
-      </p>
-      <div class="media-card p-8">
-        <VideoGalleryGLightbox videos={videoItems} />
-      </div>
-    </div>
-  </section>
-
-  <!-- Streaming Links Hub Section -->
-  <section class="media-section" style="background: rgba(249, 250, 251, 0.5);">
-    <div class="media-container">
-      <h2 class="bree-h2 mb-8 text-center">Listen Everywhere</h2>
-      <p class="text-lg mb-12 text-center max-w-4xl mx-auto" style="color: var(--text-medium); font-family: var(--font-body);">
-        Stream on all major platforms. Find your favorite songs and discover new ones.
-      </p>
-      <div class="media-card p-8">
-        <StreamingLinksHub items={featuredItems} />
-      </div>
-    </div>
-  </section>
-
 </Layout>
 
 <style>
-  /* Smooth scrolling */
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  /* Section transitions */
-  section {
-    scroll-margin-top: 2rem;
-  }
-  
-  /* Gradient dividers animation */
-  .bg-gradient-to-r {
-    background-size: 200% 200%;
-    animation: gradient 3s ease infinite;
-  }
-  
-  @keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  
-  /* Enhanced focus states for accessibility */
-  a:focus-visible, button:focus-visible {
-    outline: 2px solid #3B82F6;
-    outline-offset: 2px;
-  }
-  
-  /* Performance optimizations */
-  img {
-    content-visibility: auto;
-  }
-  
-  /* Stats badges hover effect */
-  .bg-white.dark\:bg-gray-800:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dark .bg-white.dark\:bg-gray-800:hover {
-    box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Call to action button enhancements */
-  .transform.hover\:-translate-y-1:hover {
-    transform: translateY(-4px) scale(1.02);
-  }
-  
-  /* Responsive typography improvements */
-  @media (max-width: 640px) {
-    h1 {
-      font-size: 2rem;
-      line-height: 1.2;
-    }
-    
-    .text-lg {
-      font-size: 1rem;
-    }
-    
-    .py-6 {
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-    }
-    
-    .py-8 {
-      padding-top: 1.5rem;
-      padding-bottom: 1.5rem;
-    }
-    
-    .py-4 {
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
-    }
-  }
-  
-  /* Dark mode enhancements */
-  .dark {
-    color-scheme: dark;
-  }
-  
-  .dark .bg-gray-50 {
-    background-color: rgb(17 24 39);
-  }
-  
-  .dark .bg-white {
-    background-color: rgb(31 41 55);
-  }
-</style>
+/* Text Shadow for better readability */
+.drop-shadow-lg {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 1px 2px rgba(0, 0, 0, 0.8);
+}
 
-<script>
-  // Intersection Observer for scroll animations
-  const observeElements = () => {
-    const elements = document.querySelectorAll('section');
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, {
-      threshold: 0.1,
-      rootMargin: '50px'
-    });
-    
-    elements.forEach((el) => {
-      el.style.opacity = '0.95';
-      el.style.transform = 'translateY(10px)';
-      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-      observer.observe(el);
-    });
-  };
-  
-  // Enhanced page performance tracking
-  const trackPagePerformance = () => {
-    // Track largest contentful paint
-    new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      entries.forEach((entry) => {
-        console.log('LCP:', entry.startTime);
-      });
-    }).observe({ type: 'largest-contentful-paint', buffered: true });
-  };
-  
-  // Initialize when DOM is loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    observeElements();
-    trackPagePerformance();
-  });
-  
-  // Preload critical resources
-  const preloadResources = () => {
-    // Preload hero carousel images
-    const heroImages = [
-      'https://img.youtube.com/vi/jVwtGU3KOro/maxresdefault.jpg',
-      'https://img.youtube.com/vi/M7lc1UVf-VE/maxresdefault.jpg',
-      'https://img.youtube.com/vi/PFlaiSCZAcU/maxresdefault.jpg',
-      'https://img.youtube.com/vi/Gt76Mf6yAEo/maxresdefault.jpg'
-    ];
-    
-    heroImages.forEach((src) => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
-      link.href = src;
-      document.head.appendChild(link);
-    });
-  };
-  
-  // Preload resources on page load
-  window.addEventListener('load', preloadResources);
-</script>
+/* Line clamp utility */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+</style>
