@@ -239,7 +239,7 @@ const metadata = {
               </div>
             )}
             
-            {/* Licensing Link */}
+            {/* Licensing / External Link */}
             {show.data.links?.licensing && (
               <div class="modal-section">
                 <a 
@@ -248,7 +248,7 @@ const metadata = {
                   rel="noopener noreferrer"
                   class="modal-licensing-link"
                 >
-                  Request licensing information →
+                  {show.data.status === 'touring' ? 'View current tour schedule →' : 'Request licensing information →'}
                 </a>
               </div>
             )}
