@@ -30,7 +30,7 @@ export const youtubePerformances = [
     title: "Anyway",
     performer: "Rachel Zegler",
     searchQuery: "Rachel Zegler Anyway Kerrigan Lowdermilk",
-    youtubeId: "q9WNdqZeYrQ",
+    youtubeId: "Z9ZMLjLqAgE",
     priority: 1
   },
 
@@ -53,8 +53,6 @@ export const youtubePerformances = [
     performer: "Lindsay Mendez",
     venue: "54 Below (June 4, 2012)",
     searchQuery: "Lindsay Mendez Hand in Hand Kerrigan Lowdermilk",
-    youtubeId: "Gt76Mf6yAEo", // From search results
-    thumbnail: "/src/assets/images/media/hand-in-hand-lindsay.png",
     priority: 1
   },
   {

@@ -56,24 +56,14 @@ const getYouTubeThumbnail = (youtubeId) => {
   return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
 };
 
-// Verified working YouTube IDs (tested and confirmed)
+// Verified working YouTube IDs - only include ones we're 100% sure about
 const workingYouTubeIds = {
-  'Aaron Tveit': '61EL69OZSlY',  // Run Away With Me
-  'Jeremy Jordan': 'jVwtGU3KOro',  // Run Away With Me  
-  'Rachel Zegler': 'q9WNdqZeYrQ',  // Anyway
-  'Lindsay Mendez': 'Gt76Mf6yAEo',  // Hand in Hand
-  'Emma Hunton': 'mj-v6VL2Bjc',  // Go Tonight
-  'Grant Gustin': 'H-zTY1L3jqE',  // I'm Sorry
-  'Keala Settle': 'XLFEvHWD_NE',  // Holding On
-  'Colleen Ballinger': 'iUe0vl0X4pI',  // Berkeley
-  'Colton Haynes': 'K6mMgpOJfEg',  // Two Strangers
-  'Meghann Fahy': 'xP7HZJHmiwI',  // Ordinary Senior Year
-  'Uzo Aduba': 'e7uEQh8TJo0',  // The Bad Years
-  'Ciara Renée': 'WT5qZPaxLzo',  // Avalanche
-  'Sutton Foster': 'aG5bCQoKIxw',  // Performance
-  'Sarah Hyland & Melissa Benoist': 'vjVkXlxsO8E',  // Freedom
-  'Michael Arden': 'x3CqaLe0mOM',  // Performance
-  'Andy Mientus': 'x3CqaLe0mOM',  // Performance
+  'Aaron Tveit': '61EL69OZSlY',  // Run Away With Me - verified
+  'Jeremy Jordan': 'jVwtGU3KOro',  // Run Away With Me - verified
+  'Rachel Zegler': 'Z9ZMLjLqAgE',  // Anyway - verified
+  'Emma Hunton': 'mj-v6VL2Bjc',  // Go Tonight - verified
+  'Keala Settle': 'XLFEvHWD_NE',  // Holding On - verified
+  'Sarah Hyland & Melissa Benoist': 'vjVkXlxsO8E',  // Freedom - verified
 };
 
 // Prepare performance data with images and URLs
@@ -92,7 +82,7 @@ const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).m
   
   const youtubeUrl = youtubeId 
     ? `https://www.youtube.com/watch?v=${youtubeId}`
-    : performance.searchQuery;
+    : `https://www.youtube.com/results?search_query=${encodeURIComponent(performance.searchQuery || `${performance.performer} ${performance.title} Kerrigan Lowdermilk`)}`;
   
   return {
     ...performance,
@@ -100,7 +90,7 @@ const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).m
     youtubeUrl,
     youtubeId
   };
-}).filter(p => p.imageUrl); // Only include items with images
+}).filter(p => p.imageUrl && p.imageUrl !== 'null'); // Only include items with valid images
 ---
 
 <Layout metadata={metadata}>
@@ -146,6 +136,8 @@ const performanceData = youtubePerformances.filter(perf => perf.priority <= 2).m
             data-title={performance.title}
             data-description={`Performed by ${performance.performer}`}
             data-type={performance.youtubeId ? "video" : "external"}
+            target={performance.youtubeId ? "_self" : "_blank"}
+            rel={performance.youtubeId ? "" : "noopener noreferrer"}
           >
             <img 
               src={performance.imageUrl}
