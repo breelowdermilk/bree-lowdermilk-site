@@ -75,9 +75,13 @@ const performanceDataRaw = youtubePerformances
     const imageUrl = lindsayAvalanche
       ? '/src/assets/images/media/lindsay-mendez-headshot.jpg' // headshot (please add file)
       : (celebrityImage || getYouTubeThumbnail(p.youtubeId));
+    // Preserve Avalanche's specific YouTube ID; otherwise allow performer-level overrides
     let youtubeId = p.youtubeId;
-    for (const [performer, id] of Object.entries(workingYouTubeIds)) {
-      if (p.performer.includes(performer)) { youtubeId = id; break; }
+    const allowOverride = !(lindsayAvalanche);
+    if (allowOverride) {
+      for (const [performer, id] of Object.entries(workingYouTubeIds)) {
+        if (p.performer.includes(performer)) { youtubeId = id; break; }
+      }
     }
     const youtubeUrl = youtubeId
       ? `https://www.youtube.com/watch?v=${youtubeId}`
@@ -102,29 +106,36 @@ if (byId['go-tonight-animatic']) curated.push({ ...byId['go-tonight-animatic'], 
 if (byId['say-the-word-meghann']) curated.push({ ...byId['say-the-word-meghann'], __variant: 'big' });
 
 const curatedIds = new Set(curated.map((i) => i.id));
-// Identify items to pin
+// Identify specific items
 const katieItem = performanceDataRaw.find((i) => (i.performer || '').includes('Katie Thompson'));
-const uzoItem = performanceDataRaw.find((i) => (i.performer || '').includes('Uzo Aduba'));
-const lindsaySecond = performanceDataRaw.find((i) => i.id === 'avalanche-lindsay');
-// Exclude the items we will place later (katie, uzo) from the main flow
-const excludeLater = new Set([katieItem?.id, uzoItem?.id].filter(Boolean));
-const rest = performanceDataRaw.filter((i) => !curatedIds.has(i.id) && !excludeLater.has(i.id));
+const lindsayAvalancheItem = performanceDataRaw.find((i) => i.id === 'avalanche-lindsay');
 
-// Move Katie and Uzo up one row: insert them before the last few items
-const tailCount = Math.min(6, rest.length);
-const restHead = rest.slice(0, rest.length - tailCount);
-const restTail = rest.slice(rest.length - tailCount);
+// Exclude items we'll insert at specific positions (Katie, Avalanche duplicate-safe)
+const excludeLater = new Set([katieItem?.id, lindsayAvalancheItem?.id].filter(Boolean));
+let rest = performanceDataRaw.filter((i) => !curatedIds.has(i.id) && !excludeLater.has(i.id));
 
-// Build the final ordered list: curated, most of the rest, then Lindsay (square),
-// then Katie (left) and Uzo (right), then the remaining tail items.
-const performanceData = [
-  ...curated,
-  ...restHead,
-  ...(lindsaySecond ? [{ ...lindsaySecond, __variant: 'square' }] : []),
-  ...(katieItem ? [{ ...katieItem, __variant: 'tall', __colStart: 'md:col-start-1' }] : []),
-  ...(uzoItem ? [{ ...uzoItem, __variant: 'tall', __colStart: 'md:col-start-4' }] : []),
-  ...restTail,
-];
+// Promote certain items earlier to help fill gaps when using dense packing
+const priorityNames = ['Sutton Foster', 'Colleen Ballinger', 'Matt Doyle'];
+rest = rest.sort((a, b) => {
+  const w = (x) => {
+    const perf = (x.performer || '');
+    return priorityNames.some((n) => perf.includes(n)) ? 0 : 1;
+  };
+  return w(a) - w(b);
+});
+
+// Insert Katie Thompson immediately after Keala Settle's item
+const kealaIndex = rest.findIndex((i) => i.id === 'holding-on-keala');
+if (katieItem && kealaIndex !== -1) {
+  rest.splice(kealaIndex + 1, 0, { ...katieItem, __variant: 'tall' });
+}
+
+// Ensure one Lindsay Avalanche square is included in the flow
+if (lindsayAvalancheItem) {
+  rest.push({ ...lindsayAvalancheItem, __variant: 'square' });
+}
+
+const performanceData = [...curated, ...rest];
 
 // Standardized collage rules (4 columns, no gaps)
 // Variants:
@@ -174,9 +185,8 @@ const getLayout = (item) => {
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-0 collage-grid">
       {performanceData.slice(0, 36).map((item) => {
         const { span, aspect } = getLayout(item);
-        const colStart = item.__colStart || '';
         return (
-          <div class={`group relative overflow-hidden ${span} ${colStart}`}>
+          <div class={`group relative overflow-hidden ${span}`}>
             <a
               href={item.youtubeUrl}
               class={`glightbox block relative overflow-hidden ${aspect}`}
@@ -220,12 +230,9 @@ const getLayout = (item) => {
 </Layout>
 
 <style>
-.collage-grid { grid-auto-flow: row; }
+.collage-grid { grid-auto-flow: dense; }
 .drop-shadow-lg { text-shadow: 0 2px 4px rgba(0,0,0,.9), 0 1px 2px rgba(0,0,0,.8); }
 </style>
 
-<!-- Katie Thompson and Uzo Aduba are now pinned within the main grid order as the last two tall items
-     with explicit col-start (Katie left, Uzo right). -->
-
-<!-- Lindsay Mendez 'Avalanche' kept as a 1x1 square within the main grid above. -->
-    'Matt Doyle': '/src/assets/images/media/matt-doyle.jpg',
+<!-- Dense packing enabled to minimize gaps. Curated top rows, then rest ordered to lift
+     Sutton Foster, Colleen Ballinger, and Matt Doyle earlier in the flow. -->
