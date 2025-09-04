@@ -58,7 +58,7 @@ const { profile = 'media', options = {} } = Astro.props;
 
       // Base defaults shared across pages
       const baseOptions = {
-        selector: '.glightbox',
+        selector: 'a.glightbox',
         touchNavigation: true,
         autoplayVideos: false,
         loop: true,
@@ -124,6 +124,12 @@ const { profile = 'media', options = {} } = Astro.props;
       this.lightbox.on('slide_after_load', (data) => {
         console.log('GLightbox: Slide loaded', data);
       });
+
+      // Debug: count anchors found
+      try {
+        const count = document.querySelectorAll('a.glightbox').length;
+        console.log(`[glightbox] Bound to ${count} anchors`);
+      } catch {}
     }
     
     setupViewTransitions() {
@@ -218,16 +224,28 @@ const { profile = 'media', options = {} } = Astro.props;
   // Handle Astro page transitions
   document.addEventListener('astro:page-load', initializeGLightbox);
 
-  // Prevent default hash jump if init is delayed
-  let ready = false;
+  // Strong inline fallback: directly open via API if auto-binding fails
   document.addEventListener('click', (e) => {
     const a = e.target && e.target.closest ? e.target.closest('a.glightbox[data-type="inline"]') : null;
-    if (a) {
-      if (!window.glightboxManager || !window.glightboxManager.lightbox) {
-        e.preventDefault();
-        initializeGLightbox();
-        setTimeout(() => a.click(), 100);
-      }
+    if (!a) return;
+    const href = a.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
+    // If library isn’t ready or auto-binding didn’t attach, open programmatically
+    if (!window.glightboxManager || !window.glightboxManager.lightbox) {
+      e.preventDefault();
+      initializeGLightbox();
+      setTimeout(() => {
+        if (window.glightboxManager && window.glightboxManager.lightbox) {
+          window.glightboxManager.lightbox.open({
+            href,
+            type: 'inline',
+            title: a.getAttribute('data-title') || undefined,
+          });
+        } else {
+          // final fallback: trigger original click
+          a.click();
+        }
+      }, 120);
     }
   }, { capture: true });
 </script>
