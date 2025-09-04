@@ -89,6 +89,8 @@ const workingYouTubeIds = {
 // Build data with collage rules (mirrors media-3)
 const performanceDataRaw = youtubePerformances
   .filter((p) => p.priority <= 2)
+  // Remove Matt Doyle per request
+  .filter((p) => !(p.performer || '').includes('Matt Doyle'))
   .map((p) => {
     const celebrityImage = getCelebrityImage(p.performer, p.title);
     const lindsayAvalanche = (p.title === 'Avalanche') && (p.performer || '') === 'Lindsay Mendez';

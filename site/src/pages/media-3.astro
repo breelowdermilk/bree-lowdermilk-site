@@ -69,6 +69,8 @@ const workingYouTubeIds = {
 
 const performanceDataRaw = youtubePerformances
   .filter((p) => p.priority <= 2)
+  // Remove Matt Doyle per request
+  .filter((p) => !(p.performer || '').includes('Matt Doyle'))
   .map((p) => {
     const celebrityImage = getCelebrityImage(p.performer);
     // Special-case: Use separate Lindsay Mendez headshot for Avalanche
@@ -116,7 +118,7 @@ const excludeLater = new Set([katieItem?.id, lindsayAvalancheItem?.id].filter(Bo
 let rest = performanceDataRaw.filter((i) => !curatedIds.has(i.id) && !excludeLater.has(i.id));
 
 // Promote certain items earlier to help fill gaps when using dense packing
-const priorityNames = ['Sutton Foster', 'Colleen Ballinger', 'Matt Doyle'];
+const priorityNames = ['Sutton Foster', 'Colleen Ballinger'];
 rest = rest.sort((a, b) => {
   const w = (x) => {
     const perf = (x.performer || '');
