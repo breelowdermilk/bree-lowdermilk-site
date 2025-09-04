@@ -6,7 +6,22 @@ import defaultImg from '~/assets/images/default.png';
 import GLightboxInit from '~/components/media/GLightboxInit.astro';
 
 const shows = await getCollection('shows');
-const sortedShows = shows.sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+// Only include requested shows for now
+const showWhitelist = new Set([
+  'ada-twist-scientist',
+  'tales-from-the-bad-years',
+  'ernxst',
+  'justice',
+  'republic',
+  'the-mad-ones',
+  'kill-the-boy-band',
+  'dr-wonderful',
+]);
+
+const sortedShows = shows
+  .filter((s) => showWhitelist.has(s.slug))
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
 
 // Render content for each show to include in inline modals
 const showsWithContent = await Promise.all(
@@ -52,7 +67,7 @@ const metadata = {
               title={show.data.title}
               subtitle={show.data.status || show.data.year}
               category={show.data.venue || 'Theater'}
-              className="aspect-[6/7] show-tile"
+              className="aspect-[7/8] show-tile"
               credits={show.data.credits}
               shortBlurb={shortBlurb}
             >
