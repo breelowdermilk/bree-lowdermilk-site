@@ -27,7 +27,7 @@ Summary
 – Added line-clamp for synopsis excerpts to prevent layout shift
 
 ## Implementation Details
-- Static fallback image: `import defaultImg from '~/assets/images/default.png'`
+- Static fallback image: `import defaultImg from '~/assets/images/default.jpg'`
 - Fallback logic: `const imageUrl = show.data.heroImage || defaultImg`
 - Runtime fallback: `onError={`this.src='${defaultImg}'`}`
 - Layout stability: `line-clamp-3` class on synopsis excerpts

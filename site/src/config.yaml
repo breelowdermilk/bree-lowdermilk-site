@@ -1,6 +1,6 @@
 site:
   name: Bree Lowdermilk
-  site: 'https://astrowind.vercel.app'
+  site: 'https://breelowdermilk.com'
   base: '/'
   trailingSlash: false
 
@@ -11,14 +11,14 @@ metadata:
   title:
     default: Bree Lowdermilk
     template: '%s — Bree Lowdermilk'
-  description: "\U0001F680 Suitable for Startups, Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs."
+  description: "Bree Lowdermilk - Playwright, Composer, Lyricist"
   robots:
     index: true
     follow: true
   openGraph:
     site_name: Bree Lowdermilk
     images:
-      - url: '~/assets/images/default.png'
+      - url: '~/assets/images/default.jpg'
         width: 1200
         height: 628
     type: website
