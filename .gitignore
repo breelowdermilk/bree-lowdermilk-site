@@ -23,3 +23,7 @@ pnpm-lock.yaml
 
 .astro
 
+
+# Coven working files
+coven-archive/
+coven-logline-alternatives.md

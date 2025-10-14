@@ -8,11 +8,11 @@ const { profile = 'media', options = {} } = Astro.props;
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js" defer></script>
 
-<script type="module">
+<script type="module" define:vars={{ profile, options }}>
   // Component config injected from Astro props
   const componentConfig = {
-    profile: ${JSON.stringify(profile)},
-    options: ${JSON.stringify(options)}
+    profile,
+    options
   };
 
   // Robust loader: try ESM, fallback to CDN global
