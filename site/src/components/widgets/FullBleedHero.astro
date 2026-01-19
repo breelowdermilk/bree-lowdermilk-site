@@ -118,7 +118,7 @@ const bgImageMobile = (imageUrlMobile ?? imageUrl)?.startsWith('image-set(')
 
     <!-- Mobile content -->
     <div class={`md:hidden min-h-[80vh] flex ${ (mobileContentAlign ?? contentAlign) === 'start' ? 'items-start' : (mobileContentAlign ?? contentAlign) === 'end' ? 'items-end' : 'items-center'}`} style={`min-height: ${(mobileMinVh ?? minVh)}vh;`}>
-      <div class={`max-w-2xl py-16 ${ (mobileTextAlign ?? textAlign) === 'center' ? 'text-center' : (mobileTextAlign ?? textAlign) === 'right' ? 'text-right' : 'text-left'}`} style={`transform: translateY(-${mobileContentOffsetY ?? contentOffsetY}vh);`}>
+      <div class={`max-w-2xl pt-8 pb-4 ${ (mobileTextAlign ?? textAlign) === 'center' ? 'text-center' : (mobileTextAlign ?? textAlign) === 'right' ? 'text-right' : 'text-left'}`} style={`transform: translateY(-${mobileContentOffsetY ?? contentOffsetY}vh);`}>
         <h1 class="bree-h1 text-5xl leading-tighter tracking-tighter mb-6">
           {title}
         </h1>
