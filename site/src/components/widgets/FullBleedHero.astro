@@ -117,22 +117,26 @@ const bgImageMobile = (imageUrlMobile ?? imageUrl)?.startsWith('image-set(')
     <div class="pt-0 md:pt-[76px] pointer-events-none"></div>
 
     <!-- Mobile content -->
-    <div class={`md:hidden min-h-[80vh] flex ${ (mobileContentAlign ?? contentAlign) === 'start' ? 'items-start' : (mobileContentAlign ?? contentAlign) === 'end' ? 'items-end' : 'items-center'}`} style={`min-height: ${(mobileMinVh ?? minVh)}vh;`}>
-      <div class={`max-w-2xl pt-8 pb-4 ${ (mobileTextAlign ?? textAlign) === 'center' ? 'text-center' : (mobileTextAlign ?? textAlign) === 'right' ? 'text-right' : 'text-left'}`} style={`transform: translateY(-${mobileContentOffsetY ?? contentOffsetY}vh);`}>
-        <h1 class="bree-h1 text-5xl leading-tighter tracking-tighter mb-6">
+    <div class="md:hidden flex flex-col justify-between" style={`min-height: ${(mobileMinVh ?? minVh)}vh;`}>
+      <!-- Title/subtitle at top -->
+      <div class={`max-w-2xl pt-8 ${ (mobileTextAlign ?? textAlign) === 'center' ? 'text-center' : (mobileTextAlign ?? textAlign) === 'right' ? 'text-right' : 'text-left'}`}>
+        <h1 class="bree-h1 text-5xl leading-tighter tracking-tighter mb-4">
           {title}
         </h1>
-        {subtitle && (<p class="text-xl text-muted mb-8">{subtitle}</p>)}
-        {Array.isArray(actions) && actions.length > 0 && (
-          <div class={`flex flex-col sm:flex-row gap-4 ${ (mobileTextAlign ?? textAlign) === 'center' ? 'items-center justify-center' : ''}`}>
+        {subtitle && (<p class="text-xl text-muted">{subtitle}</p>)}
+      </div>
+      <!-- Buttons at bottom -->
+      {Array.isArray(actions) && actions.length > 0 && (
+        <div class={`pb-12 ${ (mobileTextAlign ?? textAlign) === 'center' ? 'text-center' : ''}`}>
+          <div class={`flex flex-col gap-3 ${ (mobileTextAlign ?? textAlign) === 'center' ? 'items-center justify-center' : ''}`}>
             {actions.map((a) => (
-              <div class="flex w-full sm:w-auto">
-                <Button {...a} class="w-full sm:mb-0" />
+              <div class="flex w-full">
+                <Button {...a} class="w-full" />
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
 
     <!-- Desktop/Tablet content -->
