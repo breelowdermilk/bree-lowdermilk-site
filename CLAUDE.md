@@ -32,3 +32,9 @@ Push to `main` triggers `.github/workflows/deploy.yml` which builds and deploys 
 - **Light mode only** - no dark mode toggle
 - **Show modals:** Black text on white background, full poster images on mobile
 - **Mobile hero:** Title/subtitle at top, photo in middle, buttons at bottom
+
+## Mobile Testing
+Use `/webapp-testing` skill with Playwright to test responsive layouts:
+- **Viewports:** 320px (iPhone SE), 375px (iPhone 12), 414px (iPhone 12 Pro Max)
+- **Key checks:** Hero photo not covered by buttons, tap targets ≥44px, modals readable
+- Screenshots saved to `/tmp/mobile_screenshots/`
