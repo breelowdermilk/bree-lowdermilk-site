@@ -127,7 +127,7 @@ const bgImageMobile = (imageUrlMobile ?? imageUrl)?.startsWith('image-set(')
       </div>
       <!-- Buttons at bottom -->
       {Array.isArray(actions) && actions.length > 0 && (
-        <div class={`pb-12 ${ (mobileTextAlign ?? textAlign) === 'center' ? 'text-center' : ''}`}>
+        <div class={`pb-20 ${ (mobileTextAlign ?? textAlign) === 'center' ? 'text-center' : ''}`}>
           <div class={`flex flex-col gap-3 ${ (mobileTextAlign ?? textAlign) === 'center' ? 'items-center justify-center' : ''}`}>
             {actions.map((a) => (
               <div class="flex w-full">
