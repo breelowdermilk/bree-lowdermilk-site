@@ -146,6 +146,8 @@ body {
 #header.scroll .logo-text, #header.scroll h1 { color: var(--text-dark) !important; }
 #header.scroll .aw-link-active { color: var(--text-dark) !important; }
 #header.scroll svg, #header.scroll .icon { color: var(--text-dark) !important; }
+/* Hamburger menu lines - dark when header is scrolled (white background) */
+#header.scroll [data-aw-toggle-menu] span { background-color: var(--text-dark) !important; }
 
 /* Buttons with Warm Charcoal Gradient */
 .btn-primary {
@@ -263,17 +265,5 @@ body {
   }
 }
 
-/* Dark mode compatibility */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-subtle-gray: #111827;
-    --text-dark: #f9fafb;
-    --text-medium: #d1d5db;
-    --text-light: #9ca3af;
-  }
-  
-  .card-glass, .media-card {
-    background: rgba(17, 24, 39, 0.8);
-    border-color: rgba(220, 38, 38, 0.2);
-  }
-}
+/* Dark mode removed - light-only theme */
+/* Colors stay consistent regardless of system preferences */
