@@ -387,25 +387,32 @@ const metadata = {
 
   /* Mobile responsiveness */
   @media (max-width: 768px) {
-    .modal-inner { 
+    .modal-inner {
       flex-direction: column;
+      min-height: auto;
     }
-    .modal-content-body { 
+    .modal-content-body {
       padding: 1.5rem;
-      width: 100%;
+      width: 100% !important;
     }
     .modal-image-container {
-      width: 100%;
-      padding: 0;
+      width: 100% !important;
+      padding: 1rem;
       order: -1; /* Image on top on mobile */
+      justify-content: center;
     }
     .modal-hero-image {
-      height: 200px;
+      width: auto !important;
+      height: auto !important;
+      max-height: 280px;
+      max-width: 100%;
+      object-fit: contain;
     }
-    .modal-title { font-size: 2rem; }
+    .modal-title { font-size: 1.75rem; }
+    .modal-synopsis { font-size: 1rem; }
   }
 
   /* Show pages: tighter inline modal width for more overlay space */
   :global(.gslide-inline) { max-width: min(58vw, 900px); }
-  @media (max-width: 768px) { :global(.gslide-inline) { max-width: 90vw; } }
+  @media (max-width: 768px) { :global(.gslide-inline) { max-width: 95vw; } }
 </style>
